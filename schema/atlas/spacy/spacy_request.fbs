@@ -1,0 +1,10 @@
+namespace keios.atlas.spacy;
+attribute "priority";
+
+enum Type : byte { DEP, NER }
+
+table SpacyRequest {
+  text:string;
+  type:[Type];
+}
+root_type SpacyRequest;
