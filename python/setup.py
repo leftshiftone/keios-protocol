@@ -2,7 +2,9 @@
 from setuptools import setup, find_packages
 
 # dependencies
-install_requires = []
+install_requires = [
+      "flatbuffers==1.10"
+]
 extras_require = {}
 
 VERSION = "0.1.0"
