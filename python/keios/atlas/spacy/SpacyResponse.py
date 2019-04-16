@@ -19,10 +19,12 @@ class SpacyResponse(object):
         self._tab = flatbuffers.table.Table(buf, pos)
 
     # SpacyResponse
-    def Dep(self):
+    def Dep(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
-            x = self._tab.Indirect(o + self._tab.Pos)
+            x = self._tab.Vector(o)
+            x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 4
+            x = self._tab.Indirect(x)
             from .DEPSpacyResponse import DEPSpacyResponse
             obj = DEPSpacyResponse()
             obj.Init(self._tab.Bytes, x)
@@ -30,17 +32,35 @@ class SpacyResponse(object):
         return None
 
     # SpacyResponse
-    def Ner(self):
+    def DepLength(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
+        if o != 0:
+            return self._tab.VectorLen(o)
+        return 0
+
+    # SpacyResponse
+    def Ner(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
-            x = self._tab.Indirect(o + self._tab.Pos)
+            x = self._tab.Vector(o)
+            x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 4
+            x = self._tab.Indirect(x)
             from .NERSpacyResponse import NERSpacyResponse
             obj = NERSpacyResponse()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
+    # SpacyResponse
+    def NerLength(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        if o != 0:
+            return self._tab.VectorLen(o)
+        return 0
+
 def SpacyResponseStart(builder): builder.StartObject(2)
 def SpacyResponseAddDep(builder, dep): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(dep), 0)
+def SpacyResponseStartDepVector(builder, numElems): return builder.StartVector(4, numElems, 4)
 def SpacyResponseAddNer(builder, ner): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(ner), 0)
+def SpacyResponseStartNerVector(builder, numElems): return builder.StartVector(4, numElems, 4)
 def SpacyResponseEnd(builder): return builder.EndObject()
