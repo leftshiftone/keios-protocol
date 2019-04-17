@@ -170,7 +170,7 @@ class SpacyProtocol:
 
     class SpacyRequestEntity:
         class Type(Enum):
-            DEP = 0,
+            DEP = 0
             NER = 1
 
         def __init__(self, text: str, type: List[Type]):
