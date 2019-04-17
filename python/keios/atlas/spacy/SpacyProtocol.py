@@ -165,6 +165,9 @@ class SpacyProtocol:
         def dep(self) -> List:
             return self._dep
 
+        def serialize(self) -> bytearray:
+            return SpacyProtocol.serialize(self)
+
     class SpacyRequestEntity:
         class Type(Enum):
             DEP = 0,
@@ -182,11 +185,16 @@ class SpacyProtocol:
         def type(self) -> List[Type]:
             return self._type
 
+        @classmethod
+        def deserialize(cls, bb: bytearray) -> 'SpacyRequestEntity':
+            return SpacyProtocol.deserialize(bb)
+
+
         def __str__(self) -> str:
             return "SpacyRequestEntity(text={0}, type={1})".format(self.text, self.type)
 
     @staticmethod
-    def to_spacy_response(response_entity: SpacyResponseEntity) -> bytearray:
+    def serialize(response_entity: SpacyResponseEntity) -> bytearray:
         builder = flatbuffers.Builder(1024)
         serialized_dep = list(map(lambda dep: dep.serialize(builder), response_entity.dep))
         serialized_ner = list(map(lambda n: n.serialize(builder), response_entity.ner))
@@ -209,7 +217,7 @@ class SpacyProtocol:
         return builder.Output()
 
     @staticmethod
-    def to_spacy_request(bb: bytearray):
+    def deserialize(bb: bytearray) -> SpacyRequestEntity:
         flat = SpacyRequest.GetRootAsSpacyRequest(bb, 0)
         types = []
         for n in range(0, flat.TypeLength()):

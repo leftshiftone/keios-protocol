@@ -15,7 +15,7 @@ class TestSpacyProtocol(unittest.TestCase):
                                                     "abc")
 
         entity = SpacyProtocol.SpacyResponseEntity([dep1, dep2], [ner])
-        result = SpacyProtocol.to_spacy_response(entity)
+        result = entity.serialize()
         deserialized = SpacyResponse.GetRootAsSpacyResponse(result, 0)
         self.assertEqual(deserialized.Ner(0).Text().decode("UTF-8"), 'hallo')
         self.assertEqual(deserialized.Ner(0).StartChar(), 1)
@@ -28,6 +28,6 @@ class TestSpacyProtocol(unittest.TestCase):
     def test_deserializes_spacy_request(self):
         hex = "0C00000008000C000800040008000000080000000C00000001000000010000001800000068616C6C6F206963682062696E732064657220706574657200000000"
         bb = bytearray.fromhex(hex)
-        request = SpacyProtocol.to_spacy_request(bb)
+        request = SpacyProtocol.deserialize(bb)
         self.assertEqual(request.text, "hallo ich bins der peter")
         self.assertEqual(request.type, [SpacyProtocol.SpacyRequestEntity.Type.NER])
