@@ -7,7 +7,7 @@ install_requires = [
 ]
 extras_require = {}
 
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 
 setup(name='keios-protocol',
       version=VERSION,
