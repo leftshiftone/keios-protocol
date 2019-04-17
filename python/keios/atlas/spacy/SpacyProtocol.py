@@ -214,23 +214,4 @@ class SpacyProtocol:
         types = []
         for n in range(0, flat.TypeLength()):
             types.append(SpacyProtocol.SpacyRequestEntity.Type(flat.Type(n)))
-        return SpacyProtocol.SpacyRequestEntity(flat.Text(), types)
-
-
-if __name__ == '__main__':
-    ner = SpacyProtocol.NERSpacyResponseEntity("hallo", 1, 2, "hansi")
-    dep1 = SpacyProtocol.DEPSpacyResponseEntity("de", "abc", "abc", "abc", 0, "abc", "abc", "abc", "abc", 10, "abc",
-                                                "abc")
-
-    dep2 = SpacyProtocol.DEPSpacyResponseEntity("de", "abc", "abc", "abc", 0, "abc", "abc", "abc", "abc", 10, "abc",
-                                                "abc")
-
-    entity = SpacyProtocol.SpacyResponseEntity([dep1, dep2], [ner])
-    bla = SpacyProtocol.to_spacy_response(entity)
-
-    xyz = SpacyResponse.GetRootAsSpacyResponse(bla, 0)
-
-    hex = "0C00000008000C000800040008000000080000000C00000001000000010000001800000068616C6C6F206963682062696E732064657220706574657200000000"
-    bb = bytearray.fromhex(hex)
-    request = SpacyProtocol.to_spacy_request(bb)
-    print("request:", request)
+        return SpacyProtocol.SpacyRequestEntity(flat.Text().decode("UTF-8"), types)
