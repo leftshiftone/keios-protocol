@@ -14,10 +14,12 @@ public final class SpacyResponse extends Table {
   public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; }
   public SpacyResponse __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public DEPSpacyResponse dep() { return dep(new DEPSpacyResponse()); }
-  public DEPSpacyResponse dep(DEPSpacyResponse obj) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
-  public NERSpacyResponse ner() { return ner(new NERSpacyResponse()); }
-  public NERSpacyResponse ner(NERSpacyResponse obj) { int o = __offset(6); return o != 0 ? obj.__assign(__indirect(o + bb_pos), bb) : null; }
+  public DEPSpacyResponse dep(int j) { return dep(new DEPSpacyResponse(), j); }
+  public DEPSpacyResponse dep(DEPSpacyResponse obj, int j) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(__vector(o) + j * 4), bb) : null; }
+  public int depLength() { int o = __offset(4); return o != 0 ? __vector_len(o) : 0; }
+  public NERSpacyResponse ner(int j) { return ner(new NERSpacyResponse(), j); }
+  public NERSpacyResponse ner(NERSpacyResponse obj, int j) { int o = __offset(6); return o != 0 ? obj.__assign(__indirect(__vector(o) + j * 4), bb) : null; }
+  public int nerLength() { int o = __offset(6); return o != 0 ? __vector_len(o) : 0; }
 
   public static int createSpacyResponse(FlatBufferBuilder builder,
       int depOffset,
@@ -30,7 +32,11 @@ public final class SpacyResponse extends Table {
 
   public static void startSpacyResponse(FlatBufferBuilder builder) { builder.startObject(2); }
   public static void addDep(FlatBufferBuilder builder, int depOffset) { builder.addOffset(0, depOffset, 0); }
+  public static int createDepVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addOffset(data[i]); return builder.endVector(); }
+  public static void startDepVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
   public static void addNer(FlatBufferBuilder builder, int nerOffset) { builder.addOffset(1, nerOffset, 0); }
+  public static int createNerVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addOffset(data[i]); return builder.endVector(); }
+  public static void startNerVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
   public static int endSpacyResponse(FlatBufferBuilder builder) {
     int o = builder.endObject();
     return o;

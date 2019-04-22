@@ -25,7 +25,7 @@ table NERSpacyResponse {
 }
 
 table SpacyResponse {
-  dep: DEPSpacyResponse;
-  ner: NERSpacyResponse;
+  dep: [DEPSpacyResponse];
+  ner: [NERSpacyResponse];
 }
 root_type SpacyResponse;
