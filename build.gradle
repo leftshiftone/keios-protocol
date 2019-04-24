@@ -1,5 +1,88 @@
 allprojects {
+    apply plugin: 'maven'
+    apply plugin: 'maven-publish'
+    apply plugin: 'idea'
+    apply plugin: 'java'
+    
+    
+    version = '0.1.0'
+}
+
+buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.+'
+    }
+}
+
+subprojects {
+    repositories {
+        mavenLocal()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        maven { url "https://repo.maven.apache.org/maven2" }
+    }
+    
+    apply plugin: 'com.jfrog.bintray'
+    
+    
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                artifactId = project.name
+                from components.java
+                pom.withXml {
+                    Node root = asNode()
+                    root.appendNode("name", "GAIA keios protocol")
+                    root.appendNode("description", "GAIA keios communication protocol")
+                    root.appendNode("url", "https://github.com/leftshiftone/keios-protocol")
+                    
+                    Node licenses = root.appendNode("licenses")
+                    Node license = licenses.appendNode("license")
+                    license.appendNode("name", "The Apache License, Version 2.0")
+                    license.appendNode("url", "http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    
+                    Node developers = root.appendNode("developers")
+                    Node developer = developers.appendNode("developer")
+                    developer.appendNode("id", "leftshiftone")
+                    developer.appendNode("name", "Leftshift One")
+                    developer.appendNode("email", "devs@leftshift.one")
+                    developer.appendNode("organization", "Leftshift One Software GmbH")
+                    developer.appendNode("organizationUrl", "https://www.leftshift.one")
+                    
+                    Node scm = root.appendNode("scm")
+                    scm.appendNode("connection", "scm:git:git://github.com/leftshiftone/keios-protocol.git")
+                    scm.appendNode("developerConnection", "scm:git:ssh://github.com:leftshiftone/keios-protocol.git")
+                    scm.appendNode("url", "https://github.com/leftshiftone/keios-protocol")
+                }
+            }
+        }
+    }
+    
+    bintray {
+        user = project.property("user")
+        key = project.property("key")
+        pkg {
+            repo = 'keios-protocol'
+            name = "${project.group}.${project.name}"
+            userOrg = "leftshiftone"
+            licenses = ["Apache-2.0"]
+            vcsUrl = "https://github.com/leftshiftone/keios-protocol.git"
+            publications = ['mavenJava']
+            version {
+                gpg {
+                    sign = true
+                }
+                mavenCentralSync {
+                    sync = true
+                    user = System.getenv('OSSRH_USER')
+                    password = System.getenv('OSSRH_PASSWORD')
+                }
+            }
+        }
     }
 }

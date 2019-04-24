@@ -15,3 +15,7 @@
  */
 
 include "java"
+
+rootProject.children.each { child ->
+    child.name = "keios-protocol-$child.name"
+}
