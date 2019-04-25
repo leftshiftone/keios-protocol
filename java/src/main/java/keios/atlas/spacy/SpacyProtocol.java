@@ -36,10 +36,3 @@ public class SpacyProtocol {
     }
 
 }
-
-class App {
-    public static void main(String[] args) {
-        byte[] result = SpacyProtocol.toSpacyRequest("hallo ich bins der peter", ESpacyType.NER);
-        System.out.println(DatatypeConverter.printHexBinary(result));
-    }
-}
