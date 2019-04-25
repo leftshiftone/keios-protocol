@@ -64,8 +64,8 @@ class SpacyProtocol:
                      target_tag: str,
                      target_base: str):
             self._lang = lang
-            self._relation = relation,
-            self._source = source,
+            self._relation = relation
+            self._source = source
             self._source_pos = source_pos
             self._source_index = source_index
             self._source_tag = source_tag
@@ -82,46 +82,46 @@ class SpacyProtocol:
 
         @property
         def relation(self) -> str:
-            return self._relation[0]
+            return self._relation
 
         @property
         def source(self) -> str:
-            return self._source[0]
+            return self._source
 
         @property
-        def source_pos(self):
+        def source_pos(self) -> str:
             return self._source_pos
 
         @property
-        def source_index(self):
+        def source_index(self) -> int:
             return self._source_index
 
         @property
-        def source_tag(self):
+        def source_tag(self) -> str:
             return self._source_tag
 
         @property
-        def source_base(self):
+        def source_base(self) -> str:
             return self._source_base
 
         @property
-        def target(self):
+        def target(self) -> str:
             return self._target
 
         @property
-        def target_pos(self):
+        def target_pos(self) -> str:
             return self._target_pos
 
         @property
-        def target_index(self):
+        def target_index(self) -> int:
             return self._target_index
 
         @property
-        def target_tag(self):
+        def target_tag(self) -> str:
             return self._target_tag
 
         @property
-        def target_base(self):
+        def target_base(self) -> str:
             return self._target_base
 
         def serialize(self, builder):
@@ -199,12 +199,12 @@ class SpacyProtocol:
         serialized_dep = list(map(lambda dep: dep.serialize(builder), response_entity.dep))
         serialized_ner = list(map(lambda n: n.serialize(builder), response_entity.ner))
         SpacyResponseStartDepVector(builder, len(response_entity.dep))
-        for sp in serialized_dep:
+        for sp in reversed(serialized_dep):
             builder.PrependUOffsetTRelative(sp)
         dep_vector = builder.EndVector(len(response_entity.dep))
 
         SpacyResponseStartNerVector(builder, len(response_entity.ner))
-        for sn in serialized_ner:
+        for sn in reversed(serialized_ner):
             builder.PrependUOffsetTRelative(sn)
         ner_vector = builder.EndVector(len(response_entity.ner))
 
