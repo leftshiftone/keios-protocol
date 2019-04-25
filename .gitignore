@@ -83,19 +83,24 @@ venv.bak/
 .idea/**/gradle.xml
 .idea/**/libraries
 cmake-build-*/
-.idea/**/mongoSettings.xml
+
+# Gradle
+.gradle/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IntelliJ
+.idea/
+!.idea/runConfigurations/
+!.idea/codeStyles/
 *.iws
-out/
-.idea_modules/
-atlassian-ide-plugin.xml
-.idea/replstate.xml
-com_crashlytics_export_strings.xml
-crashlytics.properties
-crashlytics-build.properties
-fabric.properties
-.idea/httpRequests
-.gradle
-/build/
-gradle-app.setting
-!gradle-wrapper.jar
-.gradletasknamecache
+*.iml
+*.ipr
+**/out/
+
+# Logs
+*.log
+
+# Python
+**/.venv
+**/venv

@@ -13,6 +13,7 @@
  * is strictly forbidden unless prior written permission is obtained
  * from Leftshift One.
  */
+rootProject.name = rootProjectName
 
 include "java"
 
