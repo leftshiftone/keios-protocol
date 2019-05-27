@@ -3,11 +3,11 @@ from setuptools import setup, find_packages
 
 # dependencies
 install_requires = [
-      "flatbuffers==1.10"
+      "flatbuffers==1.11"
 ]
 extras_require = {}
 
-VERSION = "0.5.0"
+VERSION = "0.6.0"
 
 setup(name='keios-protocol',
       version=VERSION,

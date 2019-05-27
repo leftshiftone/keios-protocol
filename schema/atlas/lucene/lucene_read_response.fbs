@@ -1,0 +1,12 @@
+include "tuple_type.fbs";
+namespace keios.atlas.lucene;
+attribute "priority";
+
+table SearchResult {
+    score: float;
+    document: [Tuple];
+}
+
+table LuceneReadResponse {
+    results: [SearchResult];
+}

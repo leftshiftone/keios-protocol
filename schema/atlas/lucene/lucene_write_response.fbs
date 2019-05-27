@@ -1,0 +1,9 @@
+include "tuple_type.fbs";
+namespace keios.atlas.lucene;
+attribute "priority";
+
+enum WriteResult: byte { Success = 0, Failure = 1 }
+
+table LuceneWriteResponse {
+    writeResult: WriteResult;
+}
