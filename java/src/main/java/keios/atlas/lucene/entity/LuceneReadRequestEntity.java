@@ -4,7 +4,7 @@ import java.util.Objects;
 
 /**
  * @author benjamin.krenn@leftshift.one
- * @since 1.0.0
+ * @since 0.3.0
  */
 public class LuceneReadRequestEntity {
     private final String field;
@@ -13,8 +13,8 @@ public class LuceneReadRequestEntity {
     private final Integer limit;
 
     public LuceneReadRequestEntity(String field, String query, Float minimumScore, Integer limit) {
-        this.field = field;
-        this.query = query;
+        this.field = Objects.requireNonNull(field, "field can not be null");
+        this.query = Objects.requireNonNull(query, "query can not be null");
         this.minimumScore = minimumScore;
         this.limit = limit;
     }
@@ -47,6 +47,16 @@ public class LuceneReadRequestEntity {
 
     public Integer getLimit() {
         return limit;
+    }
+
+    public static LuceneReadRequestEntity deserialize(byte[] bb) {
+        LuceneReadRequestDeserializer deserializer = new LuceneReadRequestDeserializer();
+        return deserializer.deserialize(bb);
+    }
+
+    public byte[] serialize() {
+        LuceneReadRequestSerializer serializer = new LuceneReadRequestSerializer();
+        return serializer.serialize(this);
     }
 
     @Override

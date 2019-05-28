@@ -2,10 +2,11 @@
 
 package keios.atlas.lucene.flatbuffers;
 
-import java.nio.*;
-import java.lang.*;
-import java.util.*;
-import com.google.flatbuffers.*;
+import com.google.flatbuffers.FlatBufferBuilder;
+import com.google.flatbuffers.Table;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 @SuppressWarnings("unused")
 public final class LuceneWriteRequest extends Table {
@@ -14,21 +15,21 @@ public final class LuceneWriteRequest extends Table {
   public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; vtable_start = bb_pos - bb.getInt(bb_pos); vtable_size = bb.getShort(vtable_start); }
   public LuceneWriteRequest __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public Tuple mapping(int j) { return mapping(new Tuple(), j); }
-  public Tuple mapping(Tuple obj, int j) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(__vector(o) + j * 4), bb) : null; }
-  public int mappingLength() { int o = __offset(4); return o != 0 ? __vector_len(o) : 0; }
+  public Tuple document(int j) { return document(new Tuple(), j); }
+  public Tuple document(Tuple obj, int j) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(__vector(o) + j * 4), bb) : null; }
+  public int documentLength() { int o = __offset(4); return o != 0 ? __vector_len(o) : 0; }
 
   public static int createLuceneWriteRequest(FlatBufferBuilder builder,
-      int mappingOffset) {
+      int documentOffset) {
     builder.startObject(1);
-    LuceneWriteRequest.addMapping(builder, mappingOffset);
+    LuceneWriteRequest.addDocument(builder, documentOffset);
     return LuceneWriteRequest.endLuceneWriteRequest(builder);
   }
 
   public static void startLuceneWriteRequest(FlatBufferBuilder builder) { builder.startObject(1); }
-  public static void addMapping(FlatBufferBuilder builder, int mappingOffset) { builder.addOffset(0, mappingOffset, 0); }
-  public static int createMappingVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addOffset(data[i]); return builder.endVector(); }
-  public static void startMappingVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
+  public static void addDocument(FlatBufferBuilder builder, int documentOffset) { builder.addOffset(0, documentOffset, 0); }
+  public static int createDocumentVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addOffset(data[i]); return builder.endVector(); }
+  public static void startDocumentVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
   public static int endLuceneWriteRequest(FlatBufferBuilder builder) {
     int o = builder.endObject();
     return o;

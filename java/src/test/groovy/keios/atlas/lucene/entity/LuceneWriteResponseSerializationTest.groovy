@@ -1,20 +1,20 @@
-package keios.atlas.lucene.entity.serialize
+package keios.atlas.lucene.entity
 
 import keios.atlas.lucene.entity.LuceneWriteResponseEntity
+import keios.atlas.lucene.entity.LuceneWriteResponseSerializer
 import keios.atlas.lucene.entity.WriteResultEntity
-import keios.atlas.lucene.entity.deserialize.LuceneWriteResponseDeserializer
 import spock.lang.Specification
 import spock.lang.Subject
 import spock.lang.Unroll
 
 class LuceneWriteResponseSerializationTest extends Specification {
-    
+
     @Subject
     LuceneWriteResponseSerializer serializer = new LuceneWriteResponseSerializer()
-    
+
     @Subject
     LuceneWriteResponseDeserializer deserializer = new LuceneWriteResponseDeserializer()
-    
+
     @Unroll
     void "serializes / deserializes"() {
         given:

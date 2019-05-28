@@ -1,7 +1,6 @@
-package keios.atlas.lucene.entity.serialize;
+package keios.atlas.lucene.entity;
 
 import com.google.flatbuffers.FlatBufferBuilder;
-import keios.atlas.lucene.entity.LuceneWriteResponseEntity;
 import keios.atlas.lucene.flatbuffers.LuceneWriteResponse;
 import keios.common.BinarySerializer;
 
@@ -9,7 +8,7 @@ import keios.common.BinarySerializer;
  * @author benjamin.krenn@leftshift.one
  * @since 0.3.0
  */
-public class LuceneWriteResponseSerializer implements BinarySerializer<LuceneWriteResponseEntity> {
+class LuceneWriteResponseSerializer implements BinarySerializer<LuceneWriteResponseEntity> {
     @Override
     public byte[] serialize(LuceneWriteResponseEntity entity) {
         FlatBufferBuilder builder = new FlatBufferBuilder();

@@ -4,7 +4,7 @@ import java.util.Objects;
 
 /**
  * @author benjamin.krenn@leftshift.one
- * @since 1.0.0
+ * @since 0.3.0
  */
 public class LuceneWriteResponseEntity {
     private final WriteResultEntity writeResult;
@@ -13,8 +13,18 @@ public class LuceneWriteResponseEntity {
         this.writeResult = writeResult;
     }
 
+    public static LuceneWriteResponseEntity deserialize(byte[] bb) {
+        LuceneWriteResponseDeserializer deserializer = new LuceneWriteResponseDeserializer();
+        return deserializer.deserialize(bb);
+    }
+
     public WriteResultEntity getWriteResult() {
         return writeResult;
+    }
+
+    public byte[] serialize() {
+        LuceneWriteResponseSerializer serializer = new LuceneWriteResponseSerializer();
+        return serializer.serialize(this);
     }
 
     @Override

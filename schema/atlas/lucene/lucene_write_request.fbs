@@ -3,5 +3,5 @@ namespace keios.atlas.lucene;
 attribute "priority";
 
 table LuceneWriteRequest {
-   mapping: [Tuple];
+   document: [Tuple];
 }
