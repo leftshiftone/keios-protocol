@@ -1,6 +1,7 @@
-package keios.atlas.lucene;
+package keios.atlas.lucene.entity;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author benjamin.krenn@leftshift.one
@@ -21,5 +22,19 @@ public class SearchResultEntity {
 
     public Map<String, String> getDocument() {
         return document;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SearchResultEntity entity = (SearchResultEntity) o;
+        return score.equals(entity.score) &&
+                document.equals(entity.document);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(score, document);
     }
 }
