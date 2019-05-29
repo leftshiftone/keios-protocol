@@ -23,4 +23,4 @@ Run `./gradlew final -x bintrayUpload -Prelease.scope=patch` locally.
 `$ flatc -p spacy_incoming.fbs spacy_outgoing.fbs`
 
 #### Publish 
-Currently none. Use: `$ pip install -e "git+https://github.com/leftshiftone/keios-protocol.git#egg=keios-protocol-0.4.0&subdirectory=python"`
+Currently none. Use: `$ pip install -e "git+https://github.com/leftshiftone/keios-protocol.git#egg=keios-protocol-0.6.0&subdirectory=python"`
