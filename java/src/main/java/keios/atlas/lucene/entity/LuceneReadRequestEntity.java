@@ -1,12 +1,16 @@
 package keios.atlas.lucene.entity;
 
+import com.google.flatbuffers.FlatBufferBuilder;
+
 import java.util.Objects;
+
+import static keios.atlas.lucene.entity.LuceneMessageEntity.MessageType.READ_REQUEST;
 
 /**
  * @author benjamin.krenn@leftshift.one
  * @since 0.3.0
  */
-public class LuceneReadRequestEntity {
+public class LuceneReadRequestEntity implements Message {
     private final String field;
     private final String query;
     private final Float minimumScore;
@@ -49,14 +53,15 @@ public class LuceneReadRequestEntity {
         return limit;
     }
 
-    public static LuceneReadRequestEntity deserialize(byte[] bb) {
-        LuceneReadRequestDeserializer deserializer = new LuceneReadRequestDeserializer();
-        return deserializer.deserialize(bb);
+    @Override
+    public LuceneMessageEntity.MessageType type() {
+        return READ_REQUEST;
     }
 
-    public byte[] serialize() {
+    @Override
+    public int serialize(FlatBufferBuilder builder) {
         LuceneReadRequestSerializer serializer = new LuceneReadRequestSerializer();
-        return serializer.serialize(this);
+        return serializer.serialize(this, builder);
     }
 
     @Override

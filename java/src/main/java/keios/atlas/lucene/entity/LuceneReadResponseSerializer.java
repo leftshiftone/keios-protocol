@@ -2,21 +2,19 @@ package keios.atlas.lucene.entity;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 import keios.atlas.lucene.flatbuffers.LuceneReadResponse;
-import keios.common.BinarySerializer;
+import keios.common.ChildSerializer;
 
 /**
  * @author benjamin.krenn@leftshift.one
  * @since 0.3.0
  */
-class LuceneReadResponseSerializer implements BinarySerializer<LuceneReadResponseEntity> {
+class LuceneReadResponseSerializer implements ChildSerializer<LuceneReadResponseEntity> {
 
-    private final SearchResultChildSerializer searchResultSerializer = new SearchResultChildSerializer();
+    private final SearchResultSerializer searchResultSerializer = new SearchResultSerializer();
 
     @Override
-    public byte[] serialize(LuceneReadResponseEntity entity) {
-        FlatBufferBuilder builder = new FlatBufferBuilder();
-
-        int[] searchResultOffsets = entity.getResults()
+    public int serialize(LuceneReadResponseEntity obj, FlatBufferBuilder builder) {
+        int[] searchResultOffsets = obj.getResults()
                 .stream()
                 .map(searchResult -> searchResultSerializer.serialize(searchResult, builder))
                 .mapToInt(i -> i)
@@ -26,9 +24,6 @@ class LuceneReadResponseSerializer implements BinarySerializer<LuceneReadRespons
 
         LuceneReadResponse.startLuceneReadResponse(builder);
         LuceneReadResponse.addResults(builder, searchResultVectorOffset);
-        int result = LuceneReadResponse.endLuceneReadResponse(builder);
-        builder.finish(result);
-
-        return builder.sizedByteArray();
+        return LuceneReadResponse.endLuceneReadResponse(builder);
     }
 }

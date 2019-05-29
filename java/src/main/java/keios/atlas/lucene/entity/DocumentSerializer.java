@@ -10,7 +10,7 @@ import java.util.Map;
  * @author benjamin.krenn@leftshift.one - 5/28/19.
  * @since 0.3.0
  */
-class DocumentChildSerializer implements ChildSerializer<Map<String,String>> {
+class DocumentSerializer implements ChildSerializer<Map<String,String>> {
     @Override
     public int serialize(Map<String, String> obj, FlatBufferBuilder builder) {
         return builder.createVectorOfTables(

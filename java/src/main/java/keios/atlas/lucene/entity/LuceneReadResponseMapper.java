@@ -2,9 +2,8 @@ package keios.atlas.lucene.entity;
 
 import keios.atlas.lucene.flatbuffers.LuceneReadResponse;
 import keios.atlas.lucene.flatbuffers.SearchResult;
-import keios.common.BinaryDeserializer;
+import keios.common.EntityMapper;
 
-import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -15,19 +14,7 @@ import java.util.stream.IntStream;
  * @author benjamin.krenn@leftshift.one
  * @since 0.3.0
  */
-class LuceneReadResponseDeserializer implements BinaryDeserializer<LuceneReadResponseEntity> {
-
-    @Override
-    public LuceneReadResponseEntity deserialize(ByteBuffer bb) {
-        LuceneReadResponse readResponse = LuceneReadResponse.getRootAsLuceneReadResponse(bb);
-
-        List<SearchResultEntity> searchResults = IntStream.range(0, readResponse.resultsLength())
-                .mapToObj(readResponse::results)
-                .map(LuceneReadResponseDeserializer::toEntity)
-                .collect(Collectors.toList());
-
-        return new LuceneReadResponseEntity(searchResults);
-    }
+class LuceneReadResponseMapper implements EntityMapper<LuceneReadResponse, LuceneReadResponseEntity> {
 
     private static SearchResultEntity toEntity(SearchResult searchResult) {
         //@formatter:off
@@ -43,5 +30,15 @@ class LuceneReadResponseDeserializer implements BinaryDeserializer<LuceneReadRes
 
     private static Supplier<RuntimeException> throwIfNull() {
         return IllegalStateException::new;
+    }
+
+    @Override
+    public LuceneReadResponseEntity from(LuceneReadResponse input) {
+        List<SearchResultEntity> searchResults = IntStream.range(0, input.resultsLength())
+                .mapToObj(input::results)
+                .map(LuceneReadResponseMapper::toEntity)
+                .collect(Collectors.toList());
+
+        return new LuceneReadResponseEntity(searchResults);
     }
 }

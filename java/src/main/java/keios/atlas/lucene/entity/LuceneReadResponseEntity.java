@@ -1,5 +1,7 @@
 package keios.atlas.lucene.entity;
 
+import com.google.flatbuffers.FlatBufferBuilder;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -8,25 +10,26 @@ import java.util.Objects;
  * @author benjamin.krenn@leftshift.one
  * @since 0.3.0
  */
-public class LuceneReadResponseEntity {
+public class LuceneReadResponseEntity implements Message {
     private final List<SearchResultEntity> results;
 
     public LuceneReadResponseEntity(List<SearchResultEntity> results) {
         this.results = Objects.requireNonNull(results, "results can not be null");
     }
 
-    public static LuceneReadResponseEntity deserialize(byte[] bb) {
-        LuceneReadResponseDeserializer deserializer = new LuceneReadResponseDeserializer();
-        return deserializer.deserialize(bb);
-    }
-
     public List<SearchResultEntity> getResults() {
         return Collections.unmodifiableList(this.results);
     }
 
-    public byte[] serialize() {
+    @Override
+    public int serialize(FlatBufferBuilder builder) {
         LuceneReadResponseSerializer serializer = new LuceneReadResponseSerializer();
-        return serializer.serialize(this);
+        return serializer.serialize(this, builder);
+    }
+
+    @Override
+    public LuceneMessageEntity.MessageType type() {
+        return LuceneMessageEntity.MessageType.READ_RESPONSE;
     }
 
     @Override

@@ -1,0 +1,19 @@
+include "lucene_read_request.fbs";
+include "lucene_read_response.fbs";
+include "lucene_write_request.fbs";
+include "lucene_write_response.fbs";
+namespace keios.atlas.lucene;
+attribute "priority";
+
+union LuceneMessageType {
+    LuceneReadRequest,
+    LuceneReadResponse,
+    LuceneWriteRequest,
+    LuceneWriteResponse
+}
+
+
+table LuceneMessage {
+    message: LuceneMessageType;
+}
+

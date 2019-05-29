@@ -1,32 +1,37 @@
 package keios.atlas.lucene.entity;
 
+import com.google.flatbuffers.FlatBufferBuilder;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+
+import static keios.atlas.lucene.entity.LuceneMessageEntity.MessageType.WRITE_REQUEST;
 
 /**
  * @author benjamin.krenn@leftshift.one
  * @since 0.3.0
  */
-public class LuceneWriteRequestEntity {
+public class LuceneWriteRequestEntity implements Message {
     private final Map<String, String> document;
 
     public LuceneWriteRequestEntity(Map<String, String> document) {
         this.document = Objects.requireNonNull(document, "document can not be null");
     }
 
-    public static LuceneWriteRequestEntity deserialize(byte[] bb) {
-        LuceneWriteRequestDeserializer deserializer = new LuceneWriteRequestDeserializer();
-        return deserializer.deserialize(bb);
-    }
-
     public Map<String, String> getDocument() {
         return Collections.unmodifiableMap(this.document);
     }
 
-    public byte[] serialize() {
+    @Override
+    public int serialize(FlatBufferBuilder builder) {
         LuceneWriteRequestSerializer serializer = new LuceneWriteRequestSerializer();
-        return serializer.serialize(this);
+        return serializer.serialize(this, builder);
+    }
+
+    @Override
+    public LuceneMessageEntity.MessageType type() {
+        return WRITE_REQUEST;
     }
 
     @Override
