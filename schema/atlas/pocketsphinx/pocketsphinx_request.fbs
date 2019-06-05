@@ -1,0 +1,8 @@
+namespace keios.atlas.pocketsphinx;
+attribute "priority";
+
+table PocketsphinxRequest {
+  speech:[ubyte];
+}
+
+root_type PocketsphinxRequest;

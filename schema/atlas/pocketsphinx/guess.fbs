@@ -1,0 +1,7 @@
+namespace keios.atlas.pocketsphinx;
+attribute "priority";
+
+table Guess {
+    confidence: float;
+    phrase: string;
+}
