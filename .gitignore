@@ -1,4 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
+*.prefs
+.classpath
+.project
 .Python
 [Bb]in
 [Ii]nclude
