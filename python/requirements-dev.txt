@@ -3,3 +3,4 @@ pytest
 wheel
 setuptools
 https://github.com/leftshiftone/pocketsphinx-python.git#egg=pocketsphinx
+flatbuffers==1.11
