@@ -69,25 +69,24 @@ class PocketsphinxResponseData:
     guesses: List[Guess]
 
 PRes.Data = PocketsphinxResponseData
+PRes.Guess = Guess
 
-def serialize_guess(guess: Guess):
-    builder = flatbuffers.Builder(0)
+def build_guess(guess: Guess, builder):
+
+    phrase = builder.CreateString(guess.phrase)
+    conf = guess.confidence
 
     PGuess.GuessStart(builder)
 
-    PGuess.GuessAddConfidence(builder, guess.confidence)
-    PGuess.GuessAddPhrase(builder, builder.CreateString(guess.phrase))
+    PGuess.GuessAddConfidence(builder, conf)
+    PGuess.GuessAddPhrase(builder, phrase)
 
-    result = PGuess.GuessEnd(builder)
+    return PGuess.GuessEnd(builder)
 
-    builder.Finish(result)
-    return builder.Output()
-
-def deserialize_guess(bb: bytearray) -> Guess:
-    guess = PGuess.Guess.GetRootAsGuess(bb, 0)
+def unpack_guess(guess: PGuess.Guess) -> Guess:
     return Guess(
             confidence=guess.Confidence(),
-            phrase=guess.Phrase()
+            phrase=guess.Phrase().decode("utf-8")
         )
 
 
@@ -95,10 +94,10 @@ def res_serialize(response: PRes.Data) -> bytearray:
     builder = flatbuffers.Builder(0)
     g_len = len(response.guesses)
 
-    PRes.PocketsphinxResponseStartGuessesVector(builder, g_len) 
-    ser_guesses = [serialize_guess(g) for g in reversed(request.guesses)]
-    for b in reversed(ser_guesses):
-        builder.PrependByte(b)
+    ser_guesses = [build_guess(g, builder) for g in reversed(response.guesses)]
+    PRes.PocketsphinxResponseStartGuessesVector(builder, g_len)
+    for b in ser_guesses:
+        builder.PrependUOffsetTRelative(b)
     guess_vector = builder.EndVector(g_len)
     
     PRes.PocketsphinxResponseStart(builder)
@@ -113,10 +112,10 @@ def res_deserialize(bb: bytearray) -> PRes.Data:
     g_len = response.GuessesLength()
 
     def get_guess(i):
-        deserialize_guess(response.Guesses(i))
+        return unpack_guess(response.Guesses(i))
 
     guesses = [get_guess(i) for i in range(g_len)]
-    
+
     return PocketsphinxResponseData(guesses=guesses)
 
 PRes.serialize = res_serialize
