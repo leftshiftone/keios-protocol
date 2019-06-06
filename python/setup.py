@@ -3,7 +3,8 @@ from setuptools import setup, find_packages
 
 # dependencies
 install_requires = [
-      "flatbuffers==1.11"
+      "flatbuffers==1.11",
+      "dataclasses==0.6"
 ]
 extras_require = {}
 
