@@ -3,8 +3,7 @@ from setuptools import setup, find_packages
 
 # dependencies
 install_requires = [
-      "flatbuffers==1.11",
-      "dataclasses==0.6"
+      "flatbuffers==1.11"
 ]
 extras_require = {}
 
@@ -20,6 +19,7 @@ setup(name='keios-protocol',
       license='The Apache License, Version 2.0',
       packages=find_packages(exclude=['ez_setup', 'examples',
                                       'tests', 'tests.*', 'release']),
+      python_requires='>3.7',
       include_package_data=True,
       zip_safe=False,
       install_requires=install_requires,
