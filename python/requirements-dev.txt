@@ -2,4 +2,4 @@ flake8
 pytest
 wheel
 setuptools
-git+ssh://git@bitbucket.org/leftshiftone/pocketsphinx-python.git#egg=pocketsphinx
+https://github.com/leftshiftone/pocketsphinx-python.git#egg=pocketsphinx
