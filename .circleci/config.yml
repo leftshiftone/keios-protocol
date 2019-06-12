@@ -1,13 +1,5 @@
 version: 2.1
 jobs:
-  webhook-completed:
-    docker:
-      - image: circleci/openjdk:8-jdk-browsers
-    steps:
-      - run:
-          name: Webhook completed
-          command: |
-            curl $BUILD_STATUS_URL\?flow\=circleci-completed -d '{"repository":"'"$CIRCLE_PROJECT_REPONAME"'","branch":"'"$CIRCLE_BRANCH"'","build_number":"'"$CIRCLE_PREVIOUS_BUILD_NUM"'","build_url":"'"$CIRCLE_BUILD_URL"'"}' -H "Content-Type: application/json" -X POST -i || true
   build:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
@@ -40,6 +32,27 @@ jobs:
           when: on_fail
           command: |
             curl $BUILD_STATUS_URL\?flow\=circleci-completed\&status\=FAILED -d '{"repository":"'"$CIRCLE_PROJECT_REPONAME"'","branch":"'"$CIRCLE_BRANCH"'","build_number":"'"$CIRCLE_BUILD_NUM"'","build_url":"'"$CIRCLE_BUILD_URL"'"}' -H "Content-Type: application/json" -X POST -i || true
+  pytest:
+    docker:
+      - image: circleci/python:3.7.3
+    environment:
+      TZ: "/usr/share/zoneinfo/Europe/Vienna"
+    steps:
+      - checkout
+      - run:
+          name: install dev requirements
+          command: pip install -r ~/project/python/requirements-dev.txt --user
+      - run:
+          name: test
+          command: /home/circleci/.local/bin/pytest ~/project
+  webhook-completed:
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+    steps:
+      - run:
+          name: Webhook completed
+          command: |
+            curl $BUILD_STATUS_URL\?flow\=circleci-completed -d '{"repository":"'"$CIRCLE_PROJECT_REPONAME"'","branch":"'"$CIRCLE_BRANCH"'","build_number":"'"$CIRCLE_PREVIOUS_BUILD_NUM"'","build_url":"'"$CIRCLE_BUILD_URL"'"}' -H "Content-Type: application/json" -X POST -i || true
   release:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
@@ -64,23 +77,22 @@ jobs:
           when: on_fail
           command: |
             curl $BUILD_STATUS_URL\?flow\=circleci-completed\&status\=FAILED -d '{"repository":"'"$CIRCLE_PROJECT_REPONAME"'","branch":"'"$CIRCLE_BRANCH"'","build_number":"'"$CIRCLE_BUILD_NUM"'","build_url":"'"$CIRCLE_BUILD_URL"'"}' -H "Content-Type: application/json" -X POST -i || true
-
 workflows:
   version: 2
   build:
     jobs:
       - build:
-          context: bintray-jcenter
           filters:
             tags:
               ignore: /.*/
+          context: bintray-jcenter
+      - pytest
       - webhook-completed:
           requires:
             - build
   release:
     jobs:
       - release:
-          context: bintray-jcenter
           filters:
             branches:
               ignore: /.*/
