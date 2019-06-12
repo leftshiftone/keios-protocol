@@ -30,7 +30,8 @@ public final class ClassificationClass2Request extends Table {
   public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; vtable_start = bb_pos - bb.getInt(bb_pos); vtable_size = bb.getShort(vtable_start); }
   public ClassificationClass2Request __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public String vectors(int j) { int o = __offset(4); return o != 0 ? __string(__vector(o) + j * 4) : null; }
+  public Vector vectors(int j) { return vectors(new Vector(), j); }
+  public Vector vectors(Vector obj, int j) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(__vector(o) + j * 4), bb) : null; }
   public int vectorsLength() { int o = __offset(4); return o != 0 ? __vector_len(o) : 0; }
 
   public static int createClassificationClass2Request(FlatBufferBuilder builder,

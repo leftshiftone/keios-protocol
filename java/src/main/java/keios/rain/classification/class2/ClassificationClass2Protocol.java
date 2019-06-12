@@ -19,10 +19,9 @@ package keios.rain.classification.class2;
 import com.google.flatbuffers.FlatBufferBuilder;
 import keios.rain.classification.class2.flatbuffers.ClassificationClass2Request;
 import keios.rain.classification.class2.flatbuffers.ClassificationClass2Response;
+import keios.rain.classification.class2.flatbuffers.Vector;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.stream.Stream;
 
 
@@ -35,13 +34,15 @@ public class ClassificationClass2Protocol {
         return toRequest(Stream.of(vectors).map(String::getBytes).toArray(byte[][]::new));
     }
 
-    @SuppressWarnings("WeakerAccess")
     public static byte[] toRequest(byte[][] input) {
         final FlatBufferBuilder builder = new FlatBufferBuilder();
 
         int[] vecs = new int[input.length];
         for (int i = 0; i < input.length; i++) {
-            vecs[i] = builder.createString(new String(input[i]));
+            int vector = builder.createByteVector(input[i]);
+            Vector.startVector(builder);
+            Vector.addBytes(builder, vector);
+            vecs[i] = Vector.endVector(builder);
         }
         int vectors = ClassificationClass2Request.createVectorsVector(builder, vecs);
 

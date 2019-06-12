@@ -32,7 +32,7 @@ class ClassificationClass2ProtocolTest extends Specification {
         when:
             byte[] result = ClassificationClass2Protocol.toRequest(input)
         then:
-            result == [12, 0, 0, 0, 0, 0, 6, 0, 8, 0, 4, 0, 6, 0, 0, 0, 4, 0, 0, 0, 2, 0, 0, 0, 16, 0, 0, 0, 4, 0, 0, 0, 3, 0, 0, 0, 98, 97, 114, 0, 3, 0, 0, 0, 102, 111, 111, 0] as byte[]
+            result == [4, 0, 0, 0, -38, -1, -1, -1, 4, 0, 0, 0, 2, 0, 0, 0, 32, 0, 0, 0, 4, 0, 0, 0, -18, -1, -1, -1, 4, 0, 0, 0, 3, 0, 0, 0, 102, 111, 111, 0, 0, 0, 6, 0, 8, 0, 4, 0, 6, 0, 0, 0, 4, 0, 0, 0, 3, 0, 0, 0, 102, 111, 111, 0] as byte[]
     }
 
     def "string request is serialized to flatbuffer bytes"() {
@@ -41,7 +41,7 @@ class ClassificationClass2ProtocolTest extends Specification {
         when:
             byte[] result = ClassificationClass2Protocol.toRequest(input)
         then:
-            result == [12, 0, 0, 0, 0, 0, 6, 0, 8, 0, 4, 0, 6, 0, 0, 0, 4, 0, 0, 0, 2, 0, 0, 0, 16, 0, 0, 0, 4, 0, 0, 0, 3, 0, 0, 0, 98, 97, 114, 0, 3, 0, 0, 0, 102, 111, 111, 0] as byte[]
+            result == [4, 0, 0, 0, -38, -1, -1, -1, 4, 0, 0, 0, 2, 0, 0, 0, 32, 0, 0, 0, 4, 0, 0, 0, -18, -1, -1, -1, 4, 0, 0, 0, 3, 0, 0, 0, 102, 111, 111, 0, 0, 0, 6, 0, 8, 0, 4, 0, 6, 0, 0, 0, 4, 0, 0, 0, 3, 0, 0, 0, 102, 111, 111, 0] as byte[]
     }
 
     def "serializing and deserializing of request returns the same result"() {
@@ -53,7 +53,15 @@ class ClassificationClass2ProtocolTest extends Specification {
             ClassificationClass2Request deserialized = ClassificationClass2Request.getRootAsClassificationClass2Request(ByteBuffer.wrap(serialized))
         then:
             deserialized.vectorsLength() == 2
-            deserialized.vectors(0).chars == "foo".chars
-            deserialized.vectors(1).chars == "bar".chars
+            vectorAsString(deserialized.vectors(0)) == "foo"
+            vectorAsString(deserialized.vectors(1)) == "bar"
+    }
+
+    private static String vectorAsString(keios.rain.classification.class2.flatbuffers.Vector input) {
+        byte[] raw = new byte[input.bytesLength()]
+        for (int i = 0; i < input.bytesLength(); i++) {
+            raw[i] = input.bytes(i)
+        }
+        return new String(raw)
     }
 }
