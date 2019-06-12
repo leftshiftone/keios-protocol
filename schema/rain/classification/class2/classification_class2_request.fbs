@@ -1,0 +1,7 @@
+namespace keios.rain.classification.class2;
+attribute "priority";
+
+table ClassificationClass2Request {
+    vectors:[string];
+}
+root_type ClassificationClass2Request;
