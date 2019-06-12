@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "python-keios-protocol"
+version = "0.1.0"
+description = ""
+authors = ["Christoph Minixhofer <christoph.minixhofer@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+pocketsphinx-fork = "^1.0"
+flatbuffers = "^1.11"
+
+[tool.poetry.dev-dependencies]
+pytest = "^3.0"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
