@@ -81,6 +81,37 @@ The heart of your protocol is your implementation of ``FlatbufferObject`` with i
 ``serialize(item)`` that takes an item of your dataclass and returns a bytearray, and ``deserialize(buffer)`` which will take a bytearray and return an item of your dataclass.
 
 For these two methods to work, we need to implement ``dataclass_to_flatbuffer(dataclass)`` and ``flatbuffer_to_dataclass(flatbuffer)``.
+
+Both of the following two examples are valid. The first one uses ``FlatbufferObject`` helper functions while the other one accesses ``self.fbs`` and ``self.builder`` directly.
+
+##### With Helpers
+
+````python
+import numpy as np
+
+class MyEntity(FlatbufferObject):
+
+    def __init__(self):
+        super().__init__(MyDataclass, MyFlatbuffer)
+
+    def dataclass_to_flatbuffer(self, dataclass):
+        a = self.build_string(dataclass.A)
+        b_vector = self.build_vector(dataclass.B)
+        self.start()
+        self['A'] = a
+        self['B'] = b_vector
+        return self.end()
+        
+    def flatbuffer_to_dataclass(self, flatbuffer): # the flatbuffer argument is supplied for legacy use (see "Without Helpers" example below)
+        self['A']
+        return MyDataclass(
+            some_attribute=self['A']
+            some_list_attribute=self['B'].tolist() # returns a numpy array
+        )
+````
+
+##### Without Helpers (native flatbuffer methods)
+
 ````python
 import numpy as np
 

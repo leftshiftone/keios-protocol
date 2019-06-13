@@ -1,6 +1,0 @@
-flake8
-pytest
-wheel
-setuptools
-pocketsphinx-fork
-flatbuffers==1.11

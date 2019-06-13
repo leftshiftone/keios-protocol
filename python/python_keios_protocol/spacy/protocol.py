@@ -63,18 +63,18 @@ class DEPSpacyResponseEntity(FlatbufferObject):
         
     def flatbuffer_to_dataclass(self, flatbuffer):
         return DEPSpacyResponseData(
-            lang            =self['Lang'].decode("utf-8"),
-            relation        =self['Relation'].decode("utf-8"),
-            source          =self['Source'].decode("utf-8"),
-            source_pos      =self['SourcePos'].decode("utf-8"),
-            source_index    =self['SourceIndex'],
-            source_tag      =self['SourceTag'].decode("utf-8"),
-            source_base     =self['SourceBase'].decode("utf-8"),
-            target          =self['Target'].decode("utf-8"),
-            target_pos      =self['TargetPos'].decode("utf-8"),
-            target_index    =self['TargetIndex'],
-            target_tag      =self['TargetTag'].decode("utf-8"),
-            target_base     =self['TargetBase'].decode("utf-8")
+            lang            = self['Lang'].decode("utf-8"),
+            relation        = self['Relation'].decode("utf-8"),
+            source          = self['Source'].decode("utf-8"),
+            source_pos      = self['SourcePos'].decode("utf-8"),
+            source_index    = self['SourceIndex'],
+            source_tag      = self['SourceTag'].decode("utf-8"),
+            source_base     = self['SourceBase'].decode("utf-8"),
+            target          = self['Target'].decode("utf-8"),
+            target_pos      = self['TargetPos'].decode("utf-8"),
+            target_index    = self['TargetIndex'],
+            target_tag      = self['TargetTag'].decode("utf-8"),
+            target_base     = self['TargetBase'].decode("utf-8")
         )
 
 @dataclass
