@@ -1,12 +1,12 @@
 import os
 import pytest
-
 import numpy as np
+from python_keios_protocol.pocketsphinx.protocol import GuessData
 
 @pytest.fixture
 def supply_goforward_file():
-	test_data = os.path.join(os.path.dirname(__file__), 'goforward.raw')
-	return open(test_data, 'rb')
+        test_data = os.path.join(os.path.dirname(__file__), 'goforward.raw')
+        return open(test_data, 'rb')
 
 @pytest.fixture
 def supply_nparray_serialized():
@@ -17,15 +17,14 @@ def supply_nparray_serialized():
 
 @pytest.fixture
 def supply_guesses():
-    return [
-            ('go forward ten meters', -28034),
-            ('go for word ten meters', -28570),
-            ('go forward and majors', -28670),
-            ('go forward and meters', -28681),
-            ('go forward and readers', -28685),
-            ('go forward ten readers', -28688),
-            ('go forward ten leaders', -28695),
-            ('go forward can meters', -28695),
-            ('go forward and leaders', -28706),
-            ('go for work ten meters', -28722)
-    ]
+        guess_arr = [('go forward ten meters', -28034),
+                ('go for word ten meters', -28570),
+                ('go forward and majors', -28670),
+                ('go forward and meters', -28681),
+                ('go forward and readers', -28685),
+                ('go forward ten readers', -28688),
+                ('go forward ten leaders', -28695),
+                ('go forward can meters', -28695),
+                ('go forward and leaders', -28706),
+                ('go for work ten meters', -28722)]
+        return [GuessData(phrase=x[0], confidence=x[1]) for x in guess_arr]

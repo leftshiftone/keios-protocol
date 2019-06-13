@@ -2,7 +2,7 @@ import os
 import pytest
 import numpy as np
 from pocketsphinx import StreamSpeech
-from python_keios_protocol.pocketsphinx.Protocol import PocketsphinxRequestEntity
+from python_keios_protocol.pocketsphinx.protocol import PocketsphinxRequestEntity
 
 def test_serialize_request():
         elem_count = 10

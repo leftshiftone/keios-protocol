@@ -1,16 +1,16 @@
 import pytest
 
-from python_keios_protocol.pocketsphinx.Protocol import PocketsphinxResponseEntity
+from python_keios_protocol.pocketsphinx.protocol import PocketsphinxResponseEntity
 
 def test_serialize_response(supply_guesses):
     response = PocketsphinxResponseEntity()
     result = response.serialize(response.dataclass(guesses=supply_guesses))
     deserialized = response.fbs.PocketsphinxResponse.GetRootAsPocketsphinxResponse(result, 0)
 
-    assert supply_guesses[0][1] == deserialized.Guesses(0).Confidence()
-    assert supply_guesses[0][0] == deserialized.Guesses(0).Phrase().decode("utf-8")
-    assert supply_guesses[9][1] == deserialized.Guesses(9).Confidence()
-    assert supply_guesses[9][0] == deserialized.Guesses(9).Phrase().decode("utf-8")
+    assert supply_guesses[0].confidence == deserialized.Guesses(0).Confidence()
+    assert supply_guesses[0].phrase == deserialized.Guesses(0).Phrase().decode("utf-8")
+    assert supply_guesses[9].confidence == deserialized.Guesses(9).Confidence()
+    assert supply_guesses[9].phrase == deserialized.Guesses(9).Phrase().decode("utf-8")
 
 def test_deserialize_response(supply_guesses):
     response = PocketsphinxResponseEntity()
