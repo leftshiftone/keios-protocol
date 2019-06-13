@@ -1,4 +1,4 @@
-namespace keios.atlas.pocketsphinx;
+namespace keios.protocol.pocketsphinx;
 attribute "priority";
 
 table Guess {

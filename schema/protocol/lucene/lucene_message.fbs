@@ -2,7 +2,7 @@ include "lucene_read_request.fbs";
 include "lucene_read_response.fbs";
 include "lucene_write_request.fbs";
 include "lucene_write_response.fbs";
-namespace keios.atlas.lucene;
+namespace keios.protocol.lucene;
 attribute "priority";
 
 union LuceneMessageType {

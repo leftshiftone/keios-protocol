@@ -1,5 +1,5 @@
 include "tuple_type.fbs";
-namespace keios.atlas.lucene;
+namespace keios.protocol.lucene;
 attribute "priority";
 
 table SearchResult {

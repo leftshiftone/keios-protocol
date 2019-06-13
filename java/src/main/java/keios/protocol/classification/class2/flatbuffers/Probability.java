@@ -18,10 +18,10 @@
 
 package keios.protocol.classification.class2.flatbuffers;
 
-import java.nio.*;
-import java.lang.*;
+import com.google.flatbuffers.FlatBufferBuilder;
+import com.google.flatbuffers.Struct;
 
-import com.google.flatbuffers.*;
+import java.nio.ByteBuffer;
 
 @SuppressWarnings("unused")
 public final class Probability extends Struct {

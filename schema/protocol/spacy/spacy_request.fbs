@@ -1,4 +1,4 @@
-namespace keios.atlas.spacy;
+namespace keios.protocol.spacy;
 attribute "priority";
 
 enum Type : byte { DEP, NER }

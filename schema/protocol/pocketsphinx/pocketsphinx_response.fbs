@@ -1,5 +1,5 @@
 include "guess.fbs";
-namespace keios.atlas.pocketsphinx;
+namespace keios.protocol.pocketsphinx;
 attribute "priority";
 
 table PocketsphinxResponse {

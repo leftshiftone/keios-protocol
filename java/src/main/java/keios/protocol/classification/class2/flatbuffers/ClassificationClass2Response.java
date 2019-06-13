@@ -18,10 +18,11 @@
 
 package keios.protocol.classification.class2.flatbuffers;
 
-import java.nio.*;
-import java.lang.*;
+import com.google.flatbuffers.FlatBufferBuilder;
+import com.google.flatbuffers.Table;
 
-import com.google.flatbuffers.*;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 @SuppressWarnings("unused")
 public final class ClassificationClass2Response extends Table {

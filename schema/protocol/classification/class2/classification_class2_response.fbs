@@ -1,4 +1,4 @@
-namespace keios.rain.classification.class2;
+namespace keios.protocol.classification.class2;
 attribute "priority";
 
 struct Probability {

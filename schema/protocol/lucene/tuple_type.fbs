@@ -1,4 +1,4 @@
-namespace keios.atlas.lucene;
+namespace keios.protocol.lucene;
 attribute "priority";
 
 table Tuple {
