@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, NamedTuple
+from typing import List
 from dataclasses import dataclass
 import numpy as np
 import flatbuffers
@@ -30,7 +30,7 @@ class DEPSpacyResponseEntity(FlatbufferObject):
         super().__init__(DEPSpacyResponseData, DEPSpacyResponseClass, builder)
 
     def dataclass_to_flatbuffer(self, dataclass):
-        attr_dict = {}
+        str_attr_dict = {}
         for str_attr in [
             'lang',
             'relation',
@@ -43,230 +43,119 @@ class DEPSpacyResponseEntity(FlatbufferObject):
             'target_tag',
             'target_base'
         ]:
-            attr_dict[str_attr] = self.builder.CreateString(getattr(dataclass, str_attr))
-        self.fbs.DEPSpacyResponseStart(self.builder)
-        self.fbs.DEPSpacyResponseAddLang(self.builder, attr_dict.lang)
-        self.fbs.DEPSpacyResponseAddRelation(self.builder, attr_dict.relation)
-        self.fbs.DEPSpacyResponseAddSource(self.builder, attr_dict.source)
-        self.fbs.DEPSpacyResponseAddSourcePos(self.builder, attr_dict.source_pos)
-        self.fbs.DEPSpacyResponseAddSourceIndex(self.builder, self.source_index)
-        self.fbs.DEPSpacyResponseAddSourceTag(self.builder, attr_dict.source_tag)
-        self.fbs.DEPSpacyResponseAddSourceBase(self.builder, attr_dict.source_base)
-        self.fbs.DEPSpacyResponseAddTarget(self.builder, attr_dict.target)
-        self.fbs.DEPSpacyResponseAddTargetPos(self.builder, attr_dict.target_pos)
-        self.fbs.DEPSpacyResponseAddTargetIndex(self.builder, self.target_index)
-        self.fbs.DEPSpacyResponseAddTargetTag(self.builder, attr_dict.target_tag)
-        self.fbs.DEPSpacyResponseAddTargetBase(self.builder, attr_dict.target_base)
-        return self.fbs.DEPSpacyResponseEnd(self.builder)
+            str_attr_dict[str_attr] = self.build_string(getattr(dataclass, str_attr))
+        self.start()
+        # set string attributes
+        self['Lang']        = str_attr_dict['lang']
+        self['Relation']    = str_attr_dict['relation']
+        self['Source']      = str_attr_dict['source']
+        self['SourcePos']   = str_attr_dict['source_pos']
+        self['SourceTag']   = str_attr_dict['source_tag']
+        self['SourceBase']  = str_attr_dict['source_base']
+        self['Target']      = str_attr_dict['target']
+        self['TargetPos']   = str_attr_dict['target_pos']
+        self['TargetTag']   = str_attr_dict['target_tag']
+        self['TargetBase']  = str_attr_dict['target_base']
+        # set other attributes
+        self['SourceIndex'] = dataclass.source_index
+        self['TargetIndex'] = dataclass.target_index
+        return self.end()
         
     def flatbuffer_to_dataclass(self, flatbuffer):
-        pass
+        return DEPSpacyResponseData(
+            lang            =self['Lang'].decode("utf-8"),
+            relation        =self['Relation'].decode("utf-8"),
+            source          =self['Source'].decode("utf-8"),
+            source_pos      =self['SourcePos'].decode("utf-8"),
+            source_index    =self['SourceIndex'],
+            source_tag      =self['SourceTag'].decode("utf-8"),
+            source_base     =self['SourceBase'].decode("utf-8"),
+            target          =self['Target'].decode("utf-8"),
+            target_pos      =self['TargetPos'].decode("utf-8"),
+            target_index    =self['TargetIndex'],
+            target_tag      =self['TargetTag'].decode("utf-8"),
+            target_base     =self['TargetBase'].decode("utf-8")
+        )
 
-class SpacyProtocol:
-    class NERSpacyResponseEntity:
-        def __init__(self, text: str, start_char: int, end_char: int, label: str):
-            self._text = text
-            self._start_char = start_char
-            self._end_char = end_char
-            self._label = label
+@dataclass
+class NERSpacyResponseData:
+    text: str
+    start_char: int
+    end_char: int
+    label: str
 
-        @property
-        def text(self):
-            return self._text
+class NERSpacyResponseEntity(FlatbufferObject):
+    def __init__(self, builder):
+        super().__init__(NERSpacyResponseData, NERSpacyResponseClass, builder)
 
-        @property
-        def start_char(self):
-            return self._start_char
+    def dataclass_to_flatbuffer(self, dataclass):
+        text = self.build_string(dataclass.text)
+        label = self.build_string(dataclass.label)
+        self.start()
+        # set string attributes
+        self['Text']      = text
+        self['Label']     = label
+        # set other attributes
+        self['StartChar'] = dataclass.start_char
+        self['EndChar']   = dataclass.end_char
+        return self.end()
+        
+    def flatbuffer_to_dataclass(self, flatbuffer):
+        return NERSpacyResponseData(
+            text        = self['Text'].decode("utf-8"),
+            start_char  = self['StartChar'],
+            end_char    = self['EndChar'],
+            label       = self['Label'].decode("utf-8")
+        )
 
-        @property
-        def end_char(self):
-            return self._end_char
+@dataclass
+class SpacyResponseData:
+    ner: List[NERSpacyResponseData]
+    dep: List[DEPSpacyResponseData]
 
-        @property
-        def label(self):
-            return self._label
+class SpacyResponseEntity(FlatbufferObject):
+    def __init__(self):
+        super().__init__(SpacyResponseData, SpacyResponseClass)
+    
+    def dataclass_to_flatbuffer(self, dataclass):
+        dep_vector = self.build_vector('Dep', dataclass.dep, DEPSpacyResponseEntity)
+        ner_vector = self.build_vector('Ner', dataclass.ner, NERSpacyResponseEntity)
+        self.start()
+        self['Dep'] = dep_vector
+        self['Ner'] = ner_vector
+        return self.end()
+        
+    def flatbuffer_to_dataclass(self, flatbuffer):
+        ner = NERSpacyResponseEntity(self.builder)
+        dep = DEPSpacyResponseEntity(self.builder)
+        return SpacyResponseData(
+            ner = [ner.build(g) for n in self['Ner']],
+            dep = [dep.build(g) for d in self['Dep']]
+        )
 
-        def serialize(self, builder):
-            text = builder.CreateString(self.text)
-            label = builder.CreateString(self.label)
-            NERSpacyResponseStart(builder)
-            NERSpacyResponseAddText(builder, text)
-            NERSpacyResponseAddStartChar(builder, self.start_char)
-            NERSpacyResponseAddEndChar(builder, self.end_char)
-            NERSpacyResponseAddLabel(builder, label)
-            return NERSpacyResponseEnd(builder)
+class TypeData(Enum):
+    DEP = 0
+    NER = 1
 
-    class DEPSpacyResponseEntity:
-        def __init__(self,
-                     lang: str,
-                     relation: str,
-                     source: str,
-                     source_pos: str,
-                     source_index: int,
-                     source_tag: str,
-                     source_base: str,
-                     target: str,
-                     target_pos: str,
-                     target_index: int,
-                     target_tag: str,
-                     target_base: str):
-            self._lang = lang
-            self._relation = relation
-            self._source = source
-            self._source_pos = source_pos
-            self._source_index = source_index
-            self._source_tag = source_tag
-            self._source_base = source_base
-            self._target: str = target
-            self._target_pos = target_pos
-            self._target_index = target_index
-            self._target_tag = target_tag
-            self._target_base = target_base
+@dataclass
+class SpacyRequestData:
+    text: str
+    type: List[TypeData]
 
-        @property
-        def lang(self) -> str:
-            return self._lang
+class SpacyRequestEntity(FlatbufferObject):
+    def __init__(self):
+        super().__init__(SpacyRequestData, SpacyRequestClass)
 
-        @property
-        def relation(self) -> str:
-            return self._relation
-
-        @property
-        def source(self) -> str:
-            return self._source
-
-        @property
-        def source_pos(self) -> str:
-            return self._source_pos
-
-        @property
-        def source_index(self) -> int:
-            return self._source_index
-
-        @property
-        def source_tag(self) -> str:
-            return self._source_tag
-
-        @property
-        def source_base(self) -> str:
-            return self._source_base
-
-        @property
-        def target(self) -> str:
-            return self._target
-
-        @property
-        def target_pos(self) -> str:
-            return self._target_pos
-
-        @property
-        def target_index(self) -> int:
-            return self._target_index
-
-        @property
-        def target_tag(self) -> str:
-            return self._target_tag
-
-        @property
-        def target_base(self) -> str:
-            return self._target_base
-
-        def serialize(self, builder):
-            lang = builder.CreateString(self.lang)
-            relation = builder.CreateString(self.relation)
-            source = builder.CreateString(self.source)
-            source_pos = builder.CreateString(self.source_pos)
-            source_tag = builder.CreateString(self.source_tag)
-            source_base = builder.CreateString(self.source_base)
-            target = builder.CreateString(self.target)
-            target_pos = builder.CreateString(self.target_pos)
-            target_tag = builder.CreateString(self.target_tag)
-            target_base = builder.CreateString(self.target_base)
-
-            DEPSpacyResponseStart(builder)
-            DEPSpacyResponseAddLang(builder, lang)
-            DEPSpacyResponseAddRelation(builder, relation)
-            DEPSpacyResponseAddSource(builder, source)
-            DEPSpacyResponseAddSourcePos(builder, source_pos)
-            DEPSpacyResponseAddSourceIndex(builder, self.source_index)
-            DEPSpacyResponseAddSourceTag(builder, source_tag)
-            DEPSpacyResponseAddSourceBase(builder, source_base)
-            DEPSpacyResponseAddTarget(builder, target)
-            DEPSpacyResponseAddTargetPos(builder, target_pos)
-            DEPSpacyResponseAddTargetIndex(builder, self.target_index)
-            DEPSpacyResponseAddTargetTag(builder, target_tag)
-            DEPSpacyResponseAddTargetBase(builder, target_base)
-            return DEPSpacyResponseEnd(builder)
-
-    class SpacyResponseEntity:
-        def __init__(self, dep: list,
-                     ner: list):
-            self._dep = dep
-            self._ner = ner
-
-        @property
-        def ner(self) -> List:
-            return self._ner
-
-        @property
-        def dep(self) -> List:
-            return self._dep
-
-        def serialize(self) -> bytearray:
-            return SpacyProtocol.serialize(self)
-
-    class SpacyRequestEntity:
-        class Type(Enum):
-            DEP = 0
-            NER = 1
-
-        def __init__(self, text: str, type: List[Type]):
-            self._text = text
-            self._type = type
-
-        @property
-        def text(self) -> str:
-            return self._text
-
-        @property
-        def type(self) -> List[Type]:
-            return self._type
-
-        @classmethod
-        def deserialize(cls, bb: bytearray) -> 'SpacyRequestEntity':
-            return SpacyProtocol.deserialize(bb)
-
-
-        def __str__(self) -> str:
-            return "SpacyRequestEntity(text={0}, type={1})".format(self.text, self.type)
-
-    @staticmethod
-    def serialize(response_entity: SpacyResponseEntity) -> bytearray:
-        builder = flatbuffers.Builder(1024)
-        serialized_dep = list(map(lambda dep: dep.serialize(builder), response_entity.dep))
-        serialized_ner = list(map(lambda n: n.serialize(builder), response_entity.ner))
-        SpacyResponseStartDepVector(builder, len(response_entity.dep))
-        for sp in reversed(serialized_dep):
-            builder.PrependUOffsetTRelative(sp)
-        dep_vector = builder.EndVector(len(response_entity.dep))
-
-        SpacyResponseStartNerVector(builder, len(response_entity.ner))
-        for sn in reversed(serialized_ner):
-            builder.PrependUOffsetTRelative(sn)
-        ner_vector = builder.EndVector(len(response_entity.ner))
-
-        DEPSpacyResponseStart(builder)
-        SpacyResponseAddDep(builder, dep_vector)
-        SpacyResponseAddNer(builder, ner_vector)
-        response = SpacyResponseEnd(builder)
-        builder.Finish(response)
-
-        return builder.Output()
-
-    @staticmethod
-    def deserialize(bb: bytearray) -> SpacyRequestEntity:
-        flat = SpacyRequest.GetRootAsSpacyRequest(bb, 0)
-        types = []
-        for n in range(0, flat.TypeLength()):
-            types.append(SpacyProtocol.SpacyRequestEntity.Type(flat.Type(n)))
-        return SpacyProtocol.SpacyRequestEntity(flat.Text().decode("UTF-8"), types)
+    def dataclass_to_flatbuffer(self, dataclass):
+        dep_vector = self.build_vector('Dep', dataclass.dep, DEPSpacyResponseEntity)
+        ner_vector = self.build_vector('Ner', dataclass.dep, NERSpacyResponseEntity)
+        self.start()
+        self['Dep'] = dep_vector
+        self['Ner'] = ner_vector
+        return self.end()
+        
+    def flatbuffer_to_dataclass(self, flatbuffer):
+        return SpacyRequestData(
+            text = self['Text'].decode("utf-8"),
+            type = [TypeData(n) for n in self['Type']]
+        )
