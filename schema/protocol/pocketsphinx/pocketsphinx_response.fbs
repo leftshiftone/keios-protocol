@@ -1,0 +1,9 @@
+include "guess.fbs";
+namespace keios.protocol.pocketsphinx;
+attribute "priority";
+
+table PocketsphinxResponse {
+  guesses:[Guess];
+}
+
+root_type PocketsphinxResponse;

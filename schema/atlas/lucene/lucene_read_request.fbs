@@ -1,9 +1,0 @@
-namespace keios.atlas.lucene;
-attribute "priority";
-
-table LuceneReadRequest {
-    field: string;
-    query: string;
-    minimumScore: float = 0.0;
-    limit: ushort = 10;
-}

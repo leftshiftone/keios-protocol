@@ -1,7 +1,0 @@
-include "tuple_type.fbs";
-namespace keios.atlas.lucene;
-attribute "priority";
-
-table LuceneWriteRequest {
-   document: [Tuple];
-}

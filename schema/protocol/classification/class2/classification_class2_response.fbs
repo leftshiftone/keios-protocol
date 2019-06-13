@@ -1,0 +1,12 @@
+namespace keios.protocol.classification.class2;
+attribute "priority";
+
+struct Probability {
+  probability1:float;
+  probability2:float;
+}
+
+table ClassificationClass2Response {
+    response:[Probability];
+}
+root_type ClassificationClass2Response;

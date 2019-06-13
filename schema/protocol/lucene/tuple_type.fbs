@@ -1,0 +1,7 @@
+namespace keios.protocol.lucene;
+attribute "priority";
+
+table Tuple {
+    key: string;
+    value: string;
+}

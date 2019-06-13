@@ -1,7 +1,0 @@
-namespace keios.atlas.lucene;
-attribute "priority";
-
-table Tuple {
-    key: string;
-    value: string;
-}
