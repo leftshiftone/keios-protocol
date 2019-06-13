@@ -16,7 +16,7 @@
 
 package keios.protocol.classification.class2
 
-import keios.rain.classification.class2.flatbuffers.ClassificationClass2Request
+import keios.protocol.classification.class2.flatbuffers.ClassificationClass2Request
 import spock.lang.Specification
 
 import java.nio.ByteBuffer
@@ -32,7 +32,7 @@ class ClassificationClass2ProtocolTest extends Specification {
         when:
             byte[] result = ClassificationClass2Protocol.toRequest(input)
         then:
-            result == [4, 0, 0, 0, -38, -1, -1, -1, 4, 0, 0, 0, 2, 0, 0, 0, 32, 0, 0, 0, 4, 0, 0, 0, -18, -1, -1, -1, 4, 0, 0, 0, 3, 0, 0, 0, 102, 111, 111, 0, 0, 0, 6, 0, 8, 0, 4, 0, 6, 0, 0, 0, 4, 0, 0, 0, 3, 0, 0, 0, 102, 111, 111, 0] as byte[]
+            result == [4, 0, 0, 0, -38, -1, -1, -1, 4, 0, 0, 0, 2, 0, 0, 0, 32, 0, 0, 0, 4, 0, 0, 0, -18, -1, -1, -1, 4, 0, 0, 0, 3, 0, 0, 0, 98, 97, 114, 0, 0, 0, 6, 0, 8, 0, 4, 0, 6, 0, 0, 0, 4, 0, 0, 0, 3, 0, 0, 0, 102, 111, 111, 0] as byte[]
     }
 
     def "string request is serialized to flatbuffer bytes"() {
@@ -41,7 +41,7 @@ class ClassificationClass2ProtocolTest extends Specification {
         when:
             byte[] result = ClassificationClass2Protocol.toRequest(input)
         then:
-            result == [4, 0, 0, 0, -38, -1, -1, -1, 4, 0, 0, 0, 2, 0, 0, 0, 32, 0, 0, 0, 4, 0, 0, 0, -18, -1, -1, -1, 4, 0, 0, 0, 3, 0, 0, 0, 102, 111, 111, 0, 0, 0, 6, 0, 8, 0, 4, 0, 6, 0, 0, 0, 4, 0, 0, 0, 3, 0, 0, 0, 102, 111, 111, 0] as byte[]
+            result == [4, 0, 0, 0, -38, -1, -1, -1, 4, 0, 0, 0, 2, 0, 0, 0, 32, 0, 0, 0, 4, 0, 0, 0, -18, -1, -1, -1, 4, 0, 0, 0, 3, 0, 0, 0, 98, 97, 114, 0, 0, 0, 6, 0, 8, 0, 4, 0, 6, 0, 0, 0, 4, 0, 0, 0, 3, 0, 0, 0, 102, 111, 111, 0] as byte[]
     }
 
     def "serializing and deserializing of request returns the same result"() {

@@ -16,7 +16,6 @@
 
 package keios.protocol.lucene;
 
-import keios.atlas.lucene.entity.*;
 import keios.protocol.lucene.entity.LuceneMessageDeserializer;
 import keios.protocol.lucene.entity.LuceneMessageEntity;
 import keios.protocol.lucene.entity.LuceneMessageSerializer;
@@ -32,7 +31,8 @@ public class LuceneProtocol {
     private static final LuceneMessageDeserializer deserializer = new LuceneMessageDeserializer();
     private static final LuceneMessageSerializer serializer = new LuceneMessageSerializer();
 
-    private LuceneProtocol() {}
+    private LuceneProtocol() {
+    }
 
     public static LuceneMessageEntity toMessage(byte[] bytes) {
         return deserializer.deserialize(bytes);

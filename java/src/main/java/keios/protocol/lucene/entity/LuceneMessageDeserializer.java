@@ -16,7 +16,6 @@
 
 package keios.protocol.lucene.entity;
 
-import keios.atlas.lucene.flatbuffers.*;
 import keios.common.BinaryDeserializer;
 import keios.protocol.lucene.flatbuffers.*;
 
