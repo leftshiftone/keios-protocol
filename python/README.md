@@ -4,6 +4,15 @@ This contains python objects to deal with flatbuffers serialization/deserializat
 
 All of these classes extend ``FlatbufferObject`` which makes dealing with flatbuffer slightly easier.
 
+## Getting Started
+
+````
+cd python
+poetry env use 3.7
+poetry install
+poetry run pytest
+````
+
 ## Using a Protocol
 
 ````python
