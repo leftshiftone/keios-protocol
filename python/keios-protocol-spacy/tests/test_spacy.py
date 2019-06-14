@@ -1,13 +1,13 @@
 import pytest
 
-from python_keios_protocol.spacy.protocol import SpacyRequestEntity
-from python_keios_protocol.spacy.protocol import SpacyResponseEntity
-from python_keios_protocol.spacy.protocol import NERSpacyResponseEntity
-from python_keios_protocol.spacy.protocol import DEPSpacyResponseEntity
-from python_keios_protocol.spacy.protocol import SpacyResponseData
-from python_keios_protocol.spacy.protocol import NERSpacyResponseData
-from python_keios_protocol.spacy.protocol import DEPSpacyResponseData
-from python_keios_protocol.spacy.protocol import TypeData
+from ..spacy.protocol import SpacyRequestEntity
+from ..spacy.protocol import SpacyResponseEntity
+from ..spacy.protocol import NERSpacyResponseEntity
+from ..spacy.protocol import DEPSpacyResponseEntity
+from ..spacy.protocol import SpacyResponseData
+from ..spacy.protocol import NERSpacyResponseData
+from ..spacy.protocol import DEPSpacyResponseData
+from ..spacy.protocol import TypeData
 
 def test_serializes_spacy_response():
     ner1 = NERSpacyResponseData(text="test1", start_char=1, end_char=2, label="x")
