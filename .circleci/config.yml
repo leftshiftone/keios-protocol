@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  build:
+  build-java:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
     environment:
@@ -32,19 +32,15 @@ jobs:
           when: on_fail
           command: |
             curl $BUILD_STATUS_URL\?flow\=circleci-completed\&status\=FAILED -d '{"repository":"'"$CIRCLE_PROJECT_REPONAME"'","branch":"'"$CIRCLE_BRANCH"'","build_number":"'"$CIRCLE_BUILD_NUM"'","build_url":"'"$CIRCLE_BUILD_URL"'"}' -H "Content-Type: application/json" -X POST -i || true
-  pytest:
+  build-python:
     docker:
       - image: circleci/python:3.7.3
     environment:
       TZ: "/usr/share/zoneinfo/Europe/Vienna"
     steps:
       - checkout
-      - run:
-          name: install dev requirements
-          command: pip install -r ~/project/python/requirements-dev.txt --user
-      - run:
-          name: test
-          command: /home/circleci/.local/bin/pytest ~/project
+      - run: pip install -r ~/project/python/requirements-dev.txt --user
+      - run: /home/circleci/.local/bin/pytest ~/project
   webhook-completed:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
@@ -81,23 +77,14 @@ workflows:
   version: 2
   build:
     jobs:
-      - build:
+      - build-java:
           filters:
             tags:
               ignore: /.*/
-          context: bintray-jcenter
-      - pytest
+      - build-python:
+          filters:
+            tags:
+              ignore: /.*/
       - webhook-completed:
           requires:
             - build
-  release:
-    jobs:
-      - release:
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v\d+\.\d+\.\d+$/
-      - webhook-completed:
-          requires:
-            - release
