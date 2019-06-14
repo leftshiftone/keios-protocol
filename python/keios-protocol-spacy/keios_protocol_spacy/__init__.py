@@ -3,12 +3,12 @@ from typing import List
 from dataclasses import dataclass
 import numpy as np
 import flatbuffers
-from ..FlatbufferObject import FlatbufferObject
-from .flatbuffers import DEPSpacyResponse as DEPSpacyResponseClass
-from .flatbuffers import NERSpacyResponse as NERSpacyResponseClass
-from .flatbuffers import SpacyRequest as SpacyRequestClass
-from .flatbuffers import SpacyResponse as SpacyResponseClass
-from .flatbuffers import Type as TypeClass
+from keios_protocol_common import FlatbufferObject
+from keios_protocol_spacy.flatbuffers import DEPSpacyResponse as DEPSpacyResponseClass
+from keios_protocol_spacy.flatbuffers import NERSpacyResponse as NERSpacyResponseClass
+from keios_protocol_spacy.flatbuffers import SpacyRequest as SpacyRequestClass
+from keios_protocol_spacy.flatbuffers import SpacyResponse as SpacyResponseClass
+from keios_protocol_spacy.flatbuffers import Type as TypeClass
 
 @dataclass
 class DEPSpacyResponseData:
