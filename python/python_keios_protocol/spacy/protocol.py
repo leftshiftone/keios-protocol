@@ -4,11 +4,11 @@ from dataclasses import dataclass
 import numpy as np
 import flatbuffers
 from ..FlatbufferObject import FlatbufferObject
-from .fbs import DEPSpacyResponse as DEPSpacyResponseClass
-from .fbs import NERSpacyResponse as NERSpacyResponseClass
-from .fbs import SpacyRequest as SpacyRequestClass
-from .fbs import SpacyResponse as SpacyResponseClass
-from .fbs import Type as TypeClass
+from .flatbuffers import DEPSpacyResponse as DEPSpacyResponseClass
+from .flatbuffers import NERSpacyResponse as NERSpacyResponseClass
+from .flatbuffers import SpacyRequest as SpacyRequestClass
+from .flatbuffers import SpacyResponse as SpacyResponseClass
+from .flatbuffers import Type as TypeClass
 
 @dataclass
 class DEPSpacyResponseData:

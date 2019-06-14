@@ -3,9 +3,9 @@ from dataclasses import dataclass
 import numpy as np
 import flatbuffers
 from ..FlatbufferObject import FlatbufferObject
-from .fbs import PocketsphinxRequest as PocketsphinxRequestClass
-from .fbs import PocketsphinxResponse as PocketsphinxResponseClass
-from .fbs import Guess as GuessClass
+from .flatbuffers import PocketsphinxRequest as PocketsphinxRequestClass
+from .flatbuffers import PocketsphinxResponse as PocketsphinxResponseClass
+from .flatbuffers import Guess as GuessClass
 
 @dataclass
 class PocketsphinxRequestData:
