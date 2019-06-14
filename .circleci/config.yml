@@ -41,10 +41,13 @@ jobs:
       - checkout
       - run: curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
       - run: cd ~/project/python/keios-protocol-common && poetry install
+      - run: pytest .
       - run: cd ~/project/python/keios-protocol-classification-class2 && poetry install
+      - run: pytest .
       - run: cd ~/project/python/keios-protocol-pocketsphinx && poetry install --no-dev
+      - run: pytest .
       - run: cd ~/project/python/keios-protocol-spacy && poetry install
-      - run: pytest ~/project/python
+      - run: pytest .
   webhook-completed:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
