@@ -87,4 +87,5 @@ workflows:
               ignore: /.*/
       - webhook-completed:
           requires:
-            - build
+            - build-java
+            - build-python
