@@ -2,7 +2,7 @@ from typing import List
 from dataclasses import dataclass
 import numpy as np
 import flatbuffers
-from ..FlatbufferObject import FlatbufferObject
+from keios_protocol_common import FlatbufferObject
 from .flatbuffers import PocketsphinxRequest as PocketsphinxRequestClass
 from .flatbuffers import PocketsphinxResponse as PocketsphinxResponseClass
 from .flatbuffers import Guess as GuessClass

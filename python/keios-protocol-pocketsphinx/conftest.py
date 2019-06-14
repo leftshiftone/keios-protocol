@@ -1,11 +1,11 @@
 import os
 import pytest
 import numpy as np
-from python_keios_protocol.pocketsphinx.protocol import GuessData
+from keios_protocol_pocketsphinx import GuessData
 
 @pytest.fixture
 def supply_goforward_file():
-        test_data = os.path.join(os.path.dirname(__file__), 'goforward.raw')
+        test_data = os.path.join(os.path.dirname(__file__), 'tests/goforward.raw')
         return open(test_data, 'rb')
 
 @pytest.fixture

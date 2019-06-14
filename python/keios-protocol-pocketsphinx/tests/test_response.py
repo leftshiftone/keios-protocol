@@ -1,6 +1,6 @@
 import pytest
 
-from python_keios_protocol.pocketsphinx.protocol import PocketsphinxResponseEntity
+from keios_protocol_pocketsphinx import PocketsphinxResponseEntity
 
 def test_serialize_response(supply_guesses):
     response = PocketsphinxResponseEntity()
