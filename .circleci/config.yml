@@ -10,6 +10,14 @@ webhook-failed: &webhook-failed
 
 version: 2.1
 jobs:
+  webhook-completed:
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+    steps:
+      - run:
+          name: Webhook completed
+          command: |
+            curl $BUILD_STATUS_URL\?flow\=circleci-completed -d '{"repository":"'"$CIRCLE_PROJECT_REPONAME"'","branch":"'"$CIRCLE_BRANCH"'","build_number":"'"$CIRCLE_PREVIOUS_BUILD_NUM"'","build_url":"'"$CIRCLE_BUILD_URL"'"}' -H "Content-Type: application/json" -X POST -i || true
   build-java:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
@@ -57,14 +65,6 @@ jobs:
           path: build/circleci/test-results
       - run:
           <<: *webhook-failed
-  webhook-completed:
-    docker:
-      - image: circleci/openjdk:8-jdk-browsers
-    steps:
-      - run:
-          name: Webhook completed
-          command: |
-            curl $BUILD_STATUS_URL\?flow\=circleci-completed -d '{"repository":"'"$CIRCLE_PROJECT_REPONAME"'","branch":"'"$CIRCLE_BRANCH"'","build_number":"'"$CIRCLE_PREVIOUS_BUILD_NUM"'","build_url":"'"$CIRCLE_BUILD_URL"'"}' -H "Content-Type: application/json" -X POST -i || true
   release:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
