@@ -1,7 +1,7 @@
 import os
 import pytest
 import numpy as np
-from ..keios_protocol_pocketsphinx import GuessData
+from keios_protocol_pocketsphinx import GuessData
 
 @pytest.fixture
 def supply_goforward_file():

@@ -39,8 +39,12 @@ jobs:
       TZ: "/usr/share/zoneinfo/Europe/Vienna"
     steps:
       - checkout
-      - run: pip install -r ~/project/python/requirements-dev.txt --user
-      - run: /home/circleci/.local/bin/pytest ~/project
+      - run: curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+      - run: cd ~/project/python/keios-protocol-common && poetry install
+      - run: cd ~/project/python/keios-protocol-classification-class2&& poetry install
+      - run: cd ~/project/python/keios-protocol-pocketsphinx && poetry install
+      - run: cd ~/project/python/keios-protocol-spacy && poetry install
+      - run: pytest ~/project/python
   webhook-completed:
     docker:
       - image: circleci/openjdk:8-jdk-browsers
