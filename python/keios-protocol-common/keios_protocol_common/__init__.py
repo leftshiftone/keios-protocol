@@ -1,13 +1,15 @@
 import abc
 import collections
-import flatbuffers
 from typing import TypeVar, Type, List
+
+import flatbuffers
 
 T = TypeVar('T')
 
-class FlatbufferObject(collections.MutableMapping,dict):
-    __metaclass__  = abc.ABCMeta
-    
+
+class FlatbufferObject(collections.MutableMapping, dict):
+    __metaclass__ = abc.ABCMeta
+
     def __init__(self, dataclass, flatbuffer, builder=flatbuffers.Builder(0)):
         self.dataclass = dataclass
         self.fbs = flatbuffer

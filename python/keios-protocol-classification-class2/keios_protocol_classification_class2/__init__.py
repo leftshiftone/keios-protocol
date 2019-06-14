@@ -1,9 +1,10 @@
 from dataclasses import dataclass
 from typing import List
 
+from keios_protocol_common import FlatbufferObject
+
 from .flatbuffers import ClassificationClass2Request as ClassificationClass2RequestClass
 from .flatbuffers import Vector as VectorClass
-from ...FlatbufferObject import FlatbufferObject
 
 
 @dataclass
@@ -12,20 +13,17 @@ class Vector:
 
 
 class VectorEntity(FlatbufferObject):
-    def __init__(self):
-        super().__init__(Vector, VectorClass)
+    def __init__(self, builder):
+        super().__init__(Vector, VectorClass, builder)
 
-    # serialize
     def dataclass_to_flatbuffer(self, dataclass):
-        # todo: implement
-        speech_vector = self.build_vector('Speech', dataclass.speech)
+        bytes_vector = self.build_vector('Bytes', dataclass.speech)
         self.start()
-        self['Speech'] = speech_vector
+        self['Bytes'] = bytes_vector
         return self.end()
 
     def flatbuffer_to_dataclass(self, flatbuffer):
-        # todo: implement
-        return self.dataclass(speech=self['Speech'].tobytes())
+        return self.dataclass(bytes=self['Bytes'].tobytes())
 
 
 @dataclass
@@ -37,17 +35,13 @@ class ClassificationClass2RequestEntity(FlatbufferObject):
     def __init__(self):
         super().__init__(ClassificationClass2Request, ClassificationClass2RequestClass)
 
-    # serialize
     def dataclass_to_flatbuffer(self, dataclass):
-        # todo: implement
-        speech_vector = self.build_vector('Speech', dataclass.speech)
+        vector_vector = self.build_vector('Vectors', dataclass.vectors, VectorEntity)
         self.start()
-        self['Speech'] = speech_vector
+        self['Vectors'] = vector_vector
         return self.end()
 
     def flatbuffer_to_dataclass(self, flatbuffer):
-        # todo: implement
-        return self.dataclass(speech=self['Speech'].tobytes())
-
-
-# todo: implement response
+        vector = VectorEntity(self.builder)
+        vectors = [vector.build(v) for v in self['Vectors']]
+        return self.dataclass(vectors=vectors)
