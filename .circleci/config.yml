@@ -41,8 +41,8 @@ jobs:
       - checkout
       - run: curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
       - run: cd ~/project/python/keios-protocol-common && poetry install
-      - run: cd ~/project/python/keios-protocol-classification-class2&& poetry install
-      - run: cd ~/project/python/keios-protocol-pocketsphinx && poetry install
+      - run: cd ~/project/python/keios-protocol-classification-class2 && poetry install
+      - run: cd ~/project/python/keios-protocol-pocketsphinx && poetry install --no-dev
       - run: cd ~/project/python/keios-protocol-spacy && poetry install
       - run: pytest ~/project/python
   webhook-completed:
