@@ -1,4 +1,6 @@
-# python_keios_protocol
+# KEIOS Protocol for Python
+
+[![CircleCI branch](https://img.shields.io/circleci/project/github/leftshiftone/keios-protocol/master.svg?style=flat-square)](https://circleci.com/gh/leftshiftone/keios-protocol)
 
 This contains python objects to deal with flatbuffers serialization/deserialization accross different keios instances.
 
@@ -11,38 +13,6 @@ cd python
 poetry env use 3.7
 poetry install
 poetry run pytest
-````
-
-## Using a Protocol
-
-````python
-from python_keios_protocol.some_protocol.some_entity import SomeProtocolEntity
-
-entity = SomeProtocolEntity()
-
-# create objects to hold data in python
-data = entity.dataclass(some_attribute=...)
-
-# serialize data (result is a bytearray)
-entity.serialize(data)
-
-# deserialize data (result is an object of type entity.dataclass)
-date_from_elsewhere = entity.deserialize(bytearray_received_from_somewhere_else)
-
-````
-
-## Creating a new Protocol
-This section will tell you how to create a protocol for a new keios instance.
-When being done with creating a new protocol, you should arrive at the following project structure.
-````
-python_keios_protocol/
-├── ... other protocols ...
-├── my_new_protocol/
-│   ├── fbs/
-|   |   └── ... generated flatbuffer objects ...
-│   ├── some_datatype.py
-│   └── some_other_datatype.py
-└── FlatbufferObject.py
 ````
 
 ### Installing Flatbuffers
@@ -62,8 +32,8 @@ sudo pacman -S flatbuffers
 
 ### Generating Flatbuffer Objects
 Refer to the flatbuffer documention on [writing a schema](https://google.github.io/flatbuffers/flatbuffers_guide_writing_schema.html).
-When a ``.fbs`` schema is done, it can be compiled to python files using ``flac your_flatbuffer.fbs --python``.
-Move the generated files to ``python_keios_protocol/your_protocol/fbs``.
+When a ``.flatbuffers`` schema is done, it can be compiled to python files using ``flac your_flatbuffer.flatbuffers --python``.
+Move the generated files to ``your_protocol/flatbuffers``.
 
 ### Extending FlatbufferObject
 Now it is time to use the ``FlatbufferObject`` helper to create a class that lets users easily serialize and deserialize flatbuffer objects.
@@ -71,7 +41,7 @@ Now it is time to use the ``FlatbufferObject`` helper to create a class that let
 #### Imports
 We only need to import our previously generated flattbuffer class
 ````python
-from .fbs import SomeGeneratedFlatbuffer as MyFlatbuffer
+from .flatbuffers import SomeGeneratedFlatbuffer as MyFlatbuffer
 ````
 
 #### Dataclass
@@ -169,3 +139,23 @@ class MyEntity(FlatbufferObject):
         is already parsed into a SomeGeneratedFlatbuffer object by FlatbufferObject
         """
 ````
+
+## Development
+
+### Release
+Releases are triggered locally. Just a tag will be pushed to trigger the CI release pipeline.
+
+Make sure you are in the 
+
+**ATTENTION: Releasing via CI is not supported at the moment!**
+
+#### Major
+Run `poetry run trigger-release-major {module}` locally.
+ 
+e.g. `poetry run trigger-release-major keios-protocol-spacy` in order to release module keios-protocol-spacy
+
+#### Minor
+Run `poetry run trigger-release-minor {module}` locally.
+
+#### Patch
+Run `poetry run trigger-release-patch {module}` locally.
