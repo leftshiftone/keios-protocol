@@ -57,11 +57,10 @@ jobs:
       - checkout
       - run: mkdir -p $TEST_RESULTS_PATH
       - run: curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
-      - run: cd ~/project/python
-      - run: poetry install
-      - run: poetry run install
-      - run: poetry run test-ci
-      - run: poetry run build
+      - run: cd ~/project/python && poetry install
+      - run: cd ~/project/python && poetry run install
+      - run: cd ~/project/python && poetry run test-ci
+      - run: cd ~/project/python && poetry run build
       - store_test_results:
           path: build/circleci/test-results
       - run:
