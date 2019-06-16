@@ -57,6 +57,7 @@ jobs:
       - checkout
       - run: mkdir -p $TEST_RESULTS_PATH
       - run: curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+      - run: cd ~/project/python
       - run: poetry install
       - run: poetry run install
       - run: poetry run test-ci
