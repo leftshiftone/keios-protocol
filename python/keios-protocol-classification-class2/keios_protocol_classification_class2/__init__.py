@@ -79,7 +79,7 @@ class ClassificationClass2ResponseEntity(FlatbufferObject):
         super().__init__(ClassificationClass2Response, ClassificationClass2ResponseClass)
 
     def dataclass_to_flatbuffer(self, dataclass):
-        response_vector = self.build_vector('Response', dataclass.response, ProbabilityEntity)
+        response_vector = self.build_struct_vector('Response', dataclass.response, ProbabilityEntity)
         self.start()
         self['Response'] = response_vector
         return self.end()
