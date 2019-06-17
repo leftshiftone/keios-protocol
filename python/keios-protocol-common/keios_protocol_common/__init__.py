@@ -54,7 +54,10 @@ class FlatbufferObject(collections.MutableMapping, dict):
     def end(self):
         return getattr(self.fbs, f'{self.classname}End')(self.builder)
 
-    def build_vector(self, key: str, values: List, entity=None):
+    def build_struct_vector(self, key: str, values: List, entity=None):
+        return self.build_vector(key, values, entity, is_struct=True)
+
+    def build_vector(self, key: str, values: List, entity=None, is_struct=False):
         vector_len = len(values)
         if vector_len > 0:
             val_0 = values[0]
@@ -63,11 +66,15 @@ class FlatbufferObject(collections.MutableMapping, dict):
                     raise ValueError('cannot build dataclass vector without its entity, pass entity to build_vector')
                 else:
                     entity_obj = entity(self.builder)
-                    values = [entity_obj.dataclass_to_flatbuffer(val) for val in values]
+                    if not is_struct:
+                        values = [entity_obj.dataclass_to_flatbuffer(val) for val in values]
         getattr(self.fbs, f'{self.classname}Start{key}Vector')(self.builder, vector_len)
         for val in reversed(values):
             if entity is not None:
-                self.builder.PrependUOffsetTRelative(val)
+                if is_struct:
+                    entity_obj.dataclass_to_flatbuffer(val)
+                else:
+                    self.builder.PrependUOffsetTRelative(val)
             else:
                 self.builder.PrependByte(val)
         return self.builder.EndVector(vector_len)
