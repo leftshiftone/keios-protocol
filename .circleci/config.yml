@@ -57,7 +57,7 @@ jobs:
       - checkout
       - run: mkdir -p $TEST_RESULTS_PATH
       - run: curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
-      - run: apt-get install swig
+      - run: sudo apt-get install swig
       - run: cd ~/project/python && poetry install
       - run: cd ~/project/python && poetry run install
       - run: cd ~/project/python && poetry run test-ci
