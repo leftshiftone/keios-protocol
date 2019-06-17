@@ -5,7 +5,7 @@ from keios_protocol_pocketsphinx import PocketsphinxResponseEntity
 def test_serialize_response(supply_guesses):
     response = PocketsphinxResponseEntity()
     result = response.serialize(response.dataclass(guesses=supply_guesses))
-    deserialized = response.flatbuffers.PocketsphinxResponse.GetRootAsPocketsphinxResponse(result, 0)
+    deserialized = response.fbs.PocketsphinxResponse.GetRootAsPocketsphinxResponse(result, 0)
 
     assert supply_guesses[0].confidence == deserialized.Guesses(0).Confidence()
     assert supply_guesses[0].phrase == deserialized.Guesses(0).Phrase().decode("utf-8")
