@@ -17,7 +17,10 @@ def test():
 
 
 def test_ci():
-    exec_in_sub_modules(["poetry", "run", "pytest", '--junit-xml=$TEST_RESULTS_PATH/@filename@-junit.xml'])
+    test_results_path = os.getenv("TEST_RESULTS_PATH")
+    if test_results_path is None:
+        raise ValueError("TEST_RESULTS_PATH environment variable must be specified")
+    exec_in_sub_modules(["poetry", "run", "pytest", f'--junit-xml={test_results_path}/@filename@-junit.xml'])
 
 
 def build():
