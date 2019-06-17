@@ -14,7 +14,6 @@ def test_serializing_and_deserializing_returns_same_result():
     deserialized = response.fbs.ClassificationClass2Response.GetRootAsClassificationClass2Response(result, 0)
 
     assert math.isclose(deserialized.Response(0).Probability1(), 0.25, rel_tol=1e-07)
-    assert math.isclose(deserialized.Response(0).Probability2(), 0.5, rel_tol=1e-07)
-
-    assert math.isclose(deserialized.Response(1).Probability1(), 0.7, rel_tol=1e-07)
-    assert math.isclose(deserialized.Response(1).Probability2(), 0.1, rel_tol=1e-07)
+    assert math.isclose(deserialized.Response(0).Probability2(), 0.50, rel_tol=1e-07)
+    assert math.isclose(deserialized.Response(1).Probability1(), 0.70, rel_tol=1e-07)
+    assert math.isclose(deserialized.Response(1).Probability2(), 0.10, rel_tol=1e-07)
