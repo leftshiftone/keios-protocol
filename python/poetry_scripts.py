@@ -77,11 +77,10 @@ def release():
     print(f"Releasing {module} {version}")
     check_call(["git", "commit", "-m", f"Release {module} {version}"])
     check_call(["git", "tag", "-a", "-m", f"Release {module} {version}", f"{module}-v{version}"])
+    check_call(["git", "push"])
     check_call(["git", "push", "--tags"])
     print(f"Building {module} {version}")
     exec_in_module(["poetry", "build"], module)
-    print(f"Publishing {module} {version}")
-    exec_in_module(["poetry", "publish", "-u", "$PYPI_USERNAME", "-p", "$PYPI_PASSWORD"], module)
 
 
 def exec_in_sub_modules(command):
@@ -100,4 +99,4 @@ def exec_in_module(command, module=None):
     for e in cmd:
         if e.startswith("$"):
             cmd[cmd.index(e)] = os.getenv(e.replace("$", ""))
-    check_call(cmd, cwd=module)
+    check_call(cmd, cwd=module, env=os.environ)

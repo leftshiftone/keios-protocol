@@ -89,6 +89,8 @@ jobs:
       - run: cd ~/project/python && poetry run install
       - run: cd ~/project/python && poetry run test-ci
       - run: cd ~/project/python && poetry run release $CIRCLE_TAG
+      - run: export TARGET_MODULE=${${CIRCLE_TAG#*-}#*-}
+      - run: cd ~/project/python/$TARGET_MODULE && poetry publish -u $PYPI_USERNAME -p $PYPI_PASSWORD
       - store_test_results:
           path: build/circleci/test-results
       - run:
