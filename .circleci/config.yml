@@ -78,9 +78,9 @@ jobs:
       - checkout
       - run: mkdir -p $TEST_RESULTS_PATH
       - run: curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
-      - run: cd ~/project/python && poetry run cleanup-release
       - run: sudo apt-get install -qq build-essential swig libpulse-dev libasound2-dev
       - run: cd ~/project/python && poetry install
+      - run: cd ~/project/python && poetry run cleanup-release
       - run: cd ~/project/python && poetry run install
       - run: cd ~/project/python && poetry run test-ci
       - run: cd ~/project/python && poetry run build
@@ -106,9 +106,12 @@ workflows:
           requires:
             - build-java
             - build-python
-  release-python:
+  release-module-python:
     jobs:
       - release-python:
           filters:
             tags:
               only: /^release-(major|minor|patch).*/
+      - webhook-completed:
+          requires:
+            - release-python
