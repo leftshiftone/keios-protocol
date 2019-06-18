@@ -66,6 +66,30 @@ jobs:
           path: build/circleci/test-results
       - run:
           <<: *webhook-failed
+  release-python:
+    docker:
+      - image: circleci/python:3.7.3
+    environment:
+      TZ: "/usr/share/zoneinfo/Europe/Vienna"
+      TEST_RESULTS_PATH: build/circleci/test-results
+    steps:
+      - run:
+          <<: *webhook-created
+      - checkout
+      - run: mkdir -p $TEST_RESULTS_PATH
+      - run: curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
+      - run: cd ~/project/python && poetry run cleanup-release
+      - run: sudo apt-get install -qq build-essential swig libpulse-dev libasound2-dev
+      - run: cd ~/project/python && poetry install
+      - run: cd ~/project/python && poetry run install
+      - run: cd ~/project/python && poetry run test-ci
+      - run: cd ~/project/python && poetry run build
+      - run: cd ~/project/python && poetry run release $CIRCLE_TAG
+      - store_test_results:
+          path: build/circleci/test-results
+      - run:
+          <<: *webhook-failed
+
 workflows:
   version: 2
   build:
@@ -82,3 +106,9 @@ workflows:
           requires:
             - build-java
             - build-python
+  release-python:
+    jobs:
+      - release-python:
+          filters:
+            tags:
+              only: /^release-(major|minor|patch).*/
