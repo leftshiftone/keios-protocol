@@ -139,23 +139,3 @@ class MyEntity(FlatbufferObject):
         is already parsed into a SomeGeneratedFlatbuffer object by FlatbufferObject
         """
 ````
-
-## Development
-
-### Release
-Releases are triggered locally. Just a tag will be pushed to trigger the CI release pipeline.
-
-Make sure you are in the 
-
-**ATTENTION: Releasing via CI is not supported at the moment!**
-
-#### Major
-Run `poetry run trigger-release-major {module}` locally.
- 
-e.g. `poetry run trigger-release-major keios-protocol-spacy` in order to release module keios-protocol-spacy
-
-#### Minor
-Run `poetry run trigger-release-minor {module}` locally.
-
-#### Patch
-Run `poetry run trigger-release-patch {module}` locally.
