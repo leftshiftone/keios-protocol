@@ -109,6 +109,9 @@ workflows:
             tags:
               ignore: /.*/
       - webhook-completed:
+          filters:
+            tags:
+              ignore: /.*/
           requires:
             - build-java
             - build-python
@@ -122,5 +125,10 @@ workflows:
             tags:
               only: /^release-(major|minor|patch).*/
       - webhook-completed:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^release-(major|minor|patch).*/
           requires:
             - release-python
