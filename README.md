@@ -25,8 +25,6 @@ Run `./gradlew final -x bintrayUpload -Prelease.scope=patch` locally.
 ### Release
 Releases are triggered locally. Just a tag will be pushed to trigger the CI release pipeline.
 
-**ATTENTION: Releasing via CI is not supported at the moment!**
-
 #### Major
 Run `poetry run trigger-release-major {module}` locally.
  

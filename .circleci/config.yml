@@ -75,6 +75,9 @@ jobs:
     steps:
       - run:
           <<: *webhook-created
+      - add_ssh_keys:
+          fingerprints:
+            - "e6:4b:54:bb:ce:9c:68:e3:86:fb:0c:82:e6:a9:37:41"
       - checkout
       - run: mkdir -p $TEST_RESULTS_PATH
       - run: curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
