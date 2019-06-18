@@ -110,6 +110,8 @@ workflows:
     jobs:
       - release-python:
           filters:
+            branches:
+              ignore: /.*/
             tags:
               only: /^release-(major|minor|patch).*/
       - webhook-completed:
