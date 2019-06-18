@@ -79,8 +79,6 @@ def release():
     check_call(["git", "tag", "-a", "-m", f"Release {module} {version}", f"{module}-v{version}"])
     check_call(["git", "push"])
     check_call(["git", "push", "--tags"])
-    print(f"Building {module} {version}")
-    exec_in_module(["poetry", "build"], module)
 
 
 def exec_in_sub_modules(command):
