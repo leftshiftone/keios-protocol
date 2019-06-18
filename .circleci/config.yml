@@ -80,7 +80,7 @@ jobs:
       - run: curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
       - run: sudo apt-get install -qq build-essential swig libpulse-dev libasound2-dev
       - run: cd ~/project/python && poetry install
-      - run: cd ~/project/python && poetry run cleanup-release
+      - run: cd ~/project/python && poetry run cleanup-release $CIRCLE_TAG
       - run: cd ~/project/python && poetry run install
       - run: cd ~/project/python && poetry run test-ci
       - run: cd ~/project/python && poetry run build
