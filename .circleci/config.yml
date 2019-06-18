@@ -114,6 +114,7 @@ workflows:
   release-module-python:
     jobs:
       - release-python:
+          context: pypi
           filters:
             branches:
               ignore: /.*/
