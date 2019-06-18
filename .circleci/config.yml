@@ -87,7 +87,7 @@ jobs:
       - run: cd ~/project/python && poetry install
       - run: cd ~/project/python && poetry run cleanup-release $CIRCLE_TAG
       - run: cd ~/project/python && poetry run install
-      #- run: cd ~/project/python && poetry run test-ci
+      - run: cd ~/project/python && poetry run test-ci
       - run: cd ~/project/python && poetry run build
       - run: cd ~/project/python && poetry run release $CIRCLE_TAG
       - store_test_results:
