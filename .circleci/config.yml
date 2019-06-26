@@ -82,12 +82,16 @@ jobs:
       - run: mkdir -p $TEST_RESULTS_PATH
       - run: curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
       - run: sudo apt-get install -qq build-essential swig libpulse-dev libasound2-dev
+      - run: git config --local user.email "ci@leftshift.one" && git config --local user.name "Continuous Integration"
+      - run: git checkout master && git pull --tags
       - run: cd ~/project/python && poetry install
       - run: cd ~/project/python && poetry run cleanup-release $CIRCLE_TAG
       - run: cd ~/project/python && poetry run install
       - run: cd ~/project/python && poetry run test-ci
-      - run: cd ~/project/python && poetry run build
       - run: cd ~/project/python && poetry run release $CIRCLE_TAG
+      - run: export TARGET_MODULE=${CIRCLE_TAG#*-*-}
+      - run: cd ~/project/python/$TARGET_MODULE && poetry build
+      - run: cd ~/project/python/$TARGET_MODULE && poetry publish -u $PYPI_USERNAME -p $PYPI_PASSWORD
       - store_test_results:
           path: build/circleci/test-results
       - run:
@@ -106,17 +110,26 @@ workflows:
             tags:
               ignore: /.*/
       - webhook-completed:
+          filters:
+            tags:
+              ignore: /.*/
           requires:
             - build-java
             - build-python
   release-module-python:
     jobs:
       - release-python:
+          context: pypi
           filters:
             branches:
               ignore: /.*/
             tags:
               only: /^release-(major|minor|patch).*/
       - webhook-completed:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^release-(major|minor|patch).*/
           requires:
             - release-python

@@ -1,9 +1,8 @@
 # This script is used as a temporary workaround until poetry adds full scripting support
 import os
 import sys
-from subprocess import check_call
-
 import toml
+from subprocess import check_call
 
 PROJECTS_DIR_PREFIX = "keios-protocol-"
 
@@ -78,9 +77,8 @@ def release():
     print(f"Releasing {module} {version}")
     check_call(["git", "commit", "-m", f"Release {module} {version}"])
     check_call(["git", "tag", "-a", "-m", f"Release {module} {version}", f"{module}-v{version}"])
+    check_call(["git", "push"])
     check_call(["git", "push", "--tags"])
-    print(f"Publishing {module} {version}")
-    exec_in_module(["poetry", "publish", "-u", "$PYPI_USERNAME", "-p", "$PYPI_PASSWORD"], module)
 
 
 def exec_in_sub_modules(command):
@@ -99,4 +97,4 @@ def exec_in_module(command, module=None):
     for e in cmd:
         if e.startswith("$"):
             cmd[cmd.index(e)] = os.getenv(e.replace("$", ""))
-    check_call(cmd, cwd=module)
+    check_call(cmd, cwd=module, env=os.environ)
