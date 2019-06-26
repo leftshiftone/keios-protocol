@@ -1,11 +1,12 @@
 import abc
 import collections
 from typing import TypeVar, Type, List
-
+import threading
 import flatbuffers
 
 T = TypeVar('T')
 
+lock = threading.Lock()
 
 class FlatbufferObject(collections.MutableMapping, dict):
     __metaclass__ = abc.ABCMeta
@@ -25,16 +26,18 @@ class FlatbufferObject(collections.MutableMapping, dict):
         """ convert given fbs object to the right dataclass """
 
     def serialize(self, item: Type[T]) -> bytearray:
-        self.builder.Finish(self.dataclass_to_flatbuffer(item))
-        return self.builder.Output()
+        with lock:
+            self.builder.Finish(self.dataclass_to_flatbuffer(item))
+            return self.builder.Output()
 
     def build(self, item):
         self._flatbuffer = item
         return self.flatbuffer_to_dataclass(item)
 
     def deserialize(self, item: bytearray) -> T:
-        self._flatbuffer = getattr(getattr(self.fbs, self.classname), f'GetRootAs{self.classname}')(item, 0)
-        return self.flatbuffer_to_dataclass(self._flatbuffer)
+        with lock:
+            self._flatbuffer = getattr(getattr(self.fbs, self.classname), f'GetRootAs{self.classname}')(item, 0)
+            return self.flatbuffer_to_dataclass(self._flatbuffer)
 
     def __getitem__(self, key):
         if hasattr(getattr(self.fbs, self.classname), f'{key}AsNumpy'):
