@@ -70,6 +70,8 @@ def release():
     module = tag_name.replace(f"release-{scope}-", "")
 
     check_call(["git", "pull", "--tags"])
+    check_call(["poetry", "version", "minor"])
+    check_call(["git", "add", "*.toml"])
     command = ["poetry", "version", scope]
     exec_in_module(command, module)
     check_call(["git", "add", f"{module}/*.toml"])
