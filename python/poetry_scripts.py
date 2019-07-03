@@ -94,7 +94,7 @@ def exec_in_module(command, module=None):
     cmd = command.copy()
     for e in cmd:
         if e.__contains__("@filename@"):
-            e.replace("@filename@", module)
+            cmd[cmd.index(e)] = e.replace("@filename@", module)
     print(f"Executing for module {module}: {' '.join(cmd)}")
     for e in cmd:
         if e.startswith("$"):
