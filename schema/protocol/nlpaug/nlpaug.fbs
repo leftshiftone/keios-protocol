@@ -1,0 +1,15 @@
+include "text_augmenter.fbs";
+namespace keios.protocol.nlpaug;
+attribute "priority";
+
+union TextAugmenter {
+    RandomWordAugmenter,
+    FastTextAugmenter,
+    TfIdfAugmenter,
+    BertAugmenter,
+    SyntaxTreeAugmenter
+}
+
+table TextAugmentation {
+    augmenters: [TextAugmenter];
+}

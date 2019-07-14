@@ -1,0 +1,22 @@
+namespace keios.protocol.nlpaug;
+attribute "priority";
+
+table RandomWordAugmenter {
+    insert: bool;
+    substitute: bool;
+}
+table FastTextAugmenter {
+    insert: bool;
+    substitute: bool;
+}
+table TfIdfAugmenter {
+    insert: bool;
+    substitute: bool;
+}
+table BertAugmenter {
+    insert: bool;
+    substitute: bool;
+}
+table SyntaxTreeAugmenter {
+
+}
