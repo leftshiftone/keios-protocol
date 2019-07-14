@@ -1,0 +1,16 @@
+include "gensim_fasttext.fbs";
+namespace keios.protocol.gensim;
+attribute "priority";
+
+union GensimMessageType {
+    GensimFastTextEmbeddingRequest,
+    GensimFastTextEmbeddingResponse,
+    GensimFastTextMostSimilarRequest,
+    GensimFastTextMostSimilarResponse,
+    GensimFastTextSimilarityRequest,
+    GensimFastTextSimilarityResponse
+}
+
+table GensimMessage {
+    message: GensimMessageType;
+}

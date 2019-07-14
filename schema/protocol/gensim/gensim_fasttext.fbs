@@ -1,0 +1,27 @@
+namespace keios.protocol.gensim;
+attribute "priority";
+
+table Similarity {
+    text: string;
+    probability: float;
+}
+
+table GensimFastTextEmbeddingRequest {
+    text: string;
+}
+table GensimFastTextEmbeddingResponse {
+    vector: [float];
+}
+table GensimFastTextMostSimilarRequest {
+    text: string;
+}
+table GensimFastTextMostSimilarResponse {
+    similarities: [Similarity];
+}
+table GensimFastTextSimilarityRequest {
+    text1: string;
+    text2: string;
+}
+table GensimFastTextSimilarityResponse {
+    probability: float;
+}
