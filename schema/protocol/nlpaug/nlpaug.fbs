@@ -10,6 +10,10 @@ union TextAugmenter {
     SyntaxTreeAugmenter
 }
 
-table TextAugmentation {
+table TextAugmentationRequest {
+    text: string;
     augmenters: [TextAugmenter];
+}
+table TextAugmentationResponse {
+    text: string;
 }
