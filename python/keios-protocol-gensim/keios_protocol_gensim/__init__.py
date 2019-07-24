@@ -12,28 +12,26 @@ from .flatbuffers import GensimFastTextSimilarityResponse as GensimFastTextSimil
 from .flatbuffers import GensimMessage as GensimMessageClass
 from .flatbuffers import GensimMessageType
 from .flatbuffers import Similarity as SimilarityClass
+from .flatbuffers import VectorElement as VectorElementClass
 
 
 @dataclass
-class Similarity:
-    text: str
-    probability: float
+class VectorElement:
+    value: float
 
 
-class SimilarityEntity(FlatbufferObject):
+class VectorElementEntity(FlatbufferObject):
     def __init__(self, builder):
-        super().__init__(Similarity, SimilarityClass, builder)
+        super().__init__(VectorElement, VectorElementClass, builder)
 
     def dataclass_to_flatbuffer(self, dataclass):
-        text = self.build_string(dataclass.text)
-        probability = dataclass.probability
+        value = dataclass.value
         self.start()
-        self['Text'] = text
-        self['Probability'] = probability
+        self['Value'] = value
         return self.end()
 
     def flatbuffer_to_dataclass(self, flatbuffer):
-        return self.dataclass(text=self['Text'], probability=self['Probability'])
+        return self.dataclass(value=self['Value'])
 
 
 @dataclass
@@ -57,7 +55,7 @@ class GensimFastTextEmbeddingRequestEntity(FlatbufferObject):
 
 @dataclass
 class GensimFastTextEmbeddingResponse:
-    vector: List[float]
+    vector: List[VectorElement]
 
 
 class GensimFastTextEmbeddingResponseEntity(FlatbufferObject):
@@ -65,13 +63,35 @@ class GensimFastTextEmbeddingResponseEntity(FlatbufferObject):
         super().__init__(GensimFastTextEmbeddingResponse, GensimFastTextEmbeddingResponseClass)
 
     def dataclass_to_flatbuffer(self, dataclass):
-        vector_vector = self.build_vector('Vector', dataclass.vector)
+        vector_vector = self.build_vector('Vector', dataclass.vector, VectorElementEntity)
         self.start()
         self['Vector'] = vector_vector
         return self.end()
 
     def flatbuffer_to_dataclass(self, flatbuffer):
         return self.dataclass(vector=[v for v in self['Vector']])
+
+
+@dataclass
+class Similarity:
+    text: str
+    probability: float
+
+
+class SimilarityEntity(FlatbufferObject):
+    def __init__(self, builder):
+        super().__init__(Similarity, SimilarityClass, builder)
+
+    def dataclass_to_flatbuffer(self, dataclass):
+        text = self.build_string(dataclass.text)
+        probability = dataclass.probability
+        self.start()
+        self['Text'] = text
+        self['Probability'] = probability
+        return self.end()
+
+    def flatbuffer_to_dataclass(self, flatbuffer):
+        return self.dataclass(text=self['Text'], probability=self['Probability'])
 
 
 @dataclass
@@ -156,6 +176,7 @@ class GensimFastTextSimilarityResponseEntity(FlatbufferObject):
 
 @dataclass
 class GensimMessage:
+    message_type: GensimMessageType
     message: object
 
 
@@ -193,10 +214,30 @@ class GensimMessageEntity(FlatbufferObject):
         else:
             raise ValueError(f"Message type {type(dataclass.message)} is unknown")
 
+        message = message_entity.dataclass_to_flatbuffer(dataclass.message)
+
         self.start()
         self['MessageType'] = message_type
-        self['Message'] = message_entity.dataclass_to_flatbuffer(dataclass.message)
+        self['Message'] = message
         return self.end()
 
     def flatbuffer_to_dataclass(self, flatbuffer):
-        return self.dataclass(messageType=self['MessageType'], message=self['Message'])
+        message = None
+        raw_message = self['Message']
+        if self['MessageType'] == GensimMessageType.GensimMessageType().GensimFastTextEmbeddingRequest:
+            message = GensimFastTextEmbeddingRequestClass.GensimFastTextEmbeddingRequest()
+        elif self['MessageType'] == GensimMessageType.GensimMessageType().GensimFastTextEmbeddingResponse:
+            message = GensimFastTextEmbeddingResponseClass.GensimFastTextEmbeddingResponse()
+        elif self['MessageType'] == GensimMessageType.GensimMessageType().GensimFastTextMostSimilarRequest:
+            message = GensimFastTextMostSimilarRequestClass.GensimFastTextMostSimilarRequest()
+        elif self['MessageType'] == GensimMessageType.GensimMessageType().GensimFastTextMostSimilarResponse:
+            message = GensimFastTextMostSimilarResponseClass.GensimFastTextMostSimilarResponse()
+        elif self['MessageType'] == GensimMessageType.GensimMessageType().GensimFastTextSimilarityRequest:
+            message = GensimFastTextSimilarityRequestClass.GensimFastTextSimilarityRequest()
+        elif self['MessageType'] == GensimMessageType.GensimMessageType().GensimFastTextSimilarityResponse:
+            message = GensimFastTextSimilarityResponseClass.GensimFastTextSimilarityResponse()
+        else:
+            raise ValueError(f"Message type {self['MessageType']} is unknown")
+
+        message.Init(raw_message.Bytes, raw_message.Pos)
+        return self.dataclass(message_type=self['MessageType'], message=message)
