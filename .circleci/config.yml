@@ -89,7 +89,7 @@ jobs:
       - run: cd ~/project/python && poetry run install
       - run: cd ~/project/python && poetry run test-ci
       - run: cd ~/project/python && poetry run release $CIRCLE_TAG
-      - run: export TARGET_MODULE=${CIRCLE_TAG#*-*-}
+      - run: echo 'export TARGET_MODULE=${CIRCLE_TAG#*-*-}' >> $BASH_ENV && source $BASH_ENV
       - run: echo "Target module is $TARGET_MODULE"
       - run: cd ~/project/python/$TARGET_MODULE && pwd && poetry build
       - run: cd ~/project/python/$TARGET_MODULE && pwd && poetry publish -u $PYPI_USERNAME -p $PYPI_PASSWORD
