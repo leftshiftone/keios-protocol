@@ -3,6 +3,7 @@ package keios.protocol.gensim.flatbuffers.factory;
 import com.google.flatbuffers.FlatBufferBuilder;
 import keios.protocol.gensim.flatbuffers.GensimMessage;
 import keios.protocol.gensim.flatbuffers.GensimMessageType;
+import keios.protocol.gensim.flatbuffers.fasttext.EmbeddingRequest;
 import keios.protocol.gensim.flatbuffers.fasttext.GensimFastTextEmbeddingRequest;
 import keios.protocol.gensim.flatbuffers.fasttext.GensimFastTextEmbeddingResponse;
 
@@ -14,9 +15,12 @@ public class GensimFastTextEmbeddingFactory {
         final FlatBufferBuilder builder = new FlatBufferBuilder();
 
         final int textOffset = builder.createString(text);
+        EmbeddingRequest.startEmbeddingRequest(builder);
+        EmbeddingRequest.addText(builder, textOffset);
+        final int offset = EmbeddingRequest.endEmbeddingRequest(builder);
 
         GensimFastTextEmbeddingRequest.startGensimFastTextEmbeddingRequest(builder);
-        GensimFastTextEmbeddingRequest.addText(builder, textOffset);
+        GensimFastTextEmbeddingRequest.addRequests(builder, offset);
         int message = GensimFastTextEmbeddingRequest.endGensimFastTextEmbeddingRequest(builder);
 
         GensimMessage.startGensimMessage(builder);

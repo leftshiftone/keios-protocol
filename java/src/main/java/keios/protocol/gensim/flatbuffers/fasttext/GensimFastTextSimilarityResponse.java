@@ -14,17 +14,21 @@ public final class GensimFastTextSimilarityResponse extends Table {
   public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; }
   public GensimFastTextSimilarityResponse __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public float probability() { int o = __offset(4); return o != 0 ? bb.getFloat(o + bb_pos) : 0.0f; }
+  public SimilarityResponse responses(int j) { return responses(new SimilarityResponse(), j); }
+  public SimilarityResponse responses(SimilarityResponse obj, int j) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(__vector(o) + j * 4), bb) : null; }
+  public int responsesLength() { int o = __offset(4); return o != 0 ? __vector_len(o) : 0; }
 
   public static int createGensimFastTextSimilarityResponse(FlatBufferBuilder builder,
-      float probability) {
+      int responsesOffset) {
     builder.startObject(1);
-    GensimFastTextSimilarityResponse.addProbability(builder, probability);
+    GensimFastTextSimilarityResponse.addResponses(builder, responsesOffset);
     return GensimFastTextSimilarityResponse.endGensimFastTextSimilarityResponse(builder);
   }
 
   public static void startGensimFastTextSimilarityResponse(FlatBufferBuilder builder) { builder.startObject(1); }
-  public static void addProbability(FlatBufferBuilder builder, float probability) { builder.addFloat(0, probability, 0.0f); }
+  public static void addResponses(FlatBufferBuilder builder, int responsesOffset) { builder.addOffset(0, responsesOffset, 0); }
+  public static int createResponsesVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addOffset(data[i]); return builder.endVector(); }
+  public static void startResponsesVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
   public static int endGensimFastTextSimilarityResponse(FlatBufferBuilder builder) {
     int o = builder.endObject();
     return o;

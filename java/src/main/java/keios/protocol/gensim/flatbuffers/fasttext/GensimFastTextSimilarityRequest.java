@@ -14,25 +14,21 @@ public final class GensimFastTextSimilarityRequest extends Table {
   public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; }
   public GensimFastTextSimilarityRequest __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public String text1() { int o = __offset(4); return o != 0 ? __string(o + bb_pos) : null; }
-  public ByteBuffer text1AsByteBuffer() { return __vector_as_bytebuffer(4, 1); }
-  public ByteBuffer text1InByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 4, 1); }
-  public String text2() { int o = __offset(6); return o != 0 ? __string(o + bb_pos) : null; }
-  public ByteBuffer text2AsByteBuffer() { return __vector_as_bytebuffer(6, 1); }
-  public ByteBuffer text2InByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 6, 1); }
+  public SimilarityRequest requests(int j) { return requests(new SimilarityRequest(), j); }
+  public SimilarityRequest requests(SimilarityRequest obj, int j) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(__vector(o) + j * 4), bb) : null; }
+  public int requestsLength() { int o = __offset(4); return o != 0 ? __vector_len(o) : 0; }
 
   public static int createGensimFastTextSimilarityRequest(FlatBufferBuilder builder,
-      int text1Offset,
-      int text2Offset) {
-    builder.startObject(2);
-    GensimFastTextSimilarityRequest.addText2(builder, text2Offset);
-    GensimFastTextSimilarityRequest.addText1(builder, text1Offset);
+      int requestsOffset) {
+    builder.startObject(1);
+    GensimFastTextSimilarityRequest.addRequests(builder, requestsOffset);
     return GensimFastTextSimilarityRequest.endGensimFastTextSimilarityRequest(builder);
   }
 
-  public static void startGensimFastTextSimilarityRequest(FlatBufferBuilder builder) { builder.startObject(2); }
-  public static void addText1(FlatBufferBuilder builder, int text1Offset) { builder.addOffset(0, text1Offset, 0); }
-  public static void addText2(FlatBufferBuilder builder, int text2Offset) { builder.addOffset(1, text2Offset, 0); }
+  public static void startGensimFastTextSimilarityRequest(FlatBufferBuilder builder) { builder.startObject(1); }
+  public static void addRequests(FlatBufferBuilder builder, int requestsOffset) { builder.addOffset(0, requestsOffset, 0); }
+  public static int createRequestsVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addOffset(data[i]); return builder.endVector(); }
+  public static void startRequestsVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
   public static int endGensimFastTextSimilarityRequest(FlatBufferBuilder builder) {
     int o = builder.endObject();
     return o;

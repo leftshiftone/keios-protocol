@@ -14,19 +14,21 @@ public final class GensimFastTextMostSimilarRequest extends Table {
   public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; }
   public GensimFastTextMostSimilarRequest __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public String text() { int o = __offset(4); return o != 0 ? __string(o + bb_pos) : null; }
-  public ByteBuffer textAsByteBuffer() { return __vector_as_bytebuffer(4, 1); }
-  public ByteBuffer textInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 4, 1); }
+  public MostSimilarRequest requests(int j) { return requests(new MostSimilarRequest(), j); }
+  public MostSimilarRequest requests(MostSimilarRequest obj, int j) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(__vector(o) + j * 4), bb) : null; }
+  public int requestsLength() { int o = __offset(4); return o != 0 ? __vector_len(o) : 0; }
 
   public static int createGensimFastTextMostSimilarRequest(FlatBufferBuilder builder,
-      int textOffset) {
+      int requestsOffset) {
     builder.startObject(1);
-    GensimFastTextMostSimilarRequest.addText(builder, textOffset);
+    GensimFastTextMostSimilarRequest.addRequests(builder, requestsOffset);
     return GensimFastTextMostSimilarRequest.endGensimFastTextMostSimilarRequest(builder);
   }
 
   public static void startGensimFastTextMostSimilarRequest(FlatBufferBuilder builder) { builder.startObject(1); }
-  public static void addText(FlatBufferBuilder builder, int textOffset) { builder.addOffset(0, textOffset, 0); }
+  public static void addRequests(FlatBufferBuilder builder, int requestsOffset) { builder.addOffset(0, requestsOffset, 0); }
+  public static int createRequestsVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addOffset(data[i]); return builder.endVector(); }
+  public static void startRequestsVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
   public static int endGensimFastTextMostSimilarRequest(FlatBufferBuilder builder) {
     int o = builder.endObject();
     return o;
