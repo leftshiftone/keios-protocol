@@ -4,27 +4,27 @@
 
 import flatbuffers
 
-class VectorElement(object):
+class EmbeddingElement(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsVectorElement(cls, buf, offset):
+    def GetRootAsEmbeddingElement(cls, buf, offset):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
-        x = VectorElement()
+        x = EmbeddingElement()
         x.Init(buf, n + offset)
         return x
 
-    # VectorElement
+    # EmbeddingElement
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-    # VectorElement
+    # EmbeddingElement
     def Value(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Float32Flags, o + self._tab.Pos)
         return 0.0
 
-def VectorElementStart(builder): builder.StartObject(1)
-def VectorElementAddValue(builder, value): builder.PrependFloat32Slot(0, value, 0.0)
-def VectorElementEnd(builder): return builder.EndObject()
+def EmbeddingElementStart(builder): builder.StartObject(1)
+def EmbeddingElementAddValue(builder, value): builder.PrependFloat32Slot(0, value, 0.0)
+def EmbeddingElementEnd(builder): return builder.EndObject()

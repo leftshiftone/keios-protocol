@@ -4,35 +4,35 @@
 
 import flatbuffers
 
-class Similarity(object):
+class MostSimilarity(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsSimilarity(cls, buf, offset):
+    def GetRootAsMostSimilarity(cls, buf, offset):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
-        x = Similarity()
+        x = MostSimilarity()
         x.Init(buf, n + offset)
         return x
 
-    # Similarity
+    # MostSimilarity
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-    # Similarity
+    # MostSimilarity
     def Text(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
-    # Similarity
+    # MostSimilarity
     def Probability(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Float32Flags, o + self._tab.Pos)
         return 0.0
 
-def SimilarityStart(builder): builder.StartObject(2)
-def SimilarityAddText(builder, text): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(text), 0)
-def SimilarityAddProbability(builder, probability): builder.PrependFloat32Slot(1, probability, 0.0)
-def SimilarityEnd(builder): return builder.EndObject()
+def MostSimilarityStart(builder): builder.StartObject(2)
+def MostSimilarityAddText(builder, text): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(text), 0)
+def MostSimilarityAddProbability(builder, probability): builder.PrependFloat32Slot(1, probability, 0.0)
+def MostSimilarityEnd(builder): return builder.EndObject()

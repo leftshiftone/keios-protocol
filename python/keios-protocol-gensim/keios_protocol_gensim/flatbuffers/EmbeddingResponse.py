@@ -4,41 +4,41 @@
 
 import flatbuffers
 
-class GensimFastTextEmbeddingRequest(object):
+class EmbeddingResponse(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsGensimFastTextEmbeddingRequest(cls, buf, offset):
+    def GetRootAsEmbeddingResponse(cls, buf, offset):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
-        x = GensimFastTextEmbeddingRequest()
+        x = EmbeddingResponse()
         x.Init(buf, n + offset)
         return x
 
-    # GensimFastTextEmbeddingRequest
+    # EmbeddingResponse
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-    # GensimFastTextEmbeddingRequest
-    def Requests(self, j):
+    # EmbeddingResponse
+    def Vector(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             x = self._tab.Vector(o)
             x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 4
             x = self._tab.Indirect(x)
-            from .EmbeddingRequest import EmbeddingRequest
-            obj = EmbeddingRequest()
+            from .EmbeddingElement import EmbeddingElement
+            obj = EmbeddingElement()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
-    # GensimFastTextEmbeddingRequest
-    def RequestsLength(self):
+    # EmbeddingResponse
+    def VectorLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
-def GensimFastTextEmbeddingRequestStart(builder): builder.StartObject(1)
-def GensimFastTextEmbeddingRequestAddRequests(builder, requests): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(requests), 0)
-def GensimFastTextEmbeddingRequestStartRequestsVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def GensimFastTextEmbeddingRequestEnd(builder): return builder.EndObject()
+def EmbeddingResponseStart(builder): builder.StartObject(1)
+def EmbeddingResponseAddVector(builder, vector): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(vector), 0)
+def EmbeddingResponseStartVectorVector(builder, numElems): return builder.StartVector(4, numElems, 4)
+def EmbeddingResponseEnd(builder): return builder.EndObject()

@@ -1,29 +1,47 @@
 namespace keios.protocol.gensim;
 attribute "priority";
 
-table VectorElement {
-    value:float;
-}
-table GensimFastTextEmbeddingRequest {
+table EmbeddingRequest {
     text: string;
 }
-table GensimFastTextEmbeddingResponse {
-    vector: [VectorElement];
+table GensimFastTextEmbeddingRequest {
+    requests: [EmbeddingRequest];
 }
-table Similarity {
+table EmbeddingElement {
+    value: float;
+}
+table EmbeddingResponse {
+    vector: [EmbeddingElement];
+}
+table GensimFastTextEmbeddingResponse {
+    responses: [EmbeddingResponse];
+}
+table MostSimilarRequest {
+    text: string;
+}
+table GensimFastTextMostSimilarRequest {
+    requests: [MostSimilarRequest];
+}
+table MostSimilarity {
     text: string;
     probability: float;
 }
-table GensimFastTextMostSimilarRequest {
-    text: string;
+table MostSimilarResponse {
+    similarities: [MostSimilarity];
 }
 table GensimFastTextMostSimilarResponse {
-    similarities: [Similarity];
+    responses: [MostSimilarResponse];
 }
-table GensimFastTextSimilarityRequest {
+table SimilarityRequest {
     text1: string;
     text2: string;
 }
+table GensimFastTextSimilarityRequest {
+    requests: [SimilarityRequest];
+}
+table SimilarityResponse {
+    value: float;
+}
 table GensimFastTextSimilarityResponse {
-    probability: float;
+    responses: [SimilarityResponse];
 }

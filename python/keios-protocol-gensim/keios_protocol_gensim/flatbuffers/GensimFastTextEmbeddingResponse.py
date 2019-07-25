@@ -19,26 +19,26 @@ class GensimFastTextEmbeddingResponse(object):
         self._tab = flatbuffers.table.Table(buf, pos)
 
     # GensimFastTextEmbeddingResponse
-    def Vector(self, j):
+    def Responses(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             x = self._tab.Vector(o)
             x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 4
             x = self._tab.Indirect(x)
-            from .VectorElement import VectorElement
-            obj = VectorElement()
+            from .EmbeddingResponse import EmbeddingResponse
+            obj = EmbeddingResponse()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
     # GensimFastTextEmbeddingResponse
-    def VectorLength(self):
+    def ResponsesLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
 def GensimFastTextEmbeddingResponseStart(builder): builder.StartObject(1)
-def GensimFastTextEmbeddingResponseAddVector(builder, vector): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(vector), 0)
-def GensimFastTextEmbeddingResponseStartVectorVector(builder, numElems): return builder.StartVector(4, numElems, 4)
+def GensimFastTextEmbeddingResponseAddResponses(builder, responses): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(responses), 0)
+def GensimFastTextEmbeddingResponseStartResponsesVector(builder, numElems): return builder.StartVector(4, numElems, 4)
 def GensimFastTextEmbeddingResponseEnd(builder): return builder.EndObject()
