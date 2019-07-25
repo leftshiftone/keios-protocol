@@ -4,7 +4,7 @@ package keios.protocol.gensim.flatbuffers.fasttext;
 
 import java.nio.*;
 import java.lang.*;
-
+import java.util.*;
 import com.google.flatbuffers.*;
 
 @SuppressWarnings("unused")
@@ -14,10 +14,9 @@ public final class GensimFastTextEmbeddingResponse extends Table {
   public void __init(int _i, ByteBuffer _bb) { bb_pos = _i; bb = _bb; }
   public GensimFastTextEmbeddingResponse __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public float vector(int j) { int o = __offset(4); return o != 0 ? bb.getFloat(__vector(o) + j * 4) : 0; }
+  public VectorElement vector(int j) { return vector(new VectorElement(), j); }
+  public VectorElement vector(VectorElement obj, int j) { int o = __offset(4); return o != 0 ? obj.__assign(__indirect(__vector(o) + j * 4), bb) : null; }
   public int vectorLength() { int o = __offset(4); return o != 0 ? __vector_len(o) : 0; }
-  public ByteBuffer vectorAsByteBuffer() { return __vector_as_bytebuffer(4, 4); }
-  public ByteBuffer vectorInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 4, 4); }
 
   public static int createGensimFastTextEmbeddingResponse(FlatBufferBuilder builder,
       int vectorOffset) {
@@ -28,7 +27,7 @@ public final class GensimFastTextEmbeddingResponse extends Table {
 
   public static void startGensimFastTextEmbeddingResponse(FlatBufferBuilder builder) { builder.startObject(1); }
   public static void addVector(FlatBufferBuilder builder, int vectorOffset) { builder.addOffset(0, vectorOffset, 0); }
-  public static int createVectorVector(FlatBufferBuilder builder, float[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addFloat(data[i]); return builder.endVector(); }
+  public static int createVectorVector(FlatBufferBuilder builder, int[] data) { builder.startVector(4, data.length, 4); for (int i = data.length - 1; i >= 0; i--) builder.addOffset(data[i]); return builder.endVector(); }
   public static void startVectorVector(FlatBufferBuilder builder, int numElems) { builder.startVector(4, numElems, 4); }
   public static int endGensimFastTextEmbeddingResponse(FlatBufferBuilder builder) {
     int o = builder.endObject();

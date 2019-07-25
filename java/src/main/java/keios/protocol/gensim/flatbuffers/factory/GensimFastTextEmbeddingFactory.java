@@ -6,6 +6,8 @@ import keios.protocol.gensim.flatbuffers.GensimMessageType;
 import keios.protocol.gensim.flatbuffers.fasttext.GensimFastTextEmbeddingRequest;
 import keios.protocol.gensim.flatbuffers.fasttext.GensimFastTextEmbeddingResponse;
 
+import java.nio.ByteBuffer;
+
 public class GensimFastTextEmbeddingFactory {
 
     public static byte[] createGensimFastTextEmbeddingRequest(String text) {
@@ -27,23 +29,8 @@ public class GensimFastTextEmbeddingFactory {
         return builder.sizedByteArray();
     }
 
-    public static byte[] createGensimFastTextEmbeddingResponse(float[] embedding) {
-        final FlatBufferBuilder builder = new FlatBufferBuilder();
-
-        final int offset = GensimFastTextEmbeddingResponse.createVectorVector(builder, embedding);
-
-        GensimFastTextEmbeddingResponse.startGensimFastTextEmbeddingResponse(builder);
-        GensimFastTextEmbeddingResponse.addVector(builder, offset);
-        int message = GensimFastTextEmbeddingResponse.endGensimFastTextEmbeddingResponse(builder);
-
-        GensimMessage.startGensimMessage(builder);
-        GensimMessage.addMessageType(builder, GensimMessageType.GensimFastTextEmbeddingResponse);
-        GensimMessage.addMessage(builder, message);
-
-        final int msgOffset = GensimMessage.endGensimMessage(builder);
-        builder.finish(msgOffset);
-
-        return builder.sizedByteArray();
+    public static GensimFastTextEmbeddingResponse createGensimFastTextEmbeddingResponse(byte[] bytes) {
+        return GensimFastTextEmbeddingResponse.getRootAsGensimFastTextEmbeddingResponse(ByteBuffer.wrap(bytes));
     }
 
 }

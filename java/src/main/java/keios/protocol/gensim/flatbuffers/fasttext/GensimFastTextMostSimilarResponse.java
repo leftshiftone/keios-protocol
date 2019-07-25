@@ -4,9 +4,8 @@ package keios.protocol.gensim.flatbuffers.fasttext;
 
 import java.nio.*;
 import java.lang.*;
-
+import java.util.*;
 import com.google.flatbuffers.*;
-import keios.protocol.gensim.flatbuffers.Similarity;
 
 @SuppressWarnings("unused")
 public final class GensimFastTextMostSimilarResponse extends Table {

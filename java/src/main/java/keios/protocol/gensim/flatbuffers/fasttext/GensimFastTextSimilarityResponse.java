@@ -4,7 +4,7 @@ package keios.protocol.gensim.flatbuffers.fasttext;
 
 import java.nio.*;
 import java.lang.*;
-
+import java.util.*;
 import com.google.flatbuffers.*;
 
 @SuppressWarnings("unused")
