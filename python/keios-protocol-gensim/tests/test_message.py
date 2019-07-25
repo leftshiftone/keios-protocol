@@ -15,7 +15,7 @@ def test_message_with_fasttext_embedding_request():
 
     deserialized = message.deserialize(result)
 
-    assert deserialized.message.Text().decode("utf-8") == "foo"
+    assert deserialized.message.text == "foo"
 
 
 def test_message_with_fasttext_embedding_response():
@@ -31,10 +31,10 @@ def test_message_with_fasttext_embedding_response():
 
     deserialized = message.deserialize(result)
 
-    assert deserialized.message.VectorLength() == 3
-    assert math.isclose(deserialized.message.Vector(0).Value(), 1.0, rel_tol=1e-07)
-    assert math.isclose(deserialized.message.Vector(1).Value(), 0.1234, rel_tol=1e-07)
-    assert math.isclose(deserialized.message.Vector(2).Value(), 0.42, rel_tol=1e-07)
+    assert len(deserialized.message.vector) == 3
+    assert math.isclose(deserialized.message.vector[0].value, 1.0, rel_tol=1e-07)
+    assert math.isclose(deserialized.message.vector[1].value, 0.1234, rel_tol=1e-07)
+    assert math.isclose(deserialized.message.vector[2].value, 0.42, rel_tol=1e-07)
 
 
 def test_message_with_fasttext_most_similar_request():
@@ -46,7 +46,7 @@ def test_message_with_fasttext_most_similar_request():
 
     deserialized = message.deserialize(result)
 
-    assert deserialized.message.Text().decode("utf-8") == "foo"
+    assert deserialized.message.text == "foo"
 
 
 def test_message_with_fasttext_most_similar_response():
@@ -61,11 +61,11 @@ def test_message_with_fasttext_most_similar_response():
 
     deserialized = message.deserialize(result)
 
-    assert deserialized.message.SimilaritiesLength() == 2
-    assert deserialized.message.Similarities(0).Text().decode("utf-8") == "foo"
-    assert math.isclose(deserialized.message.Similarities(0).Probability(), 0.5, rel_tol=1e-07)
-    assert deserialized.message.Similarities(1).Text().decode("utf-8") == "bar"
-    assert math.isclose(deserialized.message.Similarities(1).Probability(), 0.1234, rel_tol=1e-07)
+    assert len(deserialized.message.similarities) == 2
+    assert deserialized.message.similarities[0].text == "foo"
+    assert math.isclose(deserialized.message.similarities[0].probability, 0.5, rel_tol=1e-07)
+    assert deserialized.message.similarities[1].text == "bar"
+    assert math.isclose(deserialized.message.similarities[1].probability, 0.1234, rel_tol=1e-07)
 
 
 def test_message_with_fasttext_similaritity_request():
@@ -77,8 +77,8 @@ def test_message_with_fasttext_similaritity_request():
 
     deserialized = message.deserialize(result)
 
-    assert deserialized.message.Text1().decode("utf-8") == "foo"
-    assert deserialized.message.Text2().decode("utf-8") == "bar"
+    assert deserialized.message.text1 == "foo"
+    assert deserialized.message.text2 == "bar"
 
 
 def test_message_with_fasttext_similaritity_response():
@@ -90,4 +90,4 @@ def test_message_with_fasttext_similaritity_response():
 
     deserialized = message.deserialize(result)
 
-    assert math.isclose(deserialized.message.Probability(), 0.1234, rel_tol=1e-07)
+    assert math.isclose(deserialized.message.probability, 0.1234, rel_tol=1e-07)
