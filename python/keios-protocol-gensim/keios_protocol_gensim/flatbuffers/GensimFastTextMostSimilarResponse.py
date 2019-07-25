@@ -19,26 +19,26 @@ class GensimFastTextMostSimilarResponse(object):
         self._tab = flatbuffers.table.Table(buf, pos)
 
     # GensimFastTextMostSimilarResponse
-    def Similarities(self, j):
+    def Responses(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             x = self._tab.Vector(o)
             x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 4
             x = self._tab.Indirect(x)
-            from .Similarity import Similarity
-            obj = Similarity()
+            from .MostSimilarResponse import MostSimilarResponse
+            obj = MostSimilarResponse()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
     # GensimFastTextMostSimilarResponse
-    def SimilaritiesLength(self):
+    def ResponsesLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
 def GensimFastTextMostSimilarResponseStart(builder): builder.StartObject(1)
-def GensimFastTextMostSimilarResponseAddSimilarities(builder, similarities): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(similarities), 0)
-def GensimFastTextMostSimilarResponseStartSimilaritiesVector(builder, numElems): return builder.StartVector(4, numElems, 4)
+def GensimFastTextMostSimilarResponseAddResponses(builder, responses): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(responses), 0)
+def GensimFastTextMostSimilarResponseStartResponsesVector(builder, numElems): return builder.StartVector(4, numElems, 4)
 def GensimFastTextMostSimilarResponseEnd(builder): return builder.EndObject()

@@ -19,20 +19,26 @@ class GensimFastTextSimilarityRequest(object):
         self._tab = flatbuffers.table.Table(buf, pos)
 
     # GensimFastTextSimilarityRequest
-    def Text1(self):
+    def Requests(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
-            return self._tab.String(o + self._tab.Pos)
+            x = self._tab.Vector(o)
+            x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 4
+            x = self._tab.Indirect(x)
+            from .SimilarityRequest import SimilarityRequest
+            obj = SimilarityRequest()
+            obj.Init(self._tab.Bytes, x)
+            return obj
         return None
 
     # GensimFastTextSimilarityRequest
-    def Text2(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+    def RequestsLength(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
-            return self._tab.String(o + self._tab.Pos)
-        return None
+            return self._tab.VectorLen(o)
+        return 0
 
-def GensimFastTextSimilarityRequestStart(builder): builder.StartObject(2)
-def GensimFastTextSimilarityRequestAddText1(builder, text1): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(text1), 0)
-def GensimFastTextSimilarityRequestAddText2(builder, text2): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(text2), 0)
+def GensimFastTextSimilarityRequestStart(builder): builder.StartObject(1)
+def GensimFastTextSimilarityRequestAddRequests(builder, requests): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(requests), 0)
+def GensimFastTextSimilarityRequestStartRequestsVector(builder, numElems): return builder.StartVector(4, numElems, 4)
 def GensimFastTextSimilarityRequestEnd(builder): return builder.EndObject()
