@@ -25,7 +25,7 @@ class LuceneProtocolTest extends Specification {
     @Unroll
     void "serializes / deserializes #entity"() {
         given:
-            LuceneMessageEntity<LuceneReadRequestEntity> message = new LuceneMessageEntity<>(entity)
+            LuceneMessageEntity message = new LuceneMessageEntity<>(entity)
         when:
             def result = LuceneProtocol.toMessage(LuceneProtocol.toWireMessage(message))
         then:

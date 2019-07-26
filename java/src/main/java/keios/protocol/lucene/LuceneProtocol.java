@@ -31,9 +31,6 @@ public class LuceneProtocol {
     private static final LuceneMessageDeserializer deserializer = new LuceneMessageDeserializer();
     private static final LuceneMessageSerializer serializer = new LuceneMessageSerializer();
 
-    private LuceneProtocol() {
-    }
-
     public static LuceneMessageEntity toMessage(byte[] bytes) {
         return deserializer.deserialize(bytes);
     }
