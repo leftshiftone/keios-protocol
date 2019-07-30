@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from typing import List
 
-from flatbuffers import Builder
 from keios_protocol_common import FlatbufferObject
 
 from .flatbuffers import GensimFastTextMostSimilarRequest as GensimFastTextMostSimilarRequestClass
@@ -49,7 +48,7 @@ class GensimFastTextMostSimilarRequestEntity(FlatbufferObject):
         requests = []
         for i in range(0, flatbuffer.RequestsLength()):
             request = flatbuffer.Requests(i)
-            request_entity = MostSimilarRequestEntity(Builder(0))
+            request_entity = MostSimilarRequestEntity(self.builder)
             requests.append(request_entity.flatbuffer_to_dataclass(request))
         return GensimFastTextMostSimilarRequest(requests)
 
@@ -95,7 +94,7 @@ class MostSimilarResponseEntity(FlatbufferObject):
         similarities = []
         for i in range(0, flatbuffer.SimilaritiesLength()):
             similarity = flatbuffer.Similarities(i)
-            similarity_entity = MostSimilarityEntity(Builder(0))
+            similarity_entity = MostSimilarityEntity(self.builder)
             similarities.append(similarity_entity.flatbuffer_to_dataclass(similarity))
         return MostSimilarResponse(similarities)
 
@@ -119,6 +118,6 @@ class GensimFastTextMostSimilarResponseEntity(FlatbufferObject):
         responses = []
         for i in range(0, flatbuffer.ResponsesLength()):
             response = flatbuffer.Responses(i)
-            response_entity = MostSimilarResponseEntity(Builder(0))
+            response_entity = MostSimilarResponseEntity(self.builder)
             responses.append(response_entity.flatbuffer_to_dataclass(response))
         return GensimFastTextMostSimilarResponse(responses)

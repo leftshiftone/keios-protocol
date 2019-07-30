@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from typing import List
 
-from flatbuffers import Builder
 from keios_protocol_common import FlatbufferObject
 
 from .flatbuffers import GensimFastTextSimilarityRequest as GensimFastTextSimilarityRequestClass
@@ -51,7 +50,7 @@ class GensimFastTextSimilarityRequestEntity(FlatbufferObject):
         requests = []
         for i in range(0, flatbuffer.RequestsLength()):
             request = flatbuffer.Requests(i)
-            request_entity = SimilarityRequestEntity(Builder(0))
+            request_entity = SimilarityRequestEntity(self.builder)
             requests.append(request_entity.flatbuffer_to_dataclass(request))
         return GensimFastTextSimilarityRequest(requests)
 
@@ -93,6 +92,6 @@ class GensimFastTextSimilarityResponseEntity(FlatbufferObject):
         responses = []
         for i in range(0, flatbuffer.ResponsesLength()):
             response = flatbuffer.Responses(i)
-            response_entity = SimilarityResponseEntity(Builder(0))
+            response_entity = SimilarityResponseEntity(self.builder)
             responses.append(response_entity.flatbuffer_to_dataclass(response))
         return GensimFastTextSimilarityResponse(responses)

@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from typing import List
 
-from flatbuffers import Builder
 from keios_protocol_common import FlatbufferObject
 
 from .flatbuffers import EmbeddingElement as EmbeddingElementClass
@@ -49,7 +48,7 @@ class GensimFastTextEmbeddingRequestEntity(FlatbufferObject):
         requests = []
         for i in range(0, flatbuffer.RequestsLength()):
             request = flatbuffer.Requests(i)
-            request_entity = EmbeddingRequestEntity(Builder(0))
+            request_entity = EmbeddingRequestEntity(self.builder)
             requests.append(request_entity.flatbuffer_to_dataclass(request))
         return GensimFastTextEmbeddingRequest(requests)
 
@@ -92,7 +91,7 @@ class EmbeddingResponseEntity(FlatbufferObject):
         elements = []
         for i in range(0, flatbuffer.VectorLength()):
             element = flatbuffer.Vector(i)
-            element_entity = EmbeddingElementEntity(Builder(0))
+            element_entity = EmbeddingElementEntity(self.builder)
             elements.append(element_entity.flatbuffer_to_dataclass(element))
         return EmbeddingResponse(elements)
 
@@ -116,6 +115,6 @@ class GensimFastTextEmbeddingResponseEntity(FlatbufferObject):
         responses = []
         for i in range(0, flatbuffer.ResponsesLength()):
             response = flatbuffer.Responses(i)
-            response_entity = EmbeddingResponseEntity(Builder(0))
+            response_entity = EmbeddingResponseEntity(self.builder)
             responses.append(response_entity.flatbuffer_to_dataclass(response))
         return GensimFastTextEmbeddingResponse(responses)
