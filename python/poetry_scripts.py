@@ -16,7 +16,7 @@ def test():
 
 
 def test_ci():
-    exec_in_sub_modules(["poetry", "run", "pytest", '--junit-xml=$TEST_RESULTS_PATH/@filename@-junit.xml'])
+    exec_in_sub_modules(["poetry", "run", "pytest", '--junit-xml=$TEST_RESULTS_PATH/TEST-@filename@-junit.xml'])
 
 
 def build():
