@@ -1,0 +1,9 @@
+include "spacy_response.fbs";
+
+namespace keios.protocol.spacy;
+
+table SpacyBatchResponse {
+    responses: [SpacyResponse] (required);
+}
+
+root_type SpacyBatchResponse;

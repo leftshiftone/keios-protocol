@@ -16,10 +16,11 @@
 
 package keios.protocol.lucene;
 
+import keios.common.Message;
+import keios.common.MessageType;
 import keios.protocol.lucene.entity.LuceneMessageDeserializer;
 import keios.protocol.lucene.entity.LuceneMessageEntity;
 import keios.protocol.lucene.entity.LuceneMessageSerializer;
-import keios.protocol.lucene.entity.Message;
 
 /**
  * Facade for easy serial-/deserialization

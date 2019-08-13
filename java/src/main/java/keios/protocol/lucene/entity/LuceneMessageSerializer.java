@@ -17,8 +17,8 @@
 package keios.protocol.lucene.entity;
 
 import com.google.flatbuffers.FlatBufferBuilder;
-import keios.protocol.lucene.flatbuffers.LuceneMessage;
 import keios.common.BinarySerializer;
+import keios.protocol.lucene.flatbuffers.LuceneMessage;
 
 /**
  * @author benjamin.krenn@leftshift.one - 5/29/19.
@@ -32,7 +32,7 @@ public class LuceneMessageSerializer implements BinarySerializer<LuceneMessageEn
         int messageOffset = entity.getMessage().serialize(builder);
 
         LuceneMessage.startLuceneMessage(builder);
-        LuceneMessage.addMessageType(builder, entity.getMessage().type().byteVal);
+        LuceneMessage.addMessageType(builder, entity.getMessage().type().byteVal());
         LuceneMessage.addMessage(builder, messageOffset);
         int resultOffset = LuceneMessage.endLuceneMessage(builder);
         builder.finish(resultOffset);

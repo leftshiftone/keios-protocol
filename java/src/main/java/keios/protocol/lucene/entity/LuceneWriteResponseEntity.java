@@ -17,10 +17,11 @@
 package keios.protocol.lucene.entity;
 
 import com.google.flatbuffers.FlatBufferBuilder;
+import keios.common.Message;
 
 import java.util.Objects;
 
-import static keios.protocol.lucene.entity.LuceneMessageEntity.MessageType.WRITE_RESPONSE;
+import static keios.protocol.lucene.entity.LuceneMessageEntity.LuceneMessageType.WRITE_RESPONSE;
 
 /**
  * @author benjamin.krenn@leftshift.one
@@ -44,7 +45,7 @@ public class LuceneWriteResponseEntity implements Message {
     }
 
     @Override
-    public LuceneMessageEntity.MessageType type() {
+    public LuceneMessageEntity.LuceneMessageType type() {
         return WRITE_RESPONSE;
     }
 

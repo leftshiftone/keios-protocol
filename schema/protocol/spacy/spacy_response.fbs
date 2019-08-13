@@ -1,7 +1,5 @@
 namespace keios.protocol.spacy;
 
-attribute "priority";
-
 table DEPSpacyResponse {
     lang: string;
     relation: string;

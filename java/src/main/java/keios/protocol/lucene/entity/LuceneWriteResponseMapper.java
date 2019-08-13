@@ -16,8 +16,8 @@
 
 package keios.protocol.lucene.entity;
 
-import keios.protocol.lucene.flatbuffers.LuceneWriteResponse;
 import keios.common.EntityMapper;
+import keios.protocol.lucene.flatbuffers.LuceneWriteResponse;
 
 /**
  * @author benjamin.krenn@leftshift.one

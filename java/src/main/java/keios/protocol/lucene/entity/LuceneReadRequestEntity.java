@@ -17,10 +17,12 @@
 package keios.protocol.lucene.entity;
 
 import com.google.flatbuffers.FlatBufferBuilder;
+import keios.common.Message;
+import keios.common.MessageType;
 
 import java.util.Objects;
 
-import static keios.protocol.lucene.entity.LuceneMessageEntity.MessageType.READ_REQUEST;
+import static keios.protocol.lucene.entity.LuceneMessageEntity.LuceneMessageType.READ_REQUEST;
 
 /**
  * @author benjamin.krenn@leftshift.one
@@ -70,7 +72,7 @@ public class LuceneReadRequestEntity implements Message {
     }
 
     @Override
-    public LuceneMessageEntity.MessageType type() {
+    public LuceneMessageEntity.LuceneMessageType type() {
         return READ_REQUEST;
     }
 

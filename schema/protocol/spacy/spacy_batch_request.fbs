@@ -1,0 +1,9 @@
+include "spacy_request.fbs";
+
+namespace keios.protocol.spacy;
+
+table SpacyBatchRequest {
+   requests: [SpacyRequest] (required);
+}
+
+root_type SpacyBatchRequest;

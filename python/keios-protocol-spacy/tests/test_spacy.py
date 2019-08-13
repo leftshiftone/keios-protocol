@@ -1,19 +1,16 @@
-import pytest
-
-from keios_protocol_spacy import SpacyRequestEntity
-from keios_protocol_spacy import SpacyResponseEntity
-from keios_protocol_spacy import NERSpacyResponseEntity
-from keios_protocol_spacy import DEPSpacyResponseEntity
-from keios_protocol_spacy import SpacyResponseData
+from keios_protocol_spacy import DEPSpacyResponseData, SpacyRequestData, TypeData, SpacyBatchRequestData, \
+    SpacyBatchResponseData
 from keios_protocol_spacy import NERSpacyResponseData
-from keios_protocol_spacy import DEPSpacyResponseData
-from keios_protocol_spacy import TypeData
+from keios_protocol_spacy import SpacyMessageData, SpacyMessageMapper
+from keios_protocol_spacy import SpacyResponseData
+from keios_protocol_spacy.fbs.SpacyMessageType import SpacyMessageType
 
-def test_serializes_spacy_response():
-    ner1 = NERSpacyResponseData(text="test1", start_char=1, end_char=2, label="x")
-    ner2 = NERSpacyResponseData(text="test2", start_char=1, end_char=2, label="y")
+
+def response_fixture(s: str):
+    ner1 = NERSpacyResponseData(text=f"{s}1", start_char=1, end_char=2, label="x")
+    ner2 = NERSpacyResponseData(text=f"{s}2", start_char=1, end_char=2, label="y")
     dep1 = DEPSpacyResponseData(
-        "de",
+        f"de-{s}-1",
         "relation",
         "source",
         "source_pos",
@@ -27,7 +24,7 @@ def test_serializes_spacy_response():
         "target_base"
     )
     dep2 = DEPSpacyResponseData(
-        "de",
+        f"de-{s}-2",
         "relation2",
         "abc",
         "abc",
@@ -40,26 +37,60 @@ def test_serializes_spacy_response():
         "abc",
         "abc"
     )
-    response_data = SpacyResponseData(dep=[dep1, dep2], ner=[ner1, ner2])
-    response = SpacyResponseEntity()
-    result = response.serialize(response_data)
-    deserialized = response.fbs.SpacyResponse.GetRootAsSpacyResponse(result, 0)
-    # ner
-    assert deserialized.Ner(0).Text().decode("UTF-8") == 'test1'
-    assert deserialized.Ner(0).StartChar() == 1
-    assert deserialized.Ner(0).EndChar() == 2
-    assert deserialized.Ner(0).Label().decode("UTF-8") == "x"
-    assert deserialized.Ner(1).Text().decode("UTF-8") == "test2"
-    # dep
-    assert deserialized.Dep(0).Lang().decode("UTF-8") == "de"
-    assert deserialized.Dep(0).Relation().decode("UTF-8") == "relation"
-    assert deserialized.Dep(1).Relation().decode("UTF-8") == "relation2"
-    assert deserialized.Dep(1).Lang().decode("UTF-8") == "de"
+    return SpacyResponseData(dep=[dep1, dep2], ner=[ner1, ner2])
 
-def test_deserializes_spacy_request():
-    hex = "0C00000008000C000800040008000000080000000C00000001000000010000001800000068616C6C6F206963682062696E732064657220706574657200000000"
-    bb = bytearray.fromhex(hex)
-    request = SpacyRequestEntity()
-    request_obj = request.deserialize(bb)
-    assert request_obj.text == "hallo ich bins der peter"
-    assert request_obj.type == [TypeData.NER]
+
+def test_serializes_deserializes_wrapped_spacy_response():
+    message_data = SpacyMessageData(SpacyMessageType().SpacyResponse, response_fixture("t"))
+    serialized_message = SpacyMessageMapper().serialize(message_data)
+
+    message_mapper = SpacyMessageMapper()
+    result: SpacyMessageData = message_mapper.deserialize(serialized_message)
+    payload: SpacyResponseData = result.message
+    assert result.type is SpacyMessageType().SpacyResponse
+    assert payload is not None
+    assert len(payload.dep) is 2
+    assert len(payload.ner) is 2
+    assert payload == response_fixture("t")
+
+def test_serializes_deserializes_wrapped_spacy_request():
+    request = SpacyRequestData("hello world", [TypeData.NER, TypeData.DEP])
+    message = SpacyMessageData(SpacyMessageType().SpacyRequest, request)
+    mapper = SpacyMessageMapper()
+    serialized = mapper.serialize(message)
+    deserialized = mapper.deserialize(serialized)
+
+    payload: SpacyRequestData = deserialized.message
+
+    assert deserialized.type == SpacyMessageType().SpacyRequest
+    assert payload.text == "hello world"
+    assert payload.types == [TypeData.NER, TypeData.DEP]
+
+
+def test_serializes_deserializes_wrapped_spacybatchrequest():
+    requests = [SpacyRequestData("first", [TypeData.DEP, TypeData.NER]),
+                SpacyRequestData("second", [TypeData.NER]),
+                SpacyRequestData("third", [TypeData.DEP])]
+    batch_request = SpacyBatchRequestData(requests)
+    message = SpacyMessageData(SpacyMessageType().SpacyBatchRequest, batch_request)
+    mapper = SpacyMessageMapper()
+    serialized = mapper.serialize(message)
+    deserialized = mapper.deserialize(serialized)
+
+    payload: SpacyBatchRequestData = deserialized.message
+
+    assert deserialized.type == SpacyMessageType.SpacyBatchRequest
+    assert len(payload.requests) == 3
+    assert payload.requests == requests
+
+
+def test_serializes_deserializes_wrapped_spacybatchresponse():
+    responses = [response_fixture("1"), response_fixture("2"), response_fixture("3")]
+    batch_response = SpacyBatchResponseData(responses)
+    mapper = SpacyMessageMapper()
+    serialized = mapper.serialize(SpacyMessageData(SpacyMessageType().SpacyBatchResponse, batch_response))
+    deserialized = mapper.deserialize(serialized)
+
+    payload: SpacyBatchResponseData = deserialized.message
+    print("responses", payload.responses)
+    assert payload.responses == responses

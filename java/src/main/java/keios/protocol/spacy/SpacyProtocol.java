@@ -16,38 +16,25 @@
 
 package keios.protocol.spacy;
 
-import com.google.flatbuffers.FlatBufferBuilder;
-import keios.protocol.spacy.flatbuffers.SpacyRequest;
-import keios.protocol.spacy.flatbuffers.SpacyResponse;
-
-import java.nio.ByteBuffer;
+import keios.common.Message;
+import keios.protocol.spacy.entity.SpacyMessageDeserializer;
+import keios.protocol.spacy.entity.SpacyMessageEntity;
+import keios.protocol.spacy.entity.SpacyMessageSerializer;
 
 public class SpacyProtocol {
 
-    public static byte[] toSpacyRequest(String text, ESpacyType... types) {
-        final FlatBufferBuilder builder = new FlatBufferBuilder();
-        int textOffset = builder.createString(text);
-        int typeOffset = SpacyRequest.createTypeVector(builder, toBytes(types));
+    private static final SpacyMessageSerializer serializer = new SpacyMessageSerializer();
+    private static final SpacyMessageDeserializer deserializer = new SpacyMessageDeserializer();
 
-        SpacyRequest.startSpacyRequest(builder);
-        SpacyRequest.addText(builder, textOffset);
-        SpacyRequest.addType(builder, typeOffset);
-
-        int request = SpacyRequest.endSpacyRequest(builder);
-        builder.finish(request);
-        return builder.sizedByteArray();
+    private SpacyProtocol() {
+        throw new UnsupportedOperationException();
     }
 
-    public static SpacyResponse toSpacyResponse(byte[] bytes) {
-        return SpacyResponse.getRootAsSpacyResponse(ByteBuffer.wrap(bytes));
+    public static SpacyMessageEntity toMessage(byte[] bytes) {
+        return deserializer.deserialize(bytes);
     }
 
-    private static byte[] toBytes(ESpacyType... types) {
-        byte[] bytes = new byte[types.length];
-        for (int i = 0; i < types.length; i++) {
-            bytes[i] = (byte) types[i].ordinal();
-        }
-        return bytes;
+    public static <T extends Message> byte[] toWireMessage(SpacyMessageEntity<T> entity) {
+        return serializer.serialize(entity);
     }
-
 }

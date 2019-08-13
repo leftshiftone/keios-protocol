@@ -17,8 +17,8 @@
 package keios.protocol.lucene.entity;
 
 import com.google.flatbuffers.FlatBufferBuilder;
-import keios.protocol.lucene.flatbuffers.LuceneReadResponse;
 import keios.common.ChildSerializer;
+import keios.protocol.lucene.flatbuffers.LuceneReadResponse;
 
 /**
  * @author benjamin.krenn@leftshift.one

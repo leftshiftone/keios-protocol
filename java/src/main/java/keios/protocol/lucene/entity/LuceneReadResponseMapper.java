@@ -16,9 +16,9 @@
 
 package keios.protocol.lucene.entity;
 
+import keios.common.EntityMapper;
 import keios.protocol.lucene.flatbuffers.LuceneReadResponse;
 import keios.protocol.lucene.flatbuffers.SearchResult;
-import keios.common.EntityMapper;
 
 import java.util.List;
 import java.util.Optional;

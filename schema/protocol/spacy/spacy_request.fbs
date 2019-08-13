@@ -1,7 +1,6 @@
 namespace keios.protocol.spacy;
-attribute "priority";
 
-enum Type : byte { DEP, NER }
+enum Type: byte { DEP = 0, NER = 1 }
 
 table SpacyRequest {
   text:string;

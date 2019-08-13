@@ -17,6 +17,7 @@
 package keios.protocol.lucene.entity;
 
 import keios.common.BinaryDeserializer;
+import keios.common.Message;
 import keios.protocol.lucene.flatbuffers.*;
 
 import java.nio.ByteBuffer;

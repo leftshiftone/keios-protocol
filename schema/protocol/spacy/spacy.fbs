@@ -1,0 +1,19 @@
+include "spacy_request.fbs";
+include "spacy_batch_request.fbs";
+include "spacy_response.fbs";
+include "spacy_batch_response.fbs";
+
+namespace keios.protocol.spacy;
+
+union SpacyMessageType {
+    SpacyRequest,
+    SpacyBatchRequest,
+    SpacyResponse,
+    SpacyBatchResponse
+}
+
+table SpacyMessage {
+    message: SpacyMessageType (required);
+}
+
+root_type SpacyMessage;

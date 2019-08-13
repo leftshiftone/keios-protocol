@@ -17,6 +17,7 @@
 package keios.protocol.lucene.entity;
 
 import com.google.flatbuffers.FlatBufferBuilder;
+import keios.common.Message;
 
 import java.util.Collections;
 import java.util.List;
@@ -44,8 +45,8 @@ public class LuceneReadResponseEntity implements Message {
     }
 
     @Override
-    public LuceneMessageEntity.MessageType type() {
-        return LuceneMessageEntity.MessageType.READ_RESPONSE;
+    public LuceneMessageEntity.LuceneMessageType type() {
+        return LuceneMessageEntity.LuceneMessageType.READ_RESPONSE;
     }
 
     @Override

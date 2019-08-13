@@ -17,8 +17,8 @@
 package keios.protocol.lucene.entity;
 
 import com.google.flatbuffers.FlatBufferBuilder;
-import keios.protocol.lucene.flatbuffers.LuceneWriteRequest;
 import keios.common.ChildSerializer;
+import keios.protocol.lucene.flatbuffers.LuceneWriteRequest;
 
 /**
  * @author benjamin.krenn@leftshift.one - 5/28/19.
