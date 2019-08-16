@@ -13,7 +13,7 @@ public class SpacyMessageEntity<T extends Message> extends AbstractMessageEntity
         super(message);
     }
 
-    enum SpacyMessageType implements MessageType {
+    public enum SpacyMessageType implements MessageType {
         REQUEST(keios.protocol.spacy.flatbuffers.SpacyMessageType.SpacyRequest),
         BATCH_REQUEST(keios.protocol.spacy.flatbuffers.SpacyMessageType.SpacyBatchRequest),
         RESPONSE(keios.protocol.spacy.flatbuffers.SpacyMessageType.SpacyResponse),

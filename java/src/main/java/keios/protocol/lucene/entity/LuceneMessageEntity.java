@@ -16,31 +16,27 @@
 
 package keios.protocol.lucene.entity;
 
+import keios.common.AbstractMessageEntity;
+import keios.common.Message;
 import keios.common.MessageType;
 import keios.protocol.lucene.flatbuffers.LuceneMessage;
 
 /**
- * Message wrapper that holds a reference to the actual message. Every {@link keios.common.Message} must be wrapped
+ * Message wrapper that holds a reference to the actual message. Every {@link Message} must be wrapped
  * by a {@link LuceneMessage} before sending it over the wire.
  *
- * This eases the deserialization on the receiver side by being able to call {@link keios.common.Message#type()}
+ * This eases the deserialization on the receiver side by being able to call {@link Message#type()}
  *
  * @author benjamin.krenn@leftshift.one - 5/29/19.
  * @since 0.4.0
  */
-public class LuceneMessageEntity<T extends keios.common.Message> {
-
-    private final T message;
+public class LuceneMessageEntity<T extends Message> extends AbstractMessageEntity<T> {
 
     public LuceneMessageEntity(T message) {
-        this.message = message;
+        super(message);
     }
 
-    public T getMessage() {
-        return message;
-    }
-
-    enum LuceneMessageType implements MessageType {
+    public enum LuceneMessageType implements MessageType {
         READ_REQUEST(keios.protocol.lucene.flatbuffers.LuceneMessageType.LuceneReadRequest),
         READ_RESPONSE(keios.protocol.lucene.flatbuffers.LuceneMessageType.LuceneReadResponse),
         WRITE_REQUEST(keios.protocol.lucene.flatbuffers.LuceneMessageType.LuceneWriteRequest),
