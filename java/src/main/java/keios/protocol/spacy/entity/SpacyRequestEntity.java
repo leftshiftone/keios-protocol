@@ -18,6 +18,7 @@ public class SpacyRequestEntity implements Message {
 
     private final String text;
     private final Set<Byte> types;
+    private final SpacyRequestSerializer serializer = new SpacyRequestSerializer();
 
     public SpacyRequestEntity(String text, ESpacyType... types) {
         Objects.requireNonNull(text, "text can not be null");
@@ -40,7 +41,7 @@ public class SpacyRequestEntity implements Message {
 
     @Override
     public int serialize(FlatBufferBuilder builder) {
-        return new SpacyRequestSerializer().serialize(this, builder);
+        return this.serializer.serialize(this, builder);
     }
 
     public String getText() {

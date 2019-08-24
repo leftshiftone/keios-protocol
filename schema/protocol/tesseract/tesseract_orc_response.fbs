@@ -1,0 +1,6 @@
+namespace keios.protocol.tesseract;
+
+table TesseractOcrResponse {
+    text: string;
+    confidence: uint;
+}

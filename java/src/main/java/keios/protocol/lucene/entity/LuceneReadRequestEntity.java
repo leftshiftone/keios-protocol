@@ -17,8 +17,8 @@
 package keios.protocol.lucene.entity;
 
 import com.google.flatbuffers.FlatBufferBuilder;
+import keios.common.ChildSerializer;
 import keios.common.Message;
-import keios.common.MessageType;
 
 import java.util.Objects;
 
@@ -33,6 +33,8 @@ public class LuceneReadRequestEntity implements Message {
     private final String query;
     private final Float minimumScore;
     private final Integer limit;
+
+    private final ChildSerializer<LuceneReadRequestEntity> serializer = new LuceneReadRequestSerializer();
 
     public LuceneReadRequestEntity(String field, String query, Float minimumScore, Integer limit) {
         this.field = Objects.requireNonNull(field, "field can not be null");
@@ -78,8 +80,7 @@ public class LuceneReadRequestEntity implements Message {
 
     @Override
     public int serialize(FlatBufferBuilder builder) {
-        LuceneReadRequestSerializer serializer = new LuceneReadRequestSerializer();
-        return serializer.serialize(this, builder);
+        return this.serializer.serialize(this, builder);
     }
 
     @Override

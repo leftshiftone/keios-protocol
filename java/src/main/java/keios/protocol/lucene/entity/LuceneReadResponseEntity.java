@@ -17,6 +17,7 @@
 package keios.protocol.lucene.entity;
 
 import com.google.flatbuffers.FlatBufferBuilder;
+import keios.common.ChildSerializer;
 import keios.common.Message;
 
 import java.util.Collections;
@@ -29,6 +30,7 @@ import java.util.Objects;
  */
 public class LuceneReadResponseEntity implements Message {
     private final List<SearchResultEntity> results;
+    private final ChildSerializer<LuceneReadResponseEntity> serializer = new LuceneReadResponseSerializer();
 
     public LuceneReadResponseEntity(List<SearchResultEntity> results) {
         this.results = Objects.requireNonNull(results, "results can not be null");
@@ -40,8 +42,7 @@ public class LuceneReadResponseEntity implements Message {
 
     @Override
     public int serialize(FlatBufferBuilder builder) {
-        LuceneReadResponseSerializer serializer = new LuceneReadResponseSerializer();
-        return serializer.serialize(this, builder);
+        return this.serializer.serialize(this, builder);
     }
 
     @Override

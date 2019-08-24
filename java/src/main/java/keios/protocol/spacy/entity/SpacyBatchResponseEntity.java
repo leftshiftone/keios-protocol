@@ -15,6 +15,7 @@ import java.util.Objects;
 public class SpacyBatchResponseEntity implements Message {
 
     private final List<SpacyResponseEntity> responses;
+    private final SpacyBatchResponseSerializer serializer = new SpacyBatchResponseSerializer();
 
     public SpacyBatchResponseEntity(List<SpacyResponseEntity> responses) {
         Objects.requireNonNull(responses, "responses can not be null");
@@ -28,7 +29,7 @@ public class SpacyBatchResponseEntity implements Message {
 
     @Override
     public int serialize(FlatBufferBuilder builder) {
-        return new SpacyBatchResponseSerializer().serialize(this, builder);
+        return this.serializer.serialize(this, builder);
     }
 
     public List<SpacyResponseEntity> getResponses() {

@@ -17,6 +17,7 @@
 package keios.protocol.lucene.entity;
 
 import com.google.flatbuffers.FlatBufferBuilder;
+import keios.common.ChildSerializer;
 import keios.common.Message;
 
 import java.util.Collections;
@@ -31,6 +32,7 @@ import static keios.protocol.lucene.entity.LuceneMessageEntity.LuceneMessageType
  */
 public class LuceneWriteRequestEntity implements Message {
     private final Map<String, String> document;
+    private final ChildSerializer<LuceneWriteRequestEntity> serializer = new LuceneWriteRequestSerializer();
 
     public LuceneWriteRequestEntity(Map<String, String> document) {
         this.document = Objects.requireNonNull(document, "document can not be null");
@@ -42,8 +44,7 @@ public class LuceneWriteRequestEntity implements Message {
 
     @Override
     public int serialize(FlatBufferBuilder builder) {
-        LuceneWriteRequestSerializer serializer = new LuceneWriteRequestSerializer();
-        return serializer.serialize(this, builder);
+        return this.serializer.serialize(this, builder);
     }
 
     @Override

@@ -17,6 +17,7 @@
 package keios.protocol.lucene.entity;
 
 import com.google.flatbuffers.FlatBufferBuilder;
+import keios.common.ChildSerializer;
 import keios.common.Message;
 
 import java.util.Objects;
@@ -29,6 +30,7 @@ import static keios.protocol.lucene.entity.LuceneMessageEntity.LuceneMessageType
  */
 public class LuceneWriteResponseEntity implements Message {
     private final WriteResultEntity writeResult;
+    private final ChildSerializer<LuceneWriteResponseEntity> serializer = new LuceneWriteResponseSerializer();
 
     public LuceneWriteResponseEntity(WriteResultEntity writeResult) {
         this.writeResult = writeResult;
@@ -40,8 +42,7 @@ public class LuceneWriteResponseEntity implements Message {
 
     @Override
     public int serialize(FlatBufferBuilder builder) {
-        LuceneWriteResponseSerializer serializer = new LuceneWriteResponseSerializer();
-        return serializer.serialize(this, builder);
+        return this.serializer.serialize(this, builder);
     }
 
     @Override

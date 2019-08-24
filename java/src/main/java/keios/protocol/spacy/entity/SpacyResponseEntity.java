@@ -1,6 +1,7 @@
 package keios.protocol.spacy.entity;
 
 import com.google.flatbuffers.FlatBufferBuilder;
+import keios.common.ChildSerializer;
 import keios.common.Message;
 import keios.common.MessageType;
 
@@ -16,6 +17,7 @@ public class SpacyResponseEntity implements Message {
 
     private final List<DEPSpacyResponseEntity> depResponses;
     private final List<NERSpacyResponseEntity> nerResponses;
+    private final ChildSerializer<SpacyResponseEntity> serializer = new SpacyResponseSerializer();
 
     public SpacyResponseEntity(List<DEPSpacyResponseEntity> depResponses, List<NERSpacyResponseEntity> nerResponses) {
         Objects.requireNonNull(depResponses, "depResponses can not be null");
@@ -31,7 +33,7 @@ public class SpacyResponseEntity implements Message {
 
     @Override
     public int serialize(FlatBufferBuilder builder) {
-        return new SpacyResponseSerializer().serialize(this, builder);
+        return this.serializer.serialize(this, builder);
     }
 
     public List<DEPSpacyResponseEntity> getDepResponses() {
