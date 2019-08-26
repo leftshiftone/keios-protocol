@@ -5,6 +5,7 @@ import keios.common.*;
 import keios.protocol.spacy.flatbuffers.*;
 
 import java.nio.ByteBuffer;
+import java.util.Objects;
 
 /**
  * @author benjamin.krenn@leftshift.one
@@ -52,21 +53,21 @@ public class SpacyMessageEntity<T extends Message> extends AbstractMessageEntity
 
     static class SpacyMessageDeserializer implements BinaryDeserializer<SpacyMessageEntity<Message>> {
         @Override
-        public SpacyMessageEntity deserialize(ByteBuffer bb) {
+        public SpacyMessageEntity<Message> deserialize(ByteBuffer bb) {
             SpacyMessage message = SpacyMessage.getRootAsSpacyMessage(bb);
             switch (message.messageType()) {
                 case keios.protocol.spacy.flatbuffers.SpacyMessageType.SpacyRequest:
                     return new SpacyMessageEntity<>(new SpacyRequestEntity.SpacyRequestMapper()
-                            .from((SpacyRequest) message.message(new SpacyRequest())));
+                            .from((SpacyRequest) Objects.requireNonNull(message.message(new SpacyRequest()))));
                 case keios.protocol.spacy.flatbuffers.SpacyMessageType.SpacyBatchRequest:
                     return new SpacyMessageEntity<>(new SpacyBatchRequestEntity.SpacyBatchRequestMapper()
-                            .from((SpacyBatchRequest) message.message(new SpacyBatchRequest())));
+                            .from((SpacyBatchRequest) Objects.requireNonNull(message.message(new SpacyBatchRequest()))));
                 case keios.protocol.spacy.flatbuffers.SpacyMessageType.SpacyResponse:
                     return new SpacyMessageEntity<>(new SpacyResponseEntity.SpacyResponseMapper()
-                            .from((SpacyResponse) message.message(new SpacyResponse())));
+                            .from((SpacyResponse) Objects.requireNonNull(message.message(new SpacyResponse()))));
                 case keios.protocol.spacy.flatbuffers.SpacyMessageType.SpacyBatchResponse:
                     return new SpacyMessageEntity<>(new SpacyBatchResponseEntity.SpacyBatchResponseMapper()
-                            .from((SpacyBatchResponse) message.message(new SpacyBatchResponse())));
+                            .from((SpacyBatchResponse) Objects.requireNonNull(message.message(new SpacyBatchResponse()))));
                 default:
                     throw new IllegalArgumentException("Could not deserialize message");
             }

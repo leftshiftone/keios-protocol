@@ -76,7 +76,7 @@ public class LuceneWriteResponseEntity implements Message {
      * @author benjamin.krenn@leftshift.one
      * @since 0.3.0
      */
-    private class LuceneWriteResponseSerializer implements ChildSerializer<LuceneWriteResponseEntity> {
+    private static class LuceneWriteResponseSerializer implements ChildSerializer<LuceneWriteResponseEntity> {
         @Override
         public int serialize(LuceneWriteResponseEntity obj, FlatBufferBuilder builder) {
             LuceneWriteResponse.startLuceneWriteResponse(builder);

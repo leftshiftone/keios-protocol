@@ -21,6 +21,7 @@ import keios.common.*;
 import keios.protocol.lucene.flatbuffers.*;
 
 import java.nio.ByteBuffer;
+import java.util.Objects;
 
 /**
  * Message wrapper that holds a reference to the actual message. Every {@link Message} must be wrapped
@@ -64,16 +65,16 @@ public class LuceneMessageEntity<T extends Message> extends AbstractMessageEntit
             switch (messageType) {
                 case keios.protocol.lucene.flatbuffers.LuceneMessageType.LuceneReadRequest:
                     return new LuceneMessageEntity<>(new LuceneReadRequestEntity.LuceneReadRequestMapper()
-                            .from((LuceneReadRequest) message.message(new LuceneReadRequest())));
+                            .from((LuceneReadRequest) Objects.requireNonNull(message.message(new LuceneReadRequest()))));
                 case keios.protocol.lucene.flatbuffers.LuceneMessageType.LuceneReadResponse:
                     return new LuceneMessageEntity<>(new LuceneReadResponseEntity.LuceneReadResponseMapper()
-                            .from((LuceneReadResponse) message.message(new LuceneReadResponse())));
+                            .from((LuceneReadResponse) Objects.requireNonNull(message.message(new LuceneReadResponse()))));
                 case keios.protocol.lucene.flatbuffers.LuceneMessageType.LuceneWriteRequest:
                     return new LuceneMessageEntity<>(new LuceneWriteRequestEntity.LuceneWriteRequestMapper()
-                            .from((LuceneWriteRequest) message.message(new LuceneWriteRequest())));
+                            .from((LuceneWriteRequest) Objects.requireNonNull(message.message(new LuceneWriteRequest()))));
                 case keios.protocol.lucene.flatbuffers.LuceneMessageType.LuceneWriteResponse:
                     return new LuceneMessageEntity<>(new LuceneWriteResponseEntity.LuceneWriteResponseMapper()
-                            .from((LuceneWriteResponse) message.message(new LuceneWriteResponse())));
+                            .from((LuceneWriteResponse) Objects.requireNonNull(message.message(new LuceneWriteResponse()))));
                 default:
                     throw new IllegalArgumentException("could not deserialize message");
             }

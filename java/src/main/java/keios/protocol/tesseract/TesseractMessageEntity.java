@@ -7,6 +7,7 @@ import keios.protocol.tesseract.flatbuffers.TesseractOcrRequest;
 import keios.protocol.tesseract.flatbuffers.TesseractOcrResponse;
 
 import java.nio.ByteBuffer;
+import java.util.Objects;
 
 /**
  * @author benjamin.krenn@leftshift.one - 8/24/19.
@@ -58,9 +59,9 @@ public class TesseractMessageEntity<T extends Message> extends AbstractMessageEn
             TesseractMessage message = TesseractMessage.getRootAsTesseractMessage(bb);
             switch (message.messageType()) {
                 case keios.protocol.tesseract.flatbuffers.TesseractMessageType.TesseractOcrRequest:
-                    return new TesseractMessageEntity<>(new TesseractOcrRequestEntity.TesseractOcrRequestMapper().from((TesseractOcrRequest) message.message(new TesseractOcrRequest())));
+                    return new TesseractMessageEntity<>(new TesseractOcrRequestEntity.TesseractOcrRequestMapper().from((TesseractOcrRequest) Objects.requireNonNull(message.message(new TesseractOcrRequest()))));
                 case keios.protocol.tesseract.flatbuffers.TesseractMessageType.TesseractOcrResponse:
-                    return new TesseractMessageEntity<>(new TesseractOcrResponseEntity.TesseractOcrResponseMapper().from((TesseractOcrResponse) message.message(new TesseractOcrResponse())));
+                    return new TesseractMessageEntity<>(new TesseractOcrResponseEntity.TesseractOcrResponseMapper().from((TesseractOcrResponse) Objects.requireNonNull(message.message(new TesseractOcrResponse()))));
                 default:
                     throw new IllegalArgumentException("Could not deserialize message");
             }
