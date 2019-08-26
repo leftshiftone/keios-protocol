@@ -14,21 +14,31 @@
  * from Leftshift One.
  */
 
-package keios.protocol.lucene.entity;
+package keios.protocol.lucene;
 
-import com.google.flatbuffers.FlatBufferBuilder;
-import keios.common.ChildSerializer;
-import keios.protocol.lucene.flatbuffers.LuceneWriteResponse;
+import java.util.Arrays;
 
 /**
  * @author benjamin.krenn@leftshift.one
  * @since 0.3.0
  */
-class LuceneWriteResponseSerializer implements ChildSerializer<LuceneWriteResponseEntity> {
-    @Override
-    public int serialize(LuceneWriteResponseEntity obj, FlatBufferBuilder builder) {
-        LuceneWriteResponse.startLuceneWriteResponse(builder);
-        LuceneWriteResponse.addWriteResult(builder, obj.getWriteResult().getAsByte());
-        return LuceneWriteResponse.endLuceneWriteResponse(builder);
+public enum WriteResultEntity {
+    SUCCESS((byte) 0),
+    FAILURE((byte) 1);
+
+    private final byte asByte;
+
+    WriteResultEntity(byte asByte) {
+        this.asByte = asByte;
+    }
+
+    public byte getAsByte() {
+        return asByte;
+    }
+
+    public static WriteResultEntity fromByte(byte b) {
+        return Arrays.stream(values())
+                .filter(v -> v.asByte == b)
+                .findFirst().orElseThrow(() -> new IllegalArgumentException(String.format("could not map %d to %s", b, WriteResultEntity.class.getSimpleName())));
     }
 }

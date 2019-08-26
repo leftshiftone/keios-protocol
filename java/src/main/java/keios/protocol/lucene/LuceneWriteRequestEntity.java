@@ -14,17 +14,23 @@
  * from Leftshift One.
  */
 
-package keios.protocol.lucene.entity;
+package keios.protocol.lucene;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 import keios.common.ChildSerializer;
+import keios.common.EntityMapper;
 import keios.common.Message;
+import keios.protocol.lucene.flatbuffers.LuceneWriteRequest;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-import static keios.protocol.lucene.entity.LuceneMessageEntity.LuceneMessageType.WRITE_REQUEST;
+import static keios.protocol.lucene.LuceneMessageEntity.LuceneMessageType.WRITE_REQUEST;
 
 /**
  * @author benjamin.krenn@leftshift.one
@@ -64,4 +70,38 @@ public class LuceneWriteRequestEntity implements Message {
     public int hashCode() {
         return Objects.hash(document);
     }
+
+    static class LuceneWriteRequestMapper implements EntityMapper<LuceneWriteRequest, LuceneWriteRequestEntity> {
+        @Override
+        public LuceneWriteRequestEntity from(LuceneWriteRequest input) {
+            Map<String, String> document = IntStream.range(0, input.documentLength())
+                    .mapToObj(input::document)
+                    .collect(Collectors.toMap(
+                            t -> Optional.ofNullable(t.key())
+                                    .orElseThrow(throwIfNull()),
+                            t -> Optional.ofNullable(t.value())
+                                    .orElseThrow(throwIfNull())));
+
+            return new LuceneWriteRequestEntity(document);
+        }
+
+        private static Supplier<RuntimeException> throwIfNull() {
+            return IllegalStateException::new;
+        }
+    }
+
+    private static class LuceneWriteRequestSerializer implements ChildSerializer<LuceneWriteRequestEntity> {
+
+        private final DocumentSerializer documentSerializer = new DocumentSerializer();
+
+        @Override
+        public int serialize(LuceneWriteRequestEntity obj, FlatBufferBuilder builder) {
+            int documentOffset = documentSerializer.serialize(obj.getDocument(), builder);
+
+            LuceneWriteRequest.startLuceneWriteRequest(builder);
+            LuceneWriteRequest.addDocument(builder, documentOffset);
+            return LuceneWriteRequest.endLuceneWriteRequest(builder);
+        }
+    }
+
 }

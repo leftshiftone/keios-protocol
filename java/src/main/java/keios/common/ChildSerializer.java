@@ -6,6 +6,7 @@ import com.google.flatbuffers.FlatBufferBuilder;
  * @author benjamin.krenn@leftshift.one - 5/28/19.
  * @since 0.3.0
  */
+@FunctionalInterface
 public interface ChildSerializer<T> {
 
     /**

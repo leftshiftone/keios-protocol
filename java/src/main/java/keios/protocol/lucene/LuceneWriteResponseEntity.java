@@ -14,15 +14,17 @@
  * from Leftshift One.
  */
 
-package keios.protocol.lucene.entity;
+package keios.protocol.lucene;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 import keios.common.ChildSerializer;
+import keios.common.EntityMapper;
 import keios.common.Message;
+import keios.protocol.lucene.flatbuffers.LuceneWriteResponse;
 
 import java.util.Objects;
 
-import static keios.protocol.lucene.entity.LuceneMessageEntity.LuceneMessageType.WRITE_RESPONSE;
+import static keios.protocol.lucene.LuceneMessageEntity.LuceneMessageType.WRITE_RESPONSE;
 
 /**
  * @author benjamin.krenn@leftshift.one
@@ -62,4 +64,25 @@ public class LuceneWriteResponseEntity implements Message {
     public int hashCode() {
         return Objects.hash(writeResult);
     }
+
+    static class LuceneWriteResponseMapper implements EntityMapper<LuceneWriteResponse, LuceneWriteResponseEntity> {
+        @Override
+        public LuceneWriteResponseEntity from(LuceneWriteResponse input) {
+            return new LuceneWriteResponseEntity(WriteResultEntity.fromByte(input.writeResult()));
+        }
+    }
+
+    /**
+     * @author benjamin.krenn@leftshift.one
+     * @since 0.3.0
+     */
+    private class LuceneWriteResponseSerializer implements ChildSerializer<LuceneWriteResponseEntity> {
+        @Override
+        public int serialize(LuceneWriteResponseEntity obj, FlatBufferBuilder builder) {
+            LuceneWriteResponse.startLuceneWriteResponse(builder);
+            LuceneWriteResponse.addWriteResult(builder, obj.getWriteResult().getAsByte());
+            return LuceneWriteResponse.endLuceneWriteResponse(builder);
+        }
+    }
+
 }

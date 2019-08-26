@@ -14,7 +14,12 @@
  * from Leftshift One.
  */
 
-package keios.protocol.lucene.entity;
+package keios.protocol.lucene;
+
+import com.google.flatbuffers.FlatBufferBuilder;
+import keios.common.FlatbuffersSerializable;
+import keios.common.ChildSerializer;
+import keios.protocol.lucene.flatbuffers.SearchResult;
 
 import java.util.Map;
 import java.util.Objects;
@@ -23,7 +28,9 @@ import java.util.Objects;
  * @author benjamin.krenn@leftshift.one
  * @since 0.3.0
  */
-public class SearchResultEntity {
+public class SearchResultEntity implements FlatbuffersSerializable {
+
+    private final ChildSerializer<SearchResultEntity> serializer = new SearchResultSerializer();
     private final Float score;
     private final Map<String, String> document;
 
@@ -50,7 +57,27 @@ public class SearchResultEntity {
     }
 
     @Override
+    public int serialize(FlatBufferBuilder builder) {
+        return this.serializer.serialize(this, builder);
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(score, document);
     }
+
+    private static class SearchResultSerializer implements ChildSerializer<SearchResultEntity> {
+
+        private final DocumentSerializer documentSerializer = new DocumentSerializer();
+
+        @Override
+        public int serialize(SearchResultEntity obj, FlatBufferBuilder builder) {
+            int documentOffset = documentSerializer.serialize(obj.getDocument(), builder);
+            SearchResult.startSearchResult(builder);
+            SearchResult.addScore(builder, obj.getScore());
+            SearchResult.addDocument(builder, documentOffset);
+            return SearchResult.endSearchResult(builder);
+        }
+    }
+
 }

@@ -14,7 +14,7 @@
  * from Leftshift One.
  */
 
-package keios.protocol.spacy.entity;
+package keios.protocol.spacy;
 
 import java.util.Arrays;
 

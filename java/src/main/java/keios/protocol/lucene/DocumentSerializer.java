@@ -14,26 +14,31 @@
  * from Leftshift One.
  */
 
-package keios.protocol.lucene.entity;
+package keios.protocol.lucene;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 import keios.common.ChildSerializer;
-import keios.protocol.lucene.flatbuffers.LuceneWriteRequest;
+import keios.protocol.lucene.flatbuffers.Tuple;
+
+import java.util.Map;
 
 /**
  * @author benjamin.krenn@leftshift.one - 5/28/19.
  * @since 0.3.0
  */
-class LuceneWriteRequestSerializer implements ChildSerializer<LuceneWriteRequestEntity> {
-
-    private final DocumentSerializer documentSerializer = new DocumentSerializer();
-
+class DocumentSerializer implements ChildSerializer<Map<String,String>> {
     @Override
-    public int serialize(LuceneWriteRequestEntity obj, FlatBufferBuilder builder) {
-        int documentOffset = documentSerializer.serialize(obj.getDocument(), builder);
+    public int serialize(Map<String, String> obj, FlatBufferBuilder builder) {
+        return builder.createVectorOfTables(
+                obj.entrySet()
+                        .stream()
+                        .map(entry -> {
+                            int keyOffset = builder.createString(entry.getKey());
+                            int valueOffset = builder.createString(entry.getValue());
 
-        LuceneWriteRequest.startLuceneWriteRequest(builder);
-        LuceneWriteRequest.addDocument(builder, documentOffset);
-        return LuceneWriteRequest.endLuceneWriteRequest(builder);
+                            return Tuple.createTuple(builder, keyOffset, valueOffset);
+                        })
+                        .mapToInt(i -> i).toArray()
+        );
     }
 }

@@ -16,7 +16,14 @@
 
 package keios.protocol.lucene.entity
 
+import keios.protocol.lucene.LuceneMessageEntity
 import keios.protocol.lucene.LuceneProtocol
+import keios.protocol.lucene.LuceneReadRequestEntity
+import keios.protocol.lucene.LuceneReadResponseEntity
+import keios.protocol.lucene.LuceneWriteRequestEntity
+import keios.protocol.lucene.LuceneWriteResponseEntity
+import keios.protocol.lucene.SearchResultEntity
+import keios.protocol.lucene.WriteResultEntity
 import spock.lang.Specification
 import spock.lang.Unroll
 

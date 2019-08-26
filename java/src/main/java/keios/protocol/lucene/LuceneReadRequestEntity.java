@@ -14,15 +14,18 @@
  * from Leftshift One.
  */
 
-package keios.protocol.lucene.entity;
+package keios.protocol.lucene;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 import keios.common.ChildSerializer;
+import keios.common.EntityMapper;
 import keios.common.Message;
+import keios.protocol.lucene.flatbuffers.LuceneReadRequest;
 
 import java.util.Objects;
+import java.util.Optional;
 
-import static keios.protocol.lucene.entity.LuceneMessageEntity.LuceneMessageType.READ_REQUEST;
+import static keios.protocol.lucene.LuceneMessageEntity.LuceneMessageType.READ_REQUEST;
 
 /**
  * @author benjamin.krenn@leftshift.one
@@ -98,4 +101,35 @@ public class LuceneReadRequestEntity implements Message {
     public int hashCode() {
         return Objects.hash(field, query, minimumScore, limit);
     }
+
+    /**
+     * @author benjamin.krenn@leftshift.one
+     * @since 0.3.0
+     */
+    static class LuceneReadRequestMapper implements EntityMapper<LuceneReadRequest, LuceneReadRequestEntity> {
+        @Override
+        public LuceneReadRequestEntity from(LuceneReadRequest input) {
+            return new LuceneReadRequestEntity(input.field(), input.query(), input.minimumScore(), input.limit());
+        }
+    }
+
+    private static class LuceneReadRequestSerializer implements ChildSerializer<LuceneReadRequestEntity> {
+
+        @Override
+        public int serialize(LuceneReadRequestEntity obj, FlatBufferBuilder builder) {
+            int fieldOffset = builder.createString(obj.getField());
+            int queryOffset = builder.createString(obj.getQuery());
+            LuceneReadRequest.startLuceneReadRequest(builder);
+            LuceneReadRequest.addField(builder, fieldOffset);
+            LuceneReadRequest.addQuery(builder, queryOffset);
+
+            Optional.ofNullable(obj.getLimit())
+                    .ifPresent(limit -> LuceneReadRequest.addLimit(builder, obj.getLimit()));
+            Optional.ofNullable(obj.getMinimumScore())
+                    .ifPresent(minimumScore -> LuceneReadRequest.addMinimumScore(builder, obj.getMinimumScore()));
+
+            return LuceneReadRequest.endLuceneReadRequest(builder);
+        }
+    }
+
 }

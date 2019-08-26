@@ -46,7 +46,6 @@ public class TesseractMessageEntity<T extends Message> extends AbstractMessageEn
             TesseractMessage.addMessage(builder, messageOffset);
 
             int resultOffset = TesseractMessage.endTesseractMessage(builder);
-
             builder.finish(resultOffset);
 
             return builder.sizedByteArray();
