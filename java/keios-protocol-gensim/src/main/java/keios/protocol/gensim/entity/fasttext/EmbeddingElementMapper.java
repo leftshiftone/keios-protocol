@@ -1,9 +1,7 @@
-import java.nio.file.Paths
-
 /*
  * Copyright (c) 2016-2019, Leftshift One
  * __________________
- * [2018] Leftshift One
+ * [2019] Leftshift One
  * All Rights Reserved.
  * NOTICE:  All information contained herein is, and remains
  * the property of Leftshift One and its suppliers,
@@ -15,19 +13,19 @@ import java.nio.file.Paths
  * is strictly forbidden unless prior written permission is obtained
  * from Leftshift One.
  */
-rootProject.name = rootProjectName
 
-rootProject.children.each { child ->
-    child.name = "keios-protocol-$child.name"
+package keios.protocol.gensim.entity.fasttext;
+
+import keios.protocol.common.EntityMapper;
+import keios.protocol.gensim.flatbuffers.fasttext.EmbeddingElement;
+
+/**
+ * @author Michael Mair
+ */
+public class EmbeddingElementMapper implements EntityMapper<EmbeddingElement, EmbeddingElementEntity> {
+
+    @Override
+    public EmbeddingElementEntity from(EmbeddingElement input) {
+        return new EmbeddingElementEntity(input.value());
+    }
 }
-
-void addProjects(String baseDir) {
-    Paths.get(rootDir.toString(), baseDir).toFile()
-            .listFiles({ f -> f.isDirectory() && f.name.contains("keios-protocol-") } as FileFilter)
-            .each {
-                include(":${it.toPath().fileName}")
-                project(":${it.toPath().fileName}").projectDir = new File("${baseDir}/${it.toPath().fileName}")
-            }
-}
-
-addProjects("java")
