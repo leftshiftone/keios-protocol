@@ -1,6 +1,7 @@
 package keios.protocol.spacy
 
-import keios.protocol.spacy.entity.*
+import groovy.transform.CompileStatic
+import groovy.transform.TypeChecked
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -13,7 +14,7 @@ class SpacyProtocolTest extends Specification {
         given:
             SpacyMessageEntity message = new SpacyMessageEntity(entity)
         when:
-            def result = SpacyProtocol.toMessage(SpacyProtocol.toWireMessage(message))
+            def result = SpacyProtocol.instance().toMessage(SpacyProtocol.instance().toWireMessage(message))
         then:
             result.message == entity
         where:
@@ -59,10 +60,10 @@ class SpacyProtocolTest extends Specification {
         when:
             def serialized = messages
                     .parallelStream()
-                    .map({ m -> SpacyProtocol.toWireMessage(m) }).collect(Collectors.toList())
+                    .map({ m -> SpacyProtocol.instance().toWireMessage(m) }).collect(Collectors.toList())
             def deserialized = serialized
                     .parallelStream()
-                    .map({ it -> SpacyProtocol.toMessage(it) })
+                    .map({ it -> SpacyProtocol.instance().toMessage(it) })
                     .collect(Collectors.toList())
         then:
             deserialized == messages

@@ -16,25 +16,31 @@
 
 package keios.protocol.spacy;
 
+import keios.common.BinaryDeserializer;
+import keios.common.BinarySerializer;
 import keios.common.Message;
-import keios.protocol.spacy.entity.SpacyMessageDeserializer;
-import keios.protocol.spacy.entity.SpacyMessageEntity;
-import keios.protocol.spacy.entity.SpacyMessageSerializer;
+import keios.common.Protocol;
 
-public class SpacyProtocol {
+public class SpacyProtocol implements Protocol<SpacyMessageEntity<Message>> {
 
-    private static final SpacyMessageSerializer serializer = new SpacyMessageSerializer();
-    private static final SpacyMessageDeserializer deserializer = new SpacyMessageDeserializer();
+    private static final SpacyProtocol INSTANCE = new SpacyProtocol();
+    private static final BinarySerializer<SpacyMessageEntity<Message>> serializer = new SpacyMessageEntity.SpacyMessageSerializer();
+    private static final BinaryDeserializer<SpacyMessageEntity<Message>> deserializer = new SpacyMessageEntity.SpacyMessageDeserializer();
 
     private SpacyProtocol() {
-        throw new UnsupportedOperationException();
     }
 
-    public static SpacyMessageEntity toMessage(byte[] bytes) {
+    public static SpacyProtocol instance() {
+        return INSTANCE;
+    }
+
+    @Override
+    public SpacyMessageEntity<Message> toMessage(byte[] bytes) {
         return deserializer.deserialize(bytes);
     }
 
-    public static <T extends Message> byte[] toWireMessage(SpacyMessageEntity<T> entity) {
-        return serializer.serialize(entity);
+    @Override
+    public byte[] toWireMessage(SpacyMessageEntity<Message> message) {
+        return serializer.serialize(message);
     }
 }

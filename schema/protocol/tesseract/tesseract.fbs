@@ -1,0 +1,15 @@
+include "tesseract_orc_request.fbs";
+include "tesseract_orc_response.fbs";
+
+namespace keios.protocol.tesseract;
+
+union TesseractMessageType {
+    TesseractOcrRequest,
+    TesseractOcrResponse
+}
+
+table TesseractMessage {
+    message: TesseractMessageType (required);
+}
+
+root_type TesseractMessage;

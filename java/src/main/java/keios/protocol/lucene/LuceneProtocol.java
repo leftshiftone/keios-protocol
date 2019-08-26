@@ -17,10 +17,6 @@
 package keios.protocol.lucene;
 
 import keios.common.Message;
-import keios.common.MessageType;
-import keios.protocol.lucene.entity.LuceneMessageDeserializer;
-import keios.protocol.lucene.entity.LuceneMessageEntity;
-import keios.protocol.lucene.entity.LuceneMessageSerializer;
 
 /**
  * Facade for easy serial-/deserialization
@@ -29,8 +25,8 @@ import keios.protocol.lucene.entity.LuceneMessageSerializer;
  * @since 0.4.0
  */
 public class LuceneProtocol {
-    private static final LuceneMessageDeserializer deserializer = new LuceneMessageDeserializer();
-    private static final LuceneMessageSerializer serializer = new LuceneMessageSerializer();
+    private static final LuceneMessageEntity.LuceneMessageDeserializer deserializer = new LuceneMessageEntity.LuceneMessageDeserializer();
+    private static final LuceneMessageEntity.LuceneMessageSerializer serializer = new LuceneMessageEntity.LuceneMessageSerializer();
 
     public static LuceneMessageEntity toMessage(byte[] bytes) {
         return deserializer.deserialize(bytes);
