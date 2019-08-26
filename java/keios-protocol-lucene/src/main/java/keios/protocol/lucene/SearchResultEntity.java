@@ -17,9 +17,8 @@
 package keios.protocol.lucene;
 
 import com.google.flatbuffers.FlatBufferBuilder;
-import keios.common.ChildSerializer;
-import keios.common.FlatbuffersSerializable;
 import keios.protocol.common.ChildSerializer;
+import keios.protocol.common.FlatbufferSerializable;
 import keios.protocol.lucene.flatbuffers.SearchResult;
 
 import java.util.Map;
@@ -29,7 +28,7 @@ import java.util.Objects;
  * @author benjamin.krenn@leftshift.one
  * @since 0.3.0
  */
-public class SearchResultEntity implements FlatbuffersSerializable {
+public class SearchResultEntity implements FlatbufferSerializable {
 
     private final ChildSerializer<SearchResultEntity> serializer = new SearchResultSerializer();
     private final Float score;

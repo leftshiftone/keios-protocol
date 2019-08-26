@@ -16,16 +16,15 @@
 
 package keios.protocol.spacy;
 
-import keios.common.BinaryDeserializer;
-import keios.common.BinarySerializer;
-import keios.common.Protocol;
-import keios.protocol.common.Message;
+import keios.protocol.common.BinaryDeserializer;
+import keios.protocol.common.BinarySerializer;
+import keios.protocol.common.Protocol;
 
-public class SpacyProtocol implements Protocol<SpacyMessageEntity<Message>> {
+public class SpacyProtocol implements Protocol<SpacyMessageEntity> {
 
     private static final SpacyProtocol INSTANCE = new SpacyProtocol();
-    private static final BinarySerializer<SpacyMessageEntity<Message>> serializer = new SpacyMessageEntity.SpacyMessageSerializer();
-    private static final BinaryDeserializer<SpacyMessageEntity<Message>> deserializer = new SpacyMessageEntity.SpacyMessageDeserializer();
+    private final BinarySerializer<SpacyMessageEntity> serializer = new SpacyMessageEntity.SpacyMessageSerializer();
+    private final BinaryDeserializer<SpacyMessageEntity> deserializer = new SpacyMessageEntity.SpacyMessageDeserializer();
 
     private SpacyProtocol() {
     }
@@ -35,12 +34,12 @@ public class SpacyProtocol implements Protocol<SpacyMessageEntity<Message>> {
     }
 
     @Override
-    public SpacyMessageEntity<Message> toMessage(byte[] bytes) {
+    public SpacyMessageEntity toMessage(byte[] bytes) {
         return deserializer.deserialize(bytes);
     }
 
     @Override
-    public byte[] toWireMessage(SpacyMessageEntity<Message> message) {
+    public byte[] toWireMessage(SpacyMessageEntity message) {
         return serializer.serialize(message);
     }
 }

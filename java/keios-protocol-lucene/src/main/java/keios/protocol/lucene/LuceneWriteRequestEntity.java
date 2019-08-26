@@ -19,7 +19,7 @@ package keios.protocol.lucene;
 import com.google.flatbuffers.FlatBufferBuilder;
 import keios.protocol.common.ChildSerializer;
 import keios.protocol.common.EntityMapper;
-import keios.protocol.common.Message;
+import keios.protocol.common.TypedMessage;
 import keios.protocol.lucene.flatbuffers.LuceneWriteRequest;
 
 import java.util.Collections;
@@ -36,7 +36,7 @@ import static keios.protocol.lucene.LuceneMessageEntity.LuceneMessageType.WRITE_
  * @author benjamin.krenn@leftshift.one
  * @since 0.3.0
  */
-public class LuceneWriteRequestEntity implements Message {
+public class LuceneWriteRequestEntity implements TypedMessage {
     private final Map<String, String> document;
     private final ChildSerializer<LuceneWriteRequestEntity> serializer = new LuceneWriteRequestSerializer();
 
@@ -72,6 +72,10 @@ public class LuceneWriteRequestEntity implements Message {
     }
 
     static class LuceneWriteRequestMapper implements EntityMapper<LuceneWriteRequest, LuceneWriteRequestEntity> {
+        private static Supplier<RuntimeException> throwIfNull() {
+            return IllegalStateException::new;
+        }
+
         @Override
         public LuceneWriteRequestEntity from(LuceneWriteRequest input) {
             Map<String, String> document = IntStream.range(0, input.documentLength())
@@ -83,10 +87,6 @@ public class LuceneWriteRequestEntity implements Message {
                                     .orElseThrow(throwIfNull())));
 
             return new LuceneWriteRequestEntity(document);
-        }
-
-        private static Supplier<RuntimeException> throwIfNull() {
-            return IllegalStateException::new;
         }
     }
 

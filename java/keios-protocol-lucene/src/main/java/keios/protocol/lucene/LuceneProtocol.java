@@ -17,7 +17,6 @@
 package keios.protocol.lucene;
 
 
-import keios.protocol.common.Message;
 import keios.protocol.common.Protocol;
 
 /**
@@ -26,20 +25,25 @@ import keios.protocol.common.Protocol;
  * @author benjamin.krenn@leftshift.one - 5/29/19.
  * @since 0.4.0
  */
-public class LuceneProtocol implements Protocol<LuceneMessageEntity<Message>> {
+public class LuceneProtocol implements Protocol<LuceneMessageEntity> {
     private static final LuceneProtocol INSTANCE = new LuceneProtocol();
     private final LuceneMessageEntity.LuceneMessageDeserializer deserializer = new LuceneMessageEntity.LuceneMessageDeserializer();
     private final LuceneMessageEntity.LuceneMessageSerializer serializer = new LuceneMessageEntity.LuceneMessageSerializer();
 
-    private LuceneProtocol() {}
+    private LuceneProtocol() {
+    }
+
+    public static Protocol<LuceneMessageEntity> instance() {
+        return INSTANCE;
+    }
 
     @Override
-    public LuceneMessageEntity<Message> toMessage(byte[] bytes) {
+    public LuceneMessageEntity toMessage(byte[] bytes) {
         return this.deserializer.deserialize(bytes);
     }
 
     @Override
-    public byte[] toWireMessage(LuceneMessageEntity<Message> message) {
+    public byte[] toWireMessage(LuceneMessageEntity message) {
         return this.serializer.serialize(message);
     }
 }

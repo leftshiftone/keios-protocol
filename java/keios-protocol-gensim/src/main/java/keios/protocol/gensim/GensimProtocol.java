@@ -6,7 +6,6 @@ import keios.protocol.common.Protocol;
 import keios.protocol.gensim.entity.GensimMessageDeserializer;
 import keios.protocol.gensim.entity.GensimMessageEntity;
 import keios.protocol.gensim.entity.GensimMessageSerializer;
-import keios.protocol.gensim.entity.Message;
 
 public class GensimProtocol implements Protocol<GensimMessageEntity> {
 
@@ -15,6 +14,10 @@ public class GensimProtocol implements Protocol<GensimMessageEntity> {
     private final BinarySerializer<GensimMessageEntity> serializer = new GensimMessageSerializer();
 
     private GensimProtocol() {}
+
+    public static Protocol<GensimMessageEntity> instance() {
+        return INSTANCE;
+    }
 
     @Override
     public GensimMessageEntity toMessage(byte[] bytes) {

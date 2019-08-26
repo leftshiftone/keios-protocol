@@ -32,13 +32,13 @@ public enum WriteResultEntity {
         this.asByte = asByte;
     }
 
-    public byte getAsByte() {
-        return asByte;
-    }
-
     public static WriteResultEntity fromByte(byte b) {
         return Arrays.stream(values())
                 .filter(v -> v.asByte == b)
                 .findFirst().orElseThrow(() -> new IllegalArgumentException(String.format("could not map %d to %s", b, WriteResultEntity.class.getSimpleName())));
+    }
+
+    public byte getAsByte() {
+        return asByte;
     }
 }

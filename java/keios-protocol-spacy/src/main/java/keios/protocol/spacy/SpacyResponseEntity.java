@@ -1,10 +1,10 @@
 package keios.protocol.spacy;
 
 import com.google.flatbuffers.FlatBufferBuilder;
-import keios.common.ChildSerializer;
-import keios.common.EntityMapper;
-import keios.common.Message;
-import keios.common.MessageType;
+import keios.protocol.common.ChildSerializer;
+import keios.protocol.common.EntityMapper;
+import keios.protocol.common.TypedMessage;
+import keios.protocol.common.MessageType;
 import keios.protocol.spacy.flatbuffers.SpacyResponse;
 
 import java.util.Collections;
@@ -17,7 +17,7 @@ import java.util.stream.IntStream;
  * @author benjamin.krenn@leftshift.one
  * @since 1.0.0
  */
-public class SpacyResponseEntity implements Message {
+public class SpacyResponseEntity implements TypedMessage {
 
     private final List<DEPSpacyResponseEntity> depResponses;
     private final List<NERSpacyResponseEntity> nerResponses;

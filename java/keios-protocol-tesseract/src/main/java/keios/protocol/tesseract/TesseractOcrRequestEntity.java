@@ -1,10 +1,10 @@
 package keios.protocol.tesseract;
 
 import com.google.flatbuffers.FlatBufferBuilder;
-import keios.common.ChildSerializer;
-import keios.common.EntityMapper;
-import keios.common.Message;
-import keios.common.MessageType;
+import keios.protocol.common.ChildSerializer;
+import keios.protocol.common.EntityMapper;
+import keios.protocol.common.TypedMessage;
+import keios.protocol.common.MessageType;
 import keios.protocol.tesseract.flatbuffers.TesseractOcrRequest;
 
 import java.util.Arrays;
@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
  * @author benjamin.krenn@leftshift.one - 8/24/19.
  * @since 0.1.0
  */
-public class TesseractOcrRequestEntity implements Message {
+public class TesseractOcrRequestEntity implements TypedMessage {
 
     private final byte[] image;
     private final ChildSerializer<TesseractOcrRequestEntity> serializer = new TesseractOcrRequestSerializer();

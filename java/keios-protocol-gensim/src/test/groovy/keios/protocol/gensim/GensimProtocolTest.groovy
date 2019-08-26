@@ -29,9 +29,9 @@ class GensimProtocolTest extends Specification {
     @Unroll
     void "serializes / deserializes #entity"() {
         given:
-            GensimMessageEntity message = new GensimMessageEntity<>(entity)
+            GensimMessageEntity message = new GensimMessageEntity(entity)
         when:
-            def result = GensimProtocol.toMessage(GensimProtocol.toWireMessage(message))
+            def result = GensimProtocol.instance().toMessage(GensimProtocol.instance().toWireMessage(message))
         then:
             result.message == entity
         where:

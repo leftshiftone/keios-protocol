@@ -19,7 +19,7 @@ package keios.protocol.lucene;
 import com.google.flatbuffers.FlatBufferBuilder;
 import keios.protocol.common.ChildSerializer;
 import keios.protocol.common.EntityMapper;
-import keios.protocol.common.Message;
+import keios.protocol.common.TypedMessage;
 import keios.protocol.lucene.flatbuffers.LuceneReadRequest;
 
 import java.util.Objects;
@@ -31,7 +31,7 @@ import static keios.protocol.lucene.LuceneMessageEntity.LuceneMessageType.READ_R
  * @author benjamin.krenn@leftshift.one
  * @since 0.3.0
  */
-public class LuceneReadRequestEntity implements Message {
+public class LuceneReadRequestEntity implements TypedMessage {
     private final String field;
     private final String query;
     private final Float minimumScore;

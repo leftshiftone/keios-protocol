@@ -1,10 +1,10 @@
 package keios.protocol.spacy;
 
 import com.google.flatbuffers.FlatBufferBuilder;
-import keios.common.ChildSerializer;
-import keios.common.EntityMapper;
-import keios.common.Message;
-import keios.common.MessageType;
+import keios.protocol.common.ChildSerializer;
+import keios.protocol.common.EntityMapper;
+import keios.protocol.common.TypedMessage;
+import keios.protocol.common.MessageType;
 import keios.protocol.spacy.flatbuffers.SpacyBatchRequest;
 
 import java.util.Collections;
@@ -17,7 +17,7 @@ import java.util.stream.IntStream;
  * @author benjamin.krenn@leftshift.one
  * @since 1.0.0
  */
-public class SpacyBatchRequestEntity implements Message {
+public class SpacyBatchRequestEntity implements TypedMessage {
 
     private final List<SpacyRequestEntity> requests;
     private final SpacyBatchRequestSerializer serializer = new SpacyBatchRequestSerializer();
@@ -54,10 +54,6 @@ public class SpacyBatchRequestEntity implements Message {
         return Objects.hash(requests);
     }
 
-    /**
-     * @author benjamin.krenn@leftshift.one - 8/9/19.
-     * @since 0.1.0
-     */
     private static class SpacyBatchRequestSerializer implements ChildSerializer<SpacyBatchRequestEntity> {
         @Override
         public int serialize(SpacyBatchRequestEntity obj, FlatBufferBuilder builder) {
@@ -74,10 +70,6 @@ public class SpacyBatchRequestEntity implements Message {
         }
     }
 
-    /**
-     * @author benjamin.krenn@leftshift.one - 8/9/19.
-     * @since 0.1.0
-     */
     static class SpacyBatchRequestMapper implements EntityMapper<SpacyBatchRequest, SpacyBatchRequestEntity> {
         @Override
         public SpacyBatchRequestEntity from(SpacyBatchRequest input) {
@@ -87,6 +79,4 @@ public class SpacyBatchRequestEntity implements Message {
                     .map(requestMapper::from).collect(Collectors.toList()));
         }
     }
-
-
 }

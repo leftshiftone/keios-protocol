@@ -17,7 +17,7 @@
 package keios.protocol.lucene;
 
 import com.google.flatbuffers.FlatBufferBuilder;
-import keios.common.ChildSerializer;
+import keios.protocol.common.ChildSerializer;
 import keios.protocol.lucene.flatbuffers.Tuple;
 
 import java.util.Map;
@@ -26,7 +26,7 @@ import java.util.Map;
  * @author benjamin.krenn@leftshift.one - 5/28/19.
  * @since 0.3.0
  */
-class DocumentSerializer implements ChildSerializer<Map<String,String>> {
+class DocumentSerializer implements ChildSerializer<Map<String, String>> {
     @Override
     public int serialize(Map<String, String> obj, FlatBufferBuilder builder) {
         return builder.createVectorOfTables(

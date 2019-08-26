@@ -1,8 +1,8 @@
 package keios.protocol.spacy;
 
 import com.google.flatbuffers.FlatBufferBuilder;
-import keios.common.ChildSerializer;
-import keios.common.FlatbuffersSerializable;
+import keios.protocol.common.ChildSerializer;
+import keios.protocol.common.FlatbufferSerializable;
 import keios.protocol.spacy.flatbuffers.NERSpacyResponse;
 
 import java.util.Objects;
@@ -11,7 +11,7 @@ import java.util.Objects;
  * @author benjamin.krenn@leftshift.one - 8/9/19.
  * @since 0.1.0
  */
-public class NERSpacyResponseEntity implements FlatbuffersSerializable {
+public class NERSpacyResponseEntity implements FlatbufferSerializable {
     private final ChildSerializer<NERSpacyResponseEntity> serializer = new NERSpacyResponseSerializer();
     private final String text;
     private final Integer startChar;

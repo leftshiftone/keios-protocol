@@ -27,10 +27,6 @@ public enum ESpacyType {
         this.byteValue = byteValue;
     }
 
-    public byte getByteValue() {
-        return byteValue;
-    }
-
     public static ESpacyType fromByte(byte b) {
         return Arrays.stream(values())
                 .filter(v -> v.byteValue == b)
@@ -43,5 +39,9 @@ public enum ESpacyType {
             bytes[i] = (byte) types[i].ordinal();
         }
         return bytes;
+    }
+
+    public byte getByteValue() {
+        return byteValue;
     }
 }

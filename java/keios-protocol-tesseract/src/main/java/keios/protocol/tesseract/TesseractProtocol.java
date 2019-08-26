@@ -1,19 +1,18 @@
 package keios.protocol.tesseract;
 
-import keios.common.BinaryDeserializer;
-import keios.common.BinarySerializer;
-import keios.common.Message;
-import keios.common.Protocol;
+import keios.protocol.common.BinaryDeserializer;
+import keios.protocol.common.BinarySerializer;
+import keios.protocol.common.Protocol;
 
 /**
  * @author benjamin.krenn@leftshift.one - 8/24/19.
  * @since 0.1.0
  */
-public class TesseractProtocol implements Protocol<TesseractMessageEntity<Message>> {
+public class TesseractProtocol implements Protocol<TesseractMessageEntity> {
 
     private static final TesseractProtocol INSTANCE = new TesseractProtocol();
-    private final BinaryDeserializer<TesseractMessageEntity<Message>> deserializer = new TesseractMessageEntity.TesseractMessageDeserializer();
-    private final BinarySerializer<TesseractMessageEntity<Message>> serializer = new TesseractMessageEntity.TesseractMessageSerializer();
+    private final BinaryDeserializer<TesseractMessageEntity> deserializer = new TesseractMessageEntity.TesseractMessageDeserializer();
+    private final BinarySerializer<TesseractMessageEntity> serializer = new TesseractMessageEntity.TesseractMessageSerializer();
 
     private TesseractProtocol() {
     }
@@ -23,12 +22,12 @@ public class TesseractProtocol implements Protocol<TesseractMessageEntity<Messag
     }
 
     @Override
-    public TesseractMessageEntity<Message> toMessage(byte[] bytes) {
+    public TesseractMessageEntity toMessage(byte[] bytes) {
         return this.deserializer.deserialize(bytes);
     }
 
     @Override
-    public byte[] toWireMessage(TesseractMessageEntity<Message> message) {
+    public byte[] toWireMessage(TesseractMessageEntity message) {
         return this.serializer.serialize(message);
     }
 }

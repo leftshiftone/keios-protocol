@@ -1,10 +1,10 @@
 package keios.protocol.tesseract;
 
 import com.google.flatbuffers.FlatBufferBuilder;
-import keios.common.ChildSerializer;
-import keios.common.EntityMapper;
-import keios.common.Message;
-import keios.common.MessageType;
+import keios.protocol.common.ChildSerializer;
+import keios.protocol.common.EntityMapper;
+import keios.protocol.common.TypedMessage;
+import keios.protocol.common.MessageType;
 import keios.protocol.tesseract.flatbuffers.TesseractOcrResponse;
 
 import java.util.Objects;
@@ -13,7 +13,7 @@ import java.util.Objects;
  * @author benjamin.krenn@leftshift.one - 8/24/19.
  * @since 0.1.0
  */
-public class TesseractOcrResponseEntity implements Message {
+public class TesseractOcrResponseEntity implements TypedMessage {
 
     private final String text;
     private final long confidence;

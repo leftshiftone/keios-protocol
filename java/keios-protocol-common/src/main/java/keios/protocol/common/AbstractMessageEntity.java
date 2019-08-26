@@ -6,7 +6,7 @@ import java.util.Objects;
  * @author benjamin.krenn@leftshift.one
  * @since 1.0.0
  */
-public class AbstractMessageEntity<T extends Message> {
+public class AbstractMessageEntity<T extends TypedMessage> {
     private final T message;
 
     public AbstractMessageEntity(T message) {

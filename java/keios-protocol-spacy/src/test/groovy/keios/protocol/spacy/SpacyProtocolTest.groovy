@@ -7,7 +7,7 @@ import spock.lang.Unroll
 import java.util.stream.Collectors
 
 class SpacyProtocolTest extends Specification {
-    
+
     @Unroll
     void "serializes / deserializes #entity"() {
         given:
@@ -52,7 +52,7 @@ class SpacyProtocolTest extends Specification {
                     ])
             ]
     }
-    
+
     void "wrapped serial/deserialization"() {
         given:
             def messages = Messages()
@@ -67,7 +67,7 @@ class SpacyProtocolTest extends Specification {
         then:
             deserialized == messages
     }
-    
+
     private List<SpacyMessageEntity> Messages() {
         return [
                 new SpacyRequestEntity("test", [ESpacyType.DEP, ESpacyType.NER] as Set<ESpacyType>),
@@ -102,6 +102,6 @@ class SpacyProtocolTest extends Specification {
                                         new NERSpacyResponseEntity("y", 1, 0, "xyz"),
                                 ])
                 ])
-        ].collect { new SpacyMessageEntity<>(it) }
+        ].collect { new SpacyMessageEntity(it) }
     }
 }

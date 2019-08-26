@@ -18,7 +18,7 @@ package keios.protocol.gensim.entity.fasttext;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 import keios.protocol.gensim.entity.GensimMessageEntity;
-import keios.protocol.common.Message;
+import keios.protocol.common.TypedMessage;
 
 import java.util.List;
 import java.util.Objects;
@@ -28,7 +28,7 @@ import static java.util.Collections.emptyList;
 /**
  * @author Michael Mair
  */
-public class GensimFastTextMostSimilarResponseEntity implements Message {
+public class GensimFastTextMostSimilarResponseEntity implements TypedMessage {
 
     private final List<MostSimilarResponseEntity> responses;
 

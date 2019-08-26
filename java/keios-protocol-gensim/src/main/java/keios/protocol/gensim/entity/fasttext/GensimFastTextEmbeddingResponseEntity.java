@@ -18,7 +18,7 @@ package keios.protocol.gensim.entity.fasttext;
 
 import com.google.flatbuffers.FlatBufferBuilder;
 import keios.protocol.gensim.entity.GensimMessageEntity.GensimMessageType;
-import keios.protocol.common.Message;
+import keios.protocol.common.TypedMessage;
 
 import java.util.List;
 import java.util.Objects;
@@ -28,7 +28,7 @@ import static java.util.Collections.emptyList;
 /**
  * @author Michael Mair
  */
-public class GensimFastTextEmbeddingResponseEntity implements Message {
+public class GensimFastTextEmbeddingResponseEntity implements TypedMessage {
 
     private final List<EmbeddingResponseEntity> responses;
 

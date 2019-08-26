@@ -1,10 +1,10 @@
 package keios.protocol.spacy;
 
 import com.google.flatbuffers.FlatBufferBuilder;
-import keios.common.ChildSerializer;
-import keios.common.EntityMapper;
-import keios.common.Message;
-import keios.common.MessageType;
+import keios.protocol.common.ChildSerializer;
+import keios.protocol.common.EntityMapper;
+import keios.protocol.common.TypedMessage;
+import keios.protocol.common.MessageType;
 import keios.protocol.spacy.flatbuffers.SpacyBatchResponse;
 
 import java.util.Collections;
@@ -17,7 +17,7 @@ import java.util.stream.IntStream;
  * @author benjamin.krenn@leftshift.one
  * @since 1.0.0
  */
-public class SpacyBatchResponseEntity implements Message {
+public class SpacyBatchResponseEntity implements TypedMessage {
 
     private final List<SpacyResponseEntity> responses;
     private final SpacyBatchResponseSerializer serializer = new SpacyBatchResponseSerializer();

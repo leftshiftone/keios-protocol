@@ -1,10 +1,10 @@
 package keios.protocol.spacy;
 
 import com.google.flatbuffers.FlatBufferBuilder;
-import keios.common.ChildSerializer;
-import keios.common.EntityMapper;
-import keios.common.Message;
-import keios.common.MessageType;
+import keios.protocol.common.ChildSerializer;
+import keios.protocol.common.EntityMapper;
+import keios.protocol.common.TypedMessage;
+import keios.protocol.common.MessageType;
 import keios.protocol.spacy.flatbuffers.SpacyRequest;
 
 import java.io.ByteArrayOutputStream;
@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
  * @author benjamin.krenn@leftshift.one
  * @since 1.0.0
  */
-public class SpacyRequestEntity implements Message {
+public class SpacyRequestEntity implements TypedMessage {
 
     private final String text;
     private final Set<Byte> types;
@@ -71,10 +71,6 @@ public class SpacyRequestEntity implements Message {
         return Objects.hash(text, types);
     }
 
-    /**
-     * @author benjamin.krenn@leftshift.one - 8/9/19.
-     * @since 0.1.0
-     */
     private static class SpacyRequestSerializer implements ChildSerializer<SpacyRequestEntity> {
         @Override
         public int serialize(SpacyRequestEntity obj, FlatBufferBuilder builder) {
@@ -95,10 +91,6 @@ public class SpacyRequestEntity implements Message {
 
     }
 
-    /**
-     * @author benjamin.krenn@leftshift.one - 8/9/19.
-     * @since 0.1.0
-     */
     static class SpacyRequestMapper implements EntityMapper<SpacyRequest, SpacyRequestEntity> {
         @Override
         public SpacyRequestEntity from(SpacyRequest input) {

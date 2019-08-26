@@ -24,17 +24,17 @@ import java.nio.ByteBuffer;
 import java.util.Objects;
 
 /**
- * Message wrapper that holds a reference to the actual message. Every {@link Message} must be wrapped
+ * Message wrapper that holds a reference to the actual message. Every {@link TypedMessage} must be wrapped
  * by a {@link LuceneMessage} before sending it over the wire.
  * <p>
- * This eases the deserialization on the receiver side by being able to call {@link Message#type()}
+ * This eases the deserialization on the receiver side by being able to call {@link TypedMessage#type()}
  *
  * @author benjamin.krenn@leftshift.one - 5/29/19.
  * @since 0.4.0
  */
-public class LuceneMessageEntity<T extends Message> extends AbstractMessageEntity<T> {
+public class LuceneMessageEntity extends AbstractMessageEntity<TypedMessage> {
 
-    public LuceneMessageEntity(T message) {
+    public LuceneMessageEntity(TypedMessage message) {
         super(message);
     }
 
@@ -57,23 +57,23 @@ public class LuceneMessageEntity<T extends Message> extends AbstractMessageEntit
         }
     }
 
-    static class LuceneMessageDeserializer implements BinaryDeserializer<LuceneMessageEntity<Message>> {
+    static class LuceneMessageDeserializer implements BinaryDeserializer<LuceneMessageEntity> {
         @Override
-        public LuceneMessageEntity<Message> deserialize(ByteBuffer bb) {
+        public LuceneMessageEntity deserialize(ByteBuffer bb) {
             LuceneMessage message = LuceneMessage.getRootAsLuceneMessage(bb);
             int messageType = message.messageType();
             switch (messageType) {
                 case keios.protocol.lucene.flatbuffers.LuceneMessageType.LuceneReadRequest:
-                    return new LuceneMessageEntity<>(new LuceneReadRequestEntity.LuceneReadRequestMapper()
+                    return new LuceneMessageEntity(new LuceneReadRequestEntity.LuceneReadRequestMapper()
                             .from((LuceneReadRequest) Objects.requireNonNull(message.message(new LuceneReadRequest()))));
                 case keios.protocol.lucene.flatbuffers.LuceneMessageType.LuceneReadResponse:
-                    return new LuceneMessageEntity<>(new LuceneReadResponseEntity.LuceneReadResponseMapper()
+                    return new LuceneMessageEntity(new LuceneReadResponseEntity.LuceneReadResponseMapper()
                             .from((LuceneReadResponse) Objects.requireNonNull(message.message(new LuceneReadResponse()))));
                 case keios.protocol.lucene.flatbuffers.LuceneMessageType.LuceneWriteRequest:
-                    return new LuceneMessageEntity<>(new LuceneWriteRequestEntity.LuceneWriteRequestMapper()
+                    return new LuceneMessageEntity(new LuceneWriteRequestEntity.LuceneWriteRequestMapper()
                             .from((LuceneWriteRequest) Objects.requireNonNull(message.message(new LuceneWriteRequest()))));
                 case keios.protocol.lucene.flatbuffers.LuceneMessageType.LuceneWriteResponse:
-                    return new LuceneMessageEntity<>(new LuceneWriteResponseEntity.LuceneWriteResponseMapper()
+                    return new LuceneMessageEntity(new LuceneWriteResponseEntity.LuceneWriteResponseMapper()
                             .from((LuceneWriteResponse) Objects.requireNonNull(message.message(new LuceneWriteResponse()))));
                 default:
                     throw new IllegalArgumentException("could not deserialize message");

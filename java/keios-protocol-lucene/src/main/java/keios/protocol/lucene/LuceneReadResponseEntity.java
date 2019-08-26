@@ -19,7 +19,7 @@ package keios.protocol.lucene;
 import com.google.flatbuffers.FlatBufferBuilder;
 import keios.protocol.common.ChildSerializer;
 import keios.protocol.common.EntityMapper;
-import keios.protocol.common.Message;
+import keios.protocol.common.TypedMessage;
 import keios.protocol.lucene.flatbuffers.LuceneReadResponse;
 import keios.protocol.lucene.flatbuffers.SearchResult;
 
@@ -35,7 +35,7 @@ import java.util.stream.IntStream;
  * @author benjamin.krenn@leftshift.one
  * @since 0.3.0
  */
-public class LuceneReadResponseEntity implements Message {
+public class LuceneReadResponseEntity implements TypedMessage {
     private final List<SearchResultEntity> results;
     private final ChildSerializer<LuceneReadResponseEntity> serializer = new LuceneReadResponseSerializer();
 

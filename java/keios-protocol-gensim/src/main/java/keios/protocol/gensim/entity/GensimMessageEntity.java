@@ -17,15 +17,15 @@
 package keios.protocol.gensim.entity;
 
 import keios.protocol.common.AbstractMessageEntity;
-import keios.protocol.common.Message;
+import keios.protocol.common.TypedMessage;
 import keios.protocol.common.MessageType;
 
 /**
  * @author Michael Mair
  */
-public class GensimMessageEntity extends AbstractMessageEntity<Message> {
+public class GensimMessageEntity extends AbstractMessageEntity<TypedMessage> {
 
-    public GensimMessageEntity(Message message) {
+    public GensimMessageEntity(TypedMessage message) {
         super(message);
     }
 
