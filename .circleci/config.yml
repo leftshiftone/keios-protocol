@@ -66,6 +66,28 @@ jobs:
           path: build/circleci/test-results
       - run:
           <<: *webhook-failed
+  release-java:
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+    environment:
+      TZ: "/usr/share/zoneinfo/Europe/Vienna"
+      GRADLE_OPTS: '-Xmx128m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"'
+      TEST_RESULTS_PATH: build/circleci/test-results
+    steps:
+      - run:
+          <<: *webhook-created
+      - add_ssh_keys:
+          fingerprints:
+            - "e6:4b:54:bb:ce:9c:68:e3:86:fb:0c:82:e6:a9:37:41"
+      - checkout
+      - run: chmod a+x gradlew
+      - run: ./gradlew dependencies
+      - run: mkdir -p $TEST_RESULTS_PATH
+      - run: export RELEASE_PROJECT=$(echo ${${${${CIRCLE_TAG/patch-/}/minor-/}/major-/}/release-/})
+      - run: export RELEASE_SCOPE=$(echo ${CIRCLE_TAG//release-/} | grep -P "^(major|minor|patch)" -o)
+      - run: "./gradlew :${RELEASE_PROJECT}:release -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=1.0.0 -Prelease.newVersion=1.1.0-SNAPSHOT --stacktrace" #todo: publish release
+      - run:
+          <<: *webhook-failed
   release-python:
     docker:
       - image: circleci/python:3.7.3
