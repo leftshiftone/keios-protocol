@@ -9,21 +9,19 @@ PROJECTS_DIR_PREFIX = "keios-protocol-"
 
 
 def install():
-    module = sys.argv[1:][0]
     command_ = ["poetry", "install"]
-    if module is None:
+    if len(sys.argv) <= 1 or sys.argv[1] is None:
         exec_in_sub_modules(command_)
     else:
-        exec_in_module(command_, module)
+        exec_in_module(command_, sys.argv[1])
 
 
 def test():
-    module = sys.argv[1:][0]
     command_ = ["poetry", "run", "pytest"]
-    if module is None:
+    if len(sys.argv) <= 1 or sys.argv[1] is None:
         exec_in_sub_modules(command_)
     else:
-        exec_in_module(command_, module)
+        exec_in_module(command_, sys.argv[1])
 
 
 def test_ci():
@@ -31,12 +29,11 @@ def test_ci():
 
 
 def build():
-    module = sys.argv[1:][0]
     command_ = ["poetry", "build"]
-    if module is None:
+    if len(sys.argv) <= 1 or sys.argv[1] is None:
         exec_in_sub_modules(command_)
     else:
-        exec_in_module(command_, module)
+        exec_in_module(command_, sys.argv[1])
 
 
 def publish():
@@ -44,12 +41,11 @@ def publish():
 
 
 def publish_ci():
-    module = sys.argv[1:][0]
     command_ = ["poetry", "publish", "-u", "$PYPI_USERNAME", "-p", "$PYPI_PASSWORD"]
-    if module is None:
+    if len(sys.argv) <= 1 or sys.argv[1] is None:
         exec_in_sub_modules(command_)
     else:
-        exec_in_module(command_, module)
+        exec_in_module(command_, sys.argv[1])
 
 
 def trigger_release_major():
