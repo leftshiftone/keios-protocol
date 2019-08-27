@@ -18,6 +18,13 @@ allprojects {
     release {
         tagTemplate = '$name-java-v$version'
         newVersionCommitMessage = 'Release $name $version'
+
+        failOnCommitNeeded = false
+        failOnPublishNeeded = false
+        failOnSnapshotDependencies = false
+        failOnUnversionedFiles = false
+        failOnUpdateNeeded = false
+
         git {
             requireBranch = 'feature/separate-releases'
         }
