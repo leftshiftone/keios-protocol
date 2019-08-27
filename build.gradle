@@ -20,15 +20,11 @@ allprojects {
         tagTemplate = '$name-java-v$version'
         newVersionCommitMessage = "Release"
 
-        failOnCommitNeeded = false
-        failOnPublishNeeded = false
+        failOnCommitNeeded = true
+        failOnPublishNeeded = true
         failOnSnapshotDependencies = false
         failOnUnversionedFiles = false
-        failOnUpdateNeeded = false
-
-        git {
-            requireBranch = 'feature/separate-releases'
-        }
+        failOnUpdateNeeded = true
     }
 }
 
