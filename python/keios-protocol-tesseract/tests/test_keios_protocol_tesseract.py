@@ -1,3 +1,4 @@
+import os
 import unittest
 
 from keios_protocol_tesseract import TesseractMessageEntity, TesseractOcrRequestEntity, TesseractProtocol, \
@@ -9,7 +10,8 @@ class TesseractProtocolTest(unittest.TestCase):
     def test_serializes_and_deserializes(self):
 
         def parameters():
-            with open("./hello_world.jpg", "rb") as f:
+            base_dir = os.path.dirname(os.path.realpath(__file__))
+            with open(f"{base_dir}/hello_world.jpg", "rb") as f:
                 yield TesseractOcrRequestEntity(bytearray(f.read()))
             yield TesseractOcrResponseEntity("some test", 99)
 
