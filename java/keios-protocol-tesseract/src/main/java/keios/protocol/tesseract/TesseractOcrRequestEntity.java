@@ -53,7 +53,7 @@ public class TesseractOcrRequestEntity implements TypedMessage {
     @Override
     public String toString() {
         return "TesseractOcrRequestEntity{" +
-                "image=" + Arrays.toString(image) +
+                "image=bytes(" + image.length + ")" +
                 '}';
     }
 
@@ -74,7 +74,7 @@ public class TesseractOcrRequestEntity implements TypedMessage {
         public TesseractOcrRequestEntity from(TesseractOcrRequest input) {
             byte[] bb = new byte[input.imageLength()];
             IntStream.range(0, input.imageLength())
-                    .forEach(i -> bb[i] = input.image(i));
+                    .forEach(i -> bb[i] = (byte) input.image(i));
             return new TesseractOcrRequestEntity(bb);
         }
     }
