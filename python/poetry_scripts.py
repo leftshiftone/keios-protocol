@@ -1,18 +1,29 @@
 # This script is used as a temporary workaround until poetry adds full scripting support
 import os
 import sys
-import toml
 from subprocess import check_call
+
+import toml
 
 PROJECTS_DIR_PREFIX = "keios-protocol-"
 
 
 def install():
-    exec_in_sub_modules(["poetry", "install"])
+    module = sys.argv[1:][0]
+    command_ = ["poetry", "install"]
+    if module is None:
+        exec_in_sub_modules(command_)
+    else:
+        exec_in_module(command_, module)
 
 
 def test():
-    exec_in_sub_modules(["poetry", "run", "pytest"])
+    module = sys.argv[1:][0]
+    command_ = ["poetry", "run", "pytest"]
+    if module is None:
+        exec_in_sub_modules(command_)
+    else:
+        exec_in_module(command_, module)
 
 
 def test_ci():
@@ -20,7 +31,12 @@ def test_ci():
 
 
 def build():
-    exec_in_sub_modules(["poetry", "build"])
+    module = sys.argv[1:][0]
+    command_ = ["poetry", "build"]
+    if module is None:
+        exec_in_sub_modules(command_)
+    else:
+        exec_in_module(command_, module)
 
 
 def publish():
@@ -28,7 +44,12 @@ def publish():
 
 
 def publish_ci():
-    exec_in_sub_modules(["poetry", "publish", "-u", "$PYPI_USERNAME", "-p", "$PYPI_PASSWORD"])
+    module = sys.argv[1:][0]
+    command_ = ["poetry", "publish", "-u", "$PYPI_USERNAME", "-p", "$PYPI_PASSWORD"]
+    if module is None:
+        exec_in_sub_modules(command_)
+    else:
+        exec_in_module(command_, module)
 
 
 def trigger_release_major():
