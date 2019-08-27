@@ -5,7 +5,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 class TesseractProtocolTest extends Specification {
-
+    
     @Unroll
     void "serializes / deserializes #entity"() {
         given:
@@ -16,7 +16,7 @@ class TesseractProtocolTest extends Specification {
             result.message == entity
         where:
             entity << [
-                    new TesseractOcrRequestEntity("not an image".bytes),
+                    new TesseractOcrRequestEntity(TesseractProtocolTest.getResourceAsStream("/hello_world.jpg").bytes),
                     new TesseractOcrResponseEntity("some text", 99L)
             ]
     }

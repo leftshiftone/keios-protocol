@@ -1,5 +1,5 @@
 namespace keios.protocol.tesseract;
 
 table TesseractOcrRequest {
-    image: [byte];
+    image: [ubyte];
 }
