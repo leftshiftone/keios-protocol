@@ -66,6 +66,31 @@ jobs:
           path: build/circleci/test-results
       - run:
           <<: *webhook-failed
+  release-java:
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+    environment:
+      TZ: "/usr/share/zoneinfo/Europe/Vienna"
+      GRADLE_OPTS: '-Xmx128m -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"'
+      TEST_RESULTS_PATH: build/circleci/test-results
+    steps:
+      - run:
+          <<: *webhook-created
+      - add_ssh_keys:
+          fingerprints:
+            - "e6:4b:54:bb:ce:9c:68:e3:86:fb:0c:82:e6:a9:37:41"
+      - checkout
+      - run: chmod a+x gradlew
+      - run: ./gradlew dependencies
+      - run: mkdir -p $TEST_RESULTS_PATH
+      - run: export RELEASE_PROJECT=$(echo ${${${${CIRCLE_TAG/patch-/}/minor-/}/major-/}/release-/})
+      - run: export RELEASE_SCOPE=$(echo ${CIRCLE_TAG//release-/} | grep -P "^(major|minor|patch)" -o)
+      - run: "./gradlew :${RELEASE_PROJECT}:prepareVersions -Prelease.scope=${RELEASE_SCOPE} -s"
+      - run: export RELEASE_VERSION=$(cat ./java/$RELEASE_PROJECT/build/release-version.txt)
+      - run: export DEV_VERSION=$(cat ./java/$RELEASE_PROJECT/build/dev-version.txt)
+      - run: "./gradlew :${RELEASE_PROJECT}:release -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${RELEASE_VERSION} -Prelease.newVersion=${DEV_VERSION} :${RELEASE_PROJECT}:bintrayUpload -s"
+      - run:
+          <<: *webhook-failed
   release-python:
     docker:
       - image: circleci/python:3.7.3
@@ -118,8 +143,15 @@ workflows:
               ignore: /.*/
           requires:
             - build-python
-  release-module-python:
+  release-module:
     jobs:
+      - release-java:
+          context: bintray-jcenter
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^release-(major|minor|patch).*/
       - release-python:
           context: pypi
           filters:
@@ -127,6 +159,8 @@ workflows:
               ignore: /.*/
             tags:
               only: /^release-(major|minor|patch).*/
+          requires:
+            - release-java
       - webhook-completed:
           filters:
             branches:

@@ -6,17 +6,29 @@ buildscript {
         }
     }
     dependencies {
-        classpath "com.netflix.nebula:nebula-release-plugin:8.0.3"
+        classpath "de.skuzzle:semantic-version:1.2.0"
+        classpath "net.researchgate:gradle-release:2.6.0"
         classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4"
     }
 }
 
 allprojects {
-    apply plugin: "nebula.nebula-release"
-    apply plugin: 'java'
+    apply plugin: "net.researchgate.release"
+    apply plugin: "java"
 
     release {
-        defaultVersionStrategy = nebula.plugin.release.NetflixOssStrategies.SNAPSHOT
+        tagTemplate = '$name-java-v$version'
+        newVersionCommitMessage = "Release"
+
+        failOnCommitNeeded = false
+        failOnPublishNeeded = false
+        failOnSnapshotDependencies = false
+        failOnUnversionedFiles = false
+        failOnUpdateNeeded = false
+
+        git {
+            requireBranch = 'feature/separate-releases'
+        }
     }
 }
 
@@ -39,14 +51,38 @@ subprojects {
         from javadoc
         classifier "javadoc"
     }
-    
+
+    bintrayUpload.mustRunAfter afterReleaseBuild
+    task prepareVersions() {
+        doLast {
+            def snapshotString = "-SNAPSHOT"
+            def currentVersion = project.version.toString()
+            def releaseVersion = currentVersion.replace(snapshotString, "")
+            if (project.hasProperty("release.scope") && project.property("release.scope") == "major") {
+                releaseVersion = de.skuzzle.semantic.Version.parseVersion(releaseVersion).nextMajor().toString()
+            } else if (project.hasProperty("release.scope") && project.property("release.scope") == "patch") {
+                releaseVersion = de.skuzzle.semantic.Version.parseVersion(releaseVersion).nextPatch().toString()
+            }
+            def devVersion = "${de.skuzzle.semantic.Version.parseVersion(releaseVersion).nextMinor().toString()}${snapshotString}"
+
+            logger.quiet("Current version for ${name}: ${currentVersion}")
+            logger.quiet("Release version for ${name}: ${releaseVersion}")
+            logger.quiet("Dev version for ${name}: ${devVersion}")
+
+            file(project.buildDir).mkdirs()
+            new File(project.buildDir, "current-version.txt").write(currentVersion)
+            new File(project.buildDir, "release-version.txt").write(releaseVersion)
+            new File(project.buildDir, "dev-version.txt").write(devVersion)
+        }
+    }
+
     if (!it.name.contains("common")) {
         dependencies {
             compile project(":keios-protocol-common")
             testCompile 'org.spockframework:spock-core:1.3-groovy-2.5'
         }
     }
-    
+
     publishing {
         publications {
             mavenJava(MavenPublication) {

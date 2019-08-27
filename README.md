@@ -10,28 +10,15 @@
 
 Releases are triggered locally. Just a tag will be pushed and CI pipelines take care of the rest.
 
-#### Major
-Run `./gradlew final -x bintrayUpload -Prelease.scope=major` locally.
-
-#### Minor
-Run `./gradlew final -x bintrayUpload -Prelease.scope=minor` locally.
-
-#### Patch
-Run `./gradlew final -x bintrayUpload -Prelease.scope=patch` locally.
- 
-## Python
-`$ flatc -p spacy_incoming.fbs spacy_outgoing.fbs`
-
-### Release
-Releases are triggered locally. Just a tag will be pushed to trigger the CI release pipeline.
+Releases are triggered per module (e.g. keios-protocol-spacy) and for each language (i.e. java and python).
 
 #### Major
 Run `poetry run trigger-release-major {module}` locally.
- 
-e.g. `poetry run trigger-release-major keios-protocol-spacy` in order to release module keios-protocol-spacy
 
 #### Minor
 Run `poetry run trigger-release-minor {module}` locally.
+ 
+e.g. `poetry run trigger-release-minor keios-protocol-spacy` in order to release module keios-protocol-spacy
 
 #### Patch
 Run `poetry run trigger-release-patch {module}` locally.

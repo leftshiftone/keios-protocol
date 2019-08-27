@@ -78,7 +78,7 @@ def release():
     version = toml.load(f"{module}/pyproject.toml")["tool"]["poetry"]["version"]
     print(f"Releasing {module} {version}")
     check_call(["git", "commit", "-m", f"Release {module} {version}"])
-    check_call(["git", "tag", "-a", "-m", f"Release {module} {version}", f"{module}-v{version}"])
+    check_call(["git", "tag", "-a", "-m", f"Release {module} {version}", f"{module}-python-v{version}"])
     check_call(["git", "push"])
     check_call(["git", "push", "--tags"])
 
