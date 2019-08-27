@@ -14,10 +14,10 @@
  * from Leftshift One.
  */
 
-package keios.protocol.classification
+package keios.protocol.classification.class2
 
-
-import keios.protocol.classification.flatbuffers.ClassificationClass2Request
+import keios.protocol.classification.class2.flatbuffers.Vector
+import keios.protocol.classification.class2.flatbuffers.ClassificationClass2Request
 import spock.lang.Specification
 
 import java.nio.ByteBuffer
@@ -58,7 +58,7 @@ class ClassificationClass2ProtocolTest extends Specification {
             vectorAsString(deserialized.vectors(1)) == "bar"
     }
     
-    private static String vectorAsString(keios.protocol.classification.flatbuffers.Vector input) {
+    private static String vectorAsString(Vector input) {
         byte[] raw = new byte[input.bytesLength()]
         for (int i = 0; i < input.bytesLength(); i++) {
             raw[i] = input.bytes(i)

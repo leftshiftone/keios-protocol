@@ -14,12 +14,12 @@
  * from Leftshift One.
  */
 
-package keios.protocol.classification;
+package keios.protocol.classification.class2;
 
 import com.google.flatbuffers.FlatBufferBuilder;
-import keios.protocol.classification.flatbuffers.ClassificationClass2Request;
-import keios.protocol.classification.flatbuffers.ClassificationClass2Response;
-import keios.protocol.classification.flatbuffers.Vector;
+import keios.protocol.classification.class2.flatbuffers.ClassificationClass2Request;
+import keios.protocol.classification.class2.flatbuffers.ClassificationClass2Response;
+import keios.protocol.classification.class2.flatbuffers.Vector;
 
 import java.nio.ByteBuffer;
 import java.util.stream.Stream;
