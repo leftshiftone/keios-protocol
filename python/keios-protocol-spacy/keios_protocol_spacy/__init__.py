@@ -4,22 +4,22 @@ from typing import List, Any
 
 import flatbuffers
 
-from keios_protocol_spacy.fbs import DEPSpacyResponse as DEPSpacyResponseClass
-from keios_protocol_spacy.fbs import NERSpacyResponse as NERSpacyResponseClass
-from keios_protocol_spacy.fbs import SpacyBatchRequest as SpacyBatchRequestClass
-from keios_protocol_spacy.fbs import SpacyBatchResponse as SpacyBatchResponseClass
-from keios_protocol_spacy.fbs import SpacyMessage as SpacyMessageClass
-from keios_protocol_spacy.fbs import SpacyMessageType
-from keios_protocol_spacy.fbs import SpacyRequest as SpacyRequestClass
-from keios_protocol_spacy.fbs import SpacyResponse as SpacyResponseClass
-from keios_protocol_spacy.fbs.SpacyBatchRequest import SpacyBatchRequest, SpacyBatchRequestStartRequestsVector, \
+from keios_protocol_spacy.flatbuffers import DEPSpacyResponse as DEPSpacyResponseClass
+from keios_protocol_spacy.flatbuffers import NERSpacyResponse as NERSpacyResponseClass
+from keios_protocol_spacy.flatbuffers import SpacyBatchRequest as SpacyBatchRequestClass
+from keios_protocol_spacy.flatbuffers import SpacyBatchResponse as SpacyBatchResponseClass
+from keios_protocol_spacy.flatbuffers import SpacyMessage as SpacyMessageClass
+from keios_protocol_spacy.flatbuffers import SpacyMessageType
+from keios_protocol_spacy.flatbuffers import SpacyRequest as SpacyRequestClass
+from keios_protocol_spacy.flatbuffers import SpacyResponse as SpacyResponseClass
+from keios_protocol_spacy.flatbuffers.SpacyBatchRequest import SpacyBatchRequest, SpacyBatchRequestStartRequestsVector, \
     SpacyBatchRequestAddRequests, SpacyBatchRequestEnd
-from keios_protocol_spacy.fbs.SpacyBatchResponse import SpacyBatchResponse
-from keios_protocol_spacy.fbs.SpacyRequest import SpacyRequest, SpacyRequestStartTypeVector, \
+from keios_protocol_spacy.flatbuffers.SpacyBatchResponse import SpacyBatchResponse
+from keios_protocol_spacy.flatbuffers.SpacyRequest import SpacyRequest, SpacyRequestStartTypeVector, \
     SpacyRequestAddType, SpacyRequestEnd, SpacyRequestStart
-from keios_protocol_spacy.fbs.SpacyResponse import SpacyResponse, SpacyResponseStartDepVector, \
+from keios_protocol_spacy.flatbuffers.SpacyResponse import SpacyResponse, SpacyResponseStartDepVector, \
     SpacyResponseAddDep, SpacyResponseEnd, SpacyResponseStart, SpacyResponseStartNerVector, SpacyResponseAddNer
-from keios_protocol_spacy.fbs.Type import Type
+from keios_protocol_spacy.flatbuffers.Type import Type
 
 
 @dataclass

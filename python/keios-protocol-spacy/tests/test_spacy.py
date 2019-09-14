@@ -3,7 +3,7 @@ from keios_protocol_spacy import DEPSpacyResponseData, SpacyRequestData, TypeDat
 from keios_protocol_spacy import NERSpacyResponseData
 from keios_protocol_spacy import SpacyMessageData, SpacyMessageMapper
 from keios_protocol_spacy import SpacyResponseData
-from keios_protocol_spacy.fbs.SpacyMessageType import SpacyMessageType
+from keios_protocol_spacy.flatbuffers.SpacyMessageType import SpacyMessageType
 
 
 def response_fixture(s: str):

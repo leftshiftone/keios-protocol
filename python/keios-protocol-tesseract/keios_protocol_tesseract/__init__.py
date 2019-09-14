@@ -3,12 +3,12 @@ from dataclasses import dataclass, field
 
 import flatbuffers
 
-from keios_protocol_tesseract.fbs.TesseractMessage import TesseractMessage, TesseractMessageStart, TesseractMessageEnd, \
+from keios_protocol_tesseract.flatbuffers.TesseractMessage import TesseractMessage, TesseractMessageStart, TesseractMessageEnd, \
     TesseractMessageAddMessage, TesseractMessageAddMessageType
-from keios_protocol_tesseract.fbs.TesseractMessageType import TesseractMessageType
-from keios_protocol_tesseract.fbs.TesseractOcrRequest import TesseractOcrRequest, TesseractOcrRequestStart, \
+from keios_protocol_tesseract.flatbuffers.TesseractMessageType import TesseractMessageType
+from keios_protocol_tesseract.flatbuffers.TesseractOcrRequest import TesseractOcrRequest, TesseractOcrRequestStart, \
     TesseractOcrRequestAddImage, TesseractOcrRequestEnd
-from keios_protocol_tesseract.fbs.TesseractOcrResponse import TesseractOcrResponse, TesseractOcrResponseStart, \
+from keios_protocol_tesseract.flatbuffers.TesseractOcrResponse import TesseractOcrResponse, TesseractOcrResponseStart, \
     TesseractOcrResponseAddText, TesseractOcrResponseAddConfidence, TesseractOcrResponseEnd
 
 
