@@ -30,9 +30,11 @@ allprojects {
 
 subprojects {
     repositories {
-        mavenLocal()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-        maven { url "https://repo.maven.apache.org/maven2" }
+        jcenter()
+        mavenCentral()
+        maven {
+            url "https://dl.bintray.com/leftshiftone/keios-protocol"
+        }
     }
 
     apply plugin: "maven-publish"
