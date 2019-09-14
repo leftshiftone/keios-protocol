@@ -88,6 +88,7 @@ jobs:
       - run: "./gradlew :${TARGET_MODULE}:prepareVersions -Prelease.scope=${RELEASE_SCOPE} -s"
       - run: echo 'export RELEASE_VERSION=$(cat ./java/$TARGET_MODULE/build/release-version.txt)' >> $BASH_ENV && source $BASH_ENV
       - run: echo 'export DEV_VERSION=$(cat ./java/$TARGET_MODULE/build/dev-version.txt)' >> $BASH_ENV && source $BASH_ENV
+      - run: git config --local user.email "ci@leftshift.one" && git config --local user.name "Continuous Integration"
       - run: git checkout master && git pull --tags
       - run: "./gradlew :${TARGET_MODULE}:release -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${RELEASE_VERSION} -Prelease.newVersion=${DEV_VERSION} :${TARGET_MODULE}:bintrayUpload -s"
       - run:

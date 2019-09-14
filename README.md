@@ -13,12 +13,12 @@ Releases are triggered locally. Just a tag will be pushed and CI pipelines take 
 Releases are triggered per module (e.g. keios-protocol-spacy) and for each language (i.e. java and python).
 
 #### Major
-Run `poetry run trigger-release-major {module}` locally.
+Run `cd python && poetry run trigger-release-major {module} && cd ..` locally.
 
 #### Minor
-Run `poetry run trigger-release-minor {module}` locally.
+Run `cd python && poetry run trigger-release-minor {module} && cd ..` locally.
  
 e.g. `poetry run trigger-release-minor keios-protocol-spacy` in order to release module keios-protocol-spacy
 
 #### Patch
-Run `poetry run trigger-release-patch {module}` locally.
+Run `cd python && poetry run trigger-release-patch {module} && cd ..` locally.
