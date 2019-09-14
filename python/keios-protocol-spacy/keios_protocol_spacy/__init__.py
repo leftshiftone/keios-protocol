@@ -2,8 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import List, Any
 
-import flatbuffers
-
+from flatbuffers import Builder
 from keios_protocol_spacy.flatbuffers import DEPSpacyResponse as DEPSpacyResponseClass
 from keios_protocol_spacy.flatbuffers import NERSpacyResponse as NERSpacyResponseClass
 from keios_protocol_spacy.flatbuffers import SpacyBatchRequest as SpacyBatchRequestClass
@@ -31,7 +30,7 @@ class SpacyMessageData:
 class SpacyMessageMapper:
     @staticmethod
     def serialize(entity: SpacyMessageData) -> bytearray:
-        builder = flatbuffers.Builder(128)
+        builder = Builder(128)
 
         payload_offset = None
 
@@ -100,7 +99,7 @@ class DEPSpacyResponseData:
 
 class DEPSpacyResponseMapper:
     @staticmethod
-    def serialize(entity: DEPSpacyResponseData, builder: flatbuffers.Builder) -> Any:
+    def serialize(entity: DEPSpacyResponseData, builder: Builder) -> Any:
         lang_offset_offset = builder.CreateString(entity.lang)
         relation_offset = builder.CreateString(entity.relation)
         source_offset = builder.CreateString(entity.source)
@@ -156,7 +155,7 @@ class NERSpacyResponseData:
 
 class NERSpacyResponseMapper:
     @staticmethod
-    def serialize(entity: NERSpacyResponseData, builder: flatbuffers.Builder) -> Any:
+    def serialize(entity: NERSpacyResponseData, builder: Builder) -> Any:
         text_offset = builder.CreateString(entity.text)
         label_offset = builder.CreateString(entity.label)
 
@@ -194,7 +193,7 @@ class SpacyRequestData:
 
 class SpacyRequestMapper:
     @staticmethod
-    def serialize(entity: SpacyRequestData, builder: flatbuffers.Builder) -> Any:
+    def serialize(entity: SpacyRequestData, builder: Builder) -> Any:
         text_offset = builder.CreateString(entity.text)
         SpacyRequestClass.SpacyRequestStartTypeVector(builder, len(entity.types))
         for x in reversed(entity.types):
@@ -221,7 +220,7 @@ class SpacyBatchRequestData:
 
 class SpacyBatchRequestMapper:
     @staticmethod
-    def serialize(entity: SpacyBatchRequestData, builder: flatbuffers.Builder) -> Any:
+    def serialize(entity: SpacyBatchRequestData, builder: Builder) -> Any:
         requests_offsets = list(map(lambda r: SpacyRequestMapper.serialize(r, builder), entity.requests))
         SpacyBatchRequestClass.SpacyBatchRequestStartRequestsVector(builder, len(entity.requests))
         for offset in reversed(requests_offsets):
@@ -247,7 +246,7 @@ class SpacyResponseData:
 
 class SpacyResponseMapper:
     @staticmethod
-    def serialize(entity: SpacyResponseData, builder: flatbuffers.Builder) -> Any:
+    def serialize(entity: SpacyResponseData, builder: Builder) -> Any:
         ner_offsets = list(map(lambda n: NERSpacyResponseMapper.serialize(n, builder), entity.ner))
         dep_offsets = list(map(lambda d: DEPSpacyResponseMapper.serialize(d, builder), entity.dep))
         SpacyResponseClass.SpacyResponseStartNerVector(builder, len(entity.ner))
@@ -282,7 +281,7 @@ class SpacyBatchResponseData:
 
 class SpacyBatchResponseMapper:
     @staticmethod
-    def serialize(entity: SpacyBatchResponseData, builder: flatbuffers.Builder) -> Any:
+    def serialize(entity: SpacyBatchResponseData, builder: Builder) -> Any:
         responses_offsets = list(map(lambda r: SpacyResponseMapper.serialize(r, builder), entity.responses))
         SpacyBatchResponseClass.SpacyBatchResponseStartResponsesVector(builder, len(entity.responses))
         for offset in reversed(responses_offsets):

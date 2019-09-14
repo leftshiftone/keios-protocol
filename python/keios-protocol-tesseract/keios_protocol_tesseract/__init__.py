@@ -1,8 +1,7 @@
 from abc import ABC
 from dataclasses import dataclass, field
 
-import flatbuffers
-
+from flatbuffers import Builder
 from keios_protocol_tesseract.flatbuffers.TesseractMessage import TesseractMessage, TesseractMessageStart, TesseractMessageEnd, \
     TesseractMessageAddMessage, TesseractMessageAddMessageType
 from keios_protocol_tesseract.flatbuffers.TesseractMessageType import TesseractMessageType
@@ -16,7 +15,7 @@ class SerializableMessageEntity(ABC):
     def type(self) -> TesseractMessageType:
         pass
 
-    def serialize(self, builder: flatbuffers.Builder) -> bytearray:
+    def serialize(self, builder: Builder) -> bytearray:
         pass
 
 
@@ -38,7 +37,7 @@ class TesseractOcrRequestEntity(SerializableMessageEntity):
         image = list(map(lambda i: fb_obj.Image(i), range(0, fb_obj.ImageLength())))
         return TesseractOcrRequestEntity(bytearray(image))
 
-    def serialize(self, builder: flatbuffers.Builder):
+    def serialize(self, builder: Builder):
         image_offset = builder.CreateByteVector(self.image)
 
         TesseractOcrRequestStart(builder)
@@ -59,7 +58,7 @@ class TesseractOcrResponseEntity(SerializableMessageEntity):
     def new(fb_obj: TesseractOcrResponse):
         return TesseractOcrResponseEntity(fb_obj.Text().decode("utf-8"), fb_obj.Confidence())
 
-    def serialize(self, builder: flatbuffers.Builder):
+    def serialize(self, builder: Builder):
         text_offset = builder.CreateString(self.text)
         TesseractOcrResponseStart(builder)
         TesseractOcrResponseAddText(builder, text_offset)
@@ -74,7 +73,7 @@ class TesseractOcrResponseEntity(SerializableMessageEntity):
 class TesseractProtocol:
     @staticmethod
     def serialize(entity: TesseractMessageEntity) -> bytearray:
-        builder = flatbuffers.Builder(1024)
+        builder = Builder(1024)
         payload_offset = entity.message.serialize(builder)
         TesseractMessageStart(builder)
         TesseractMessageAddMessageType(builder, entity.type)
