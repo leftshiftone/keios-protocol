@@ -90,7 +90,7 @@ jobs:
       - run: echo 'export DEV_VERSION=$(cat ./java/$TARGET_MODULE/build/dev-version.txt)' >> $BASH_ENV && source $BASH_ENV
       - run: git config --local user.email "ci@leftshift.one" && git config --local user.name "Continuous Integration"
       - run: git checkout master && git pull --tags
-      - run: "./gradlew :${TARGET_MODULE}:release -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${RELEASE_VERSION} -Prelease.newVersion=${DEV_VERSION} :${TARGET_MODULE}:bintrayUpload -s"
+      - run: "./gradlew :${TARGET_MODULE}:release -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${RELEASE_VERSION} -Prelease.newVersion=${DEV_VERSION} -s"
       - run:
           <<: *webhook-failed
   release-python:

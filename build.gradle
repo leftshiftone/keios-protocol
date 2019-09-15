@@ -50,7 +50,7 @@ subprojects {
         classifier "javadoc"
     }
 
-    bintrayUpload.mustRunAfter afterReleaseBuild
+    afterReleaseBuild.dependsOn bintrayUpload
     task prepareVersions() {
         doLast {
             def snapshotString = "-SNAPSHOT"
