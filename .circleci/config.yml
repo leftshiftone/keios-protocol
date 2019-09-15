@@ -92,7 +92,12 @@ jobs:
       - run: git checkout master && git pull --tags
       - run: "./gradlew :${TARGET_MODULE}:release -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${RELEASE_VERSION} -Prelease.newVersion=${DEV_VERSION} -s"
       - run:
+          name: Cleanup release
+          when: on_fail
+          command: git push -d origin release-minor-$TARGET_MODULE
+      - run:
           <<: *webhook-failed
+
   release-python:
     docker:
       - image: circleci/python:3.7.3
@@ -122,6 +127,10 @@ jobs:
       - run: cd ~/project/python && poetry run publish $TARGET_MODULE
       - store_test_results:
           path: build/circleci/test-results
+      - run:
+          name: Cleanup release
+          when: on_fail
+          command: git push -d origin release-minor-$TARGET_MODULE
       - run:
           <<: *webhook-failed
 
