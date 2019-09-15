@@ -25,7 +25,11 @@ def test():
 
 
 def test_ci():
-    exec_in_sub_modules(["poetry", "run", "pytest", '--junit-xml=$TEST_RESULTS_PATH/TEST-@filename@-junit.xml'])
+    command_ = ["poetry", "run", "pytest", '--junit-xml=$TEST_RESULTS_PATH/TEST-@filename@-junit.xml']
+    if len(sys.argv) <= 1 or sys.argv[1] is None:
+        exec_in_sub_modules(command_)
+    else:
+        exec_in_module(command_, sys.argv[1])
 
 
 def build():

@@ -116,7 +116,6 @@ jobs:
       - run: git config --local user.email "ci@leftshift.one" && git config --local user.name "Continuous Integration"
       - run: git checkout master && git pull --tags
       - run: cd ~/project/python && poetry install
-      - run: cd ~/project/python && poetry run cleanup-release $CIRCLE_TAG
       - run: echo 'export TARGET_MODULE=${CIRCLE_TAG#*-*-}' >> $BASH_ENV && source $BASH_ENV
       - run: echo "Target module is $TARGET_MODULE"
       - run: cd ~/project/python && poetry run install $TARGET_MODULE
@@ -128,8 +127,8 @@ jobs:
           path: build/circleci/test-results
       - run:
           name: Cleanup release
-          when: on_fail
-          command: git push -d origin release-minor-$TARGET_MODULE
+          when: always
+          command: git tag -d $CIRCLE_TAG && git push -d origin $CIRCLE_TAG
       - run:
           <<: *webhook-failed
 workflows:
