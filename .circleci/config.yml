@@ -122,7 +122,7 @@ jobs:
       - run: cd ~/project/python && poetry run test-ci $TARGET_MODULE
       - run: cd ~/project/python && poetry run release $CIRCLE_TAG
       - run: cd ~/project/python && poetry run build $TARGET_MODULE
-      - run: cd ~/project/python && poetry run publish $TARGET_MODULE
+      - run: cd ~/project/python && poetry run publish-ci $TARGET_MODULE
       - store_test_results:
           path: build/circleci/test-results
       - run:

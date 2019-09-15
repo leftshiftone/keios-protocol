@@ -41,7 +41,11 @@ def build():
 
 
 def publish():
-    exec_in_sub_modules(["poetry", "publish"])
+    command_ = ["poetry", "publish"]
+    if len(sys.argv) <= 1 or sys.argv[1] is None:
+        exec_in_sub_modules(command_)
+    else:
+        exec_in_module(command_, sys.argv[1])
 
 
 def publish_ci():
