@@ -1,8 +1,0 @@
-namespace keios.protocol.pocketsphinx;
-attribute "priority";
-
-table PocketsphinxRequest {
-  speech:[ubyte];
-}
-
-root_type PocketsphinxRequest;

@@ -1,7 +1,7 @@
 import os
 import pytest
 import numpy as np
-from keios_protocol_pocketsphinx import GuessData
+from keios_protocol_pocketsphinx import Guess
 
 @pytest.fixture
 def supply_goforward_file():
@@ -27,4 +27,4 @@ def supply_guesses():
                 ('go forward can meters', -28695),
                 ('go forward and leaders', -28706),
                 ('go for work ten meters', -28722)]
-        return [GuessData(phrase=x[0], confidence=x[1]) for x in guess_arr]
+        return [Guess(phrase=x[0], confidence=x[1]) for x in guess_arr]

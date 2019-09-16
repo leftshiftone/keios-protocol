@@ -1,0 +1,24 @@
+namespace keios.protocol.pocketsphinx;
+attribute "priority";
+
+table PocketSphinxRequest {
+  speech:[ubyte];
+}
+
+table Guess {
+    confidence: float;
+    phrase: string;
+}
+
+table PocketSphinxResponse {
+  guesses:[Guess];
+}
+
+union PocketSphinxMessageType {
+    PocketSphinxRequest,
+    PocketSphinxResponse,
+}
+
+table PocketSphinxMessage {
+    message: PocketSphinxMessageType;
+}
