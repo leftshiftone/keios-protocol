@@ -1,45 +1,44 @@
 import math
 
-from keios_protocol_gensim import GensimFastTextSimilarityRequest, GensimMessage, GensimMessageEntity, \
-    GensimFastTextSimilarityResponse, GensimFastTextMostSimilarRequest, GensimFastTextMostSimilarResponse, \
-    MostSimilarity, \
-    GensimFastTextEmbeddingRequest, EmbeddingElement, GensimFastTextEmbeddingResponse
-from keios_protocol_gensim.fasttext_embedding import EmbeddingRequest, EmbeddingResponse
-from keios_protocol_gensim.fasttext_most_similar import MostSimilarRequest, MostSimilarResponse
-from keios_protocol_gensim.fasttext_similarity import SimilarityRequest, SimilarityResponse
-from keios_protocol_gensim.flatbuffers.GensimMessageType import GensimMessageType
+from keios_protocol_gensim import GensimFastTextSimilarityRequestData, GensimMessage, GensimMessageMapper, \
+    GensimFastTextSimilarityResponseData, GensimFastTextMostSimilarRequestData, GensimFastTextMostSimilarResponseData, \
+    MostSimilarityData, \
+    GensimFastTextEmbeddingRequestData, EmbeddingElementData, GensimFastTextEmbeddingResponseData
+from keios_protocol_gensim.fasttext_embedding import EmbeddingRequestData, EmbeddingResponseData
+from keios_protocol_gensim.fasttext_most_similar import MostSimilarRequestData, MostSimilarResponseData
+from keios_protocol_gensim.fasttext_similarity import SimilarityRequestData, SimilarityResponseData
 
 
 def test_message_with_fasttext_embedding_request():
-    data1 = EmbeddingRequest("foo")
-    data2 = EmbeddingRequest("bar")
-    data = GensimFastTextEmbeddingRequest([data1, data2])
+    data1 = EmbeddingRequestData("foo")
+    data2 = EmbeddingRequestData("bar")
+    data = GensimFastTextEmbeddingRequestData([data1, data2])
 
-    message_data = GensimMessage(GensimMessageType().GensimFastTextEmbeddingRequest, data)
+    message_data = GensimMessage(data)
 
-    result = GensimMessageEntity().serialize(message_data)
+    result = GensimMessageMapper.serialize(message_data)
 
-    deserialized: GensimFastTextEmbeddingRequest = GensimMessageEntity().deserialize(result).message
+    deserialized: GensimFastTextEmbeddingRequestData = GensimMessageMapper.deserialize(result).message
 
     assert deserialized.requests[0].text == "foo"
 
 
 def test_message_with_fasttext_embedding_response():
-    data1_element1 = EmbeddingElement(1.0)
-    data1_element2 = EmbeddingElement(0.1234)
-    data1_element3 = EmbeddingElement(0.42)
-    data1 = EmbeddingResponse([data1_element1, data1_element2, data1_element3])
+    data1_element1 = EmbeddingElementData(1.0)
+    data1_element2 = EmbeddingElementData(0.1234)
+    data1_element3 = EmbeddingElementData(0.42)
+    data1 = EmbeddingResponseData([data1_element1, data1_element2, data1_element3])
 
-    data2_element1 = EmbeddingElement(42.0)
-    data2_element2 = EmbeddingElement(0.314)
-    data2 = EmbeddingResponse([data2_element1, data2_element2])
+    data2_element1 = EmbeddingElementData(42.0)
+    data2_element2 = EmbeddingElementData(0.314)
+    data2 = EmbeddingResponseData([data2_element1, data2_element2])
 
-    data = GensimFastTextEmbeddingResponse([data1, data2])
-    message_data = GensimMessage(GensimMessageType().GensimFastTextSimilarityResponse, data)
+    data = GensimFastTextEmbeddingResponseData([data1, data2])
+    message_data = GensimMessage(data)
 
-    result = GensimMessageEntity().serialize(message_data)
+    result = GensimMessageMapper.serialize(message_data)
 
-    deserialized: GensimFastTextEmbeddingResponse = GensimMessageEntity().deserialize(result).message
+    deserialized: GensimFastTextEmbeddingResponseData = GensimMessageMapper.deserialize(result).message
 
     assert len(deserialized.responses) == 2
     assert len(deserialized.responses[0].vector) == 3
@@ -52,14 +51,14 @@ def test_message_with_fasttext_embedding_response():
 
 
 def test_message_with_fasttext_most_similar_request():
-    data1 = MostSimilarRequest("foo")
-    data2 = MostSimilarRequest("bar")
-    data = GensimFastTextMostSimilarRequest([data1, data2])
-    message_data = GensimMessage(GensimMessageType().GensimFastTextMostSimilarRequest, data)
+    data1 = MostSimilarRequestData("foo")
+    data2 = MostSimilarRequestData("bar")
+    data = GensimFastTextMostSimilarRequestData([data1, data2])
+    message_data = GensimMessage(data)
 
-    result = GensimMessageEntity().serialize(message_data)
+    result = GensimMessageMapper.serialize(message_data)
 
-    deserialized: GensimFastTextMostSimilarRequest = GensimMessageEntity().deserialize(result).message
+    deserialized: GensimFastTextMostSimilarRequestData = GensimMessageMapper.deserialize(result).message
 
     assert len(deserialized.requests) == 2
     assert deserialized.requests[0].text == "foo"
@@ -67,21 +66,21 @@ def test_message_with_fasttext_most_similar_request():
 
 
 def test_message_with_fasttext_most_similar_response():
-    data1_sim1 = MostSimilarity("foo", 0.5)
-    data1_sim2 = MostSimilarity("bar", 0.1234)
-    data1 = MostSimilarResponse([data1_sim1, data1_sim2])
+    data1_sim1 = MostSimilarityData("foo", 0.5)
+    data1_sim2 = MostSimilarityData("bar", 0.1234)
+    data1 = MostSimilarResponseData([data1_sim1, data1_sim2])
 
-    data2_sim1 = MostSimilarity("123", 3.14)
-    data2_sim2 = MostSimilarity("abc", 1.7)
-    data2_sim3 = MostSimilarity("xyz", 42.0)
-    data2 = MostSimilarResponse([data2_sim1, data2_sim2, data2_sim3])
+    data2_sim1 = MostSimilarityData("123", 3.14)
+    data2_sim2 = MostSimilarityData("abc", 1.7)
+    data2_sim3 = MostSimilarityData("xyz", 42.0)
+    data2 = MostSimilarResponseData([data2_sim1, data2_sim2, data2_sim3])
 
-    data = GensimFastTextMostSimilarResponse([data1, data2])
-    message_data = GensimMessage(GensimMessageType().GensimFastTextSimilarityResponse, data)
+    data = GensimFastTextMostSimilarResponseData([data1, data2])
+    message_data = GensimMessage(data)
 
-    result = GensimMessageEntity().serialize(message_data)
+    result = GensimMessageMapper.serialize(message_data)
 
-    deserialized: GensimFastTextMostSimilarResponse = GensimMessageEntity().deserialize(result).message
+    deserialized: GensimFastTextMostSimilarResponseData = GensimMessageMapper.deserialize(result).message
 
     assert len(deserialized.responses) == 2
     assert len(deserialized.responses[0].similarities) == 2
@@ -99,14 +98,14 @@ def test_message_with_fasttext_most_similar_response():
 
 
 def test_message_with_fasttext_similaritity_request():
-    data1 = SimilarityRequest("foo", "bar")
-    data2 = SimilarityRequest("abc", "xyz")
-    data = GensimFastTextSimilarityRequest([data1, data2])
-    message_data = GensimMessage(GensimMessageType().GensimFastTextSimilarityRequest, data)
+    data1 = SimilarityRequestData("foo", "bar")
+    data2 = SimilarityRequestData("abc", "xyz")
+    data = GensimFastTextSimilarityRequestData([data1, data2])
+    message_data = GensimMessage(data)
 
-    result = GensimMessageEntity().serialize(message_data)
+    result = GensimMessageMapper.serialize(message_data)
 
-    deserialized: GensimFastTextSimilarityRequest = GensimMessageEntity().deserialize(result).message
+    deserialized: GensimFastTextSimilarityRequestData = GensimMessageMapper.deserialize(result).message
 
     assert len(deserialized.requests)
     assert deserialized.requests[0].text1 == "foo"
@@ -116,14 +115,14 @@ def test_message_with_fasttext_similaritity_request():
 
 
 def test_message_with_fasttext_similaritity_response():
-    data1 = SimilarityResponse(0.1234)
-    data2 = SimilarityResponse(3.14)
-    data = GensimFastTextSimilarityResponse([data1, data2])
-    message_data = GensimMessage(GensimMessageType().GensimFastTextSimilarityResponse, data)
+    data1 = SimilarityResponseData(0.1234)
+    data2 = SimilarityResponseData(3.14)
+    data = GensimFastTextSimilarityResponseData([data1, data2])
+    message_data = GensimMessage(data)
 
-    result = GensimMessageEntity().serialize(message_data)
+    result = GensimMessageMapper.serialize(message_data)
 
-    deserialized: GensimFastTextSimilarityResponse = GensimMessageEntity().deserialize(result).message
+    deserialized: GensimFastTextSimilarityResponseData = GensimMessageMapper.deserialize(result).message
 
     assert len(deserialized.responses)
     assert math.isclose(deserialized.responses[0].value, 0.1234, rel_tol=1e-07)
