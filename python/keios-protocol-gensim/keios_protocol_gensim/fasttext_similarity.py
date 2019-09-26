@@ -3,11 +3,11 @@ from typing import List
 
 import flatbuffers
 
-from keios_protocol_gensim.typed_message import TypedMessage
 from keios_protocol_gensim.fbs import SimilarityRequest, GensimFastTextSimilarityRequest, SimilarityResponse, \
     GensimFastTextSimilarityResponse, GensimMessageType
 from keios_protocol_gensim.fbs.SimilarityRequest import SimilarityRequestStart, SimilarityRequestAddText1, \
     SimilarityRequestAddText2, SimilarityRequestEnd
+from keios_protocol_gensim.typed_message import TypedMessage
 
 
 @dataclass
