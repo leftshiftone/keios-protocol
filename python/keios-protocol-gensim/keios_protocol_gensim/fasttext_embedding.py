@@ -1,120 +1,133 @@
 from dataclasses import dataclass
 from typing import List
 
-from keios_protocol_common import FlatbufferObject
+import flatbuffers
 
-from .flatbuffers import EmbeddingElement as EmbeddingElementClass
-from .flatbuffers import EmbeddingRequest as EmbeddingRequestClass
-from .flatbuffers import EmbeddingResponse as EmbeddingResponseClass
-from .flatbuffers import GensimFastTextEmbeddingRequest as GensimFastTextEmbeddingRequestClass
-from .flatbuffers import GensimFastTextEmbeddingResponse as GensimFastTextEmbeddingResponseClass
+from keios_protocol_gensim.typed_message import TypedMessage
+from keios_protocol_gensim.fbs import EmbeddingRequest, GensimFastTextEmbeddingRequest, EmbeddingElement, \
+    EmbeddingResponse, GensimFastTextEmbeddingResponse
+from keios_protocol_gensim.fbs.GensimMessageType import GensimMessageType
 
 
 @dataclass
-class EmbeddingRequest:
+class EmbeddingRequestData:
     text: str
 
 
-class EmbeddingRequestEntity(FlatbufferObject):
-    def __init__(self, builder):
-        super().__init__(EmbeddingRequest, EmbeddingRequestClass, builder)
+class EmbeddingRequestMapper:
+    @staticmethod
+    def serialize(data: EmbeddingRequestData, builder: flatbuffers.Builder):
+        text = builder.CreateString(data.text)
+        EmbeddingRequest.EmbeddingRequestStart(builder)
+        EmbeddingRequest.EmbeddingRequestAddText(builder, text)
 
-    def dataclass_to_flatbuffer(self, dataclass):
-        text = self.build_string(dataclass.text)
-        self.start()
-        self['Text'] = text
-        return self.end()
+        return EmbeddingRequest.EmbeddingRequestEnd(builder)
 
-    def flatbuffer_to_dataclass(self, flatbuffer):
-        return EmbeddingRequest(flatbuffer.Text().decode("utf-8"))
-
-
-@dataclass
-class GensimFastTextEmbeddingRequest:
-    requests: List[EmbeddingRequest]
-
-
-class GensimFastTextEmbeddingRequestEntity(FlatbufferObject):
-    def __init__(self):
-        super().__init__(GensimFastTextEmbeddingRequest, GensimFastTextEmbeddingRequestClass)
-
-    def dataclass_to_flatbuffer(self, dataclass):
-        requests = self.build_vector("Requests", dataclass.requests, EmbeddingRequestEntity)
-        self.start()
-        self['Requests'] = requests
-        return self.end()
-
-    def flatbuffer_to_dataclass(self, flatbuffer):
-        requests = []
-        for i in range(0, flatbuffer.RequestsLength()):
-            request = flatbuffer.Requests(i)
-            request_entity = EmbeddingRequestEntity(self.builder)
-            requests.append(request_entity.flatbuffer_to_dataclass(request))
-        return GensimFastTextEmbeddingRequest(requests)
+    @staticmethod
+    def to_dataclass(flatbuffer: EmbeddingRequest):
+        return EmbeddingRequestData(flatbuffer.Text().decode("utf-8"))
 
 
 @dataclass
-class EmbeddingElement:
+class GensimFastTextEmbeddingRequestData(TypedMessage):
+    requests: List[EmbeddingRequestData]
+
+    def type(self):
+        return GensimMessageType.GensimFastTextEmbeddingRequest
+
+
+class GensimFastTextEmbeddingRequestMapper:
+    @staticmethod
+    def serialize(data: GensimFastTextEmbeddingRequestData, builder: flatbuffers.Builder):
+        length = len(data.requests)
+        request_offsets = list(map(lambda r: EmbeddingRequestMapper.serialize(r, builder), data.requests))
+        GensimFastTextEmbeddingRequest.GensimFastTextEmbeddingRequestStartRequestsVector(builder,
+                                                                                         length)
+        for offset in reversed(request_offsets):
+            builder.PrependUOffsetTRelative(offset)
+        request_offsets_vector = builder.EndVector(length)
+        GensimFastTextEmbeddingRequest.GensimFastTextEmbeddingRequestStart(builder)
+        GensimFastTextEmbeddingRequest.GensimFastTextEmbeddingRequestAddRequests(builder, request_offsets_vector)
+
+        return GensimFastTextEmbeddingRequest.GensimFastTextEmbeddingRequestEnd(builder)
+
+    @staticmethod
+    def to_dataclass(flatbuffer: GensimFastTextEmbeddingRequest):
+        requests = list(map(lambda r: EmbeddingRequestMapper.to_dataclass(r),
+                            map(lambda i: flatbuffer.Requests(i), range(0, flatbuffer.RequestsLength()))))
+        return GensimFastTextEmbeddingRequestData(requests)
+
+
+@dataclass
+class EmbeddingElementData:
     value: float
 
 
-class EmbeddingElementEntity(FlatbufferObject):
-    def __init__(self, builder):
-        super().__init__(EmbeddingElement, EmbeddingElementClass, builder)
+class EmbeddingElementMapper:
+    @staticmethod
+    def serialize(data: EmbeddingElementData, builder: flatbuffers.Builder):
+        EmbeddingElement.EmbeddingElementStart(builder)
+        EmbeddingElement.EmbeddingElementAddValue(builder, data.value)
 
-    def dataclass_to_flatbuffer(self, dataclass):
-        value = dataclass.value
-        self.start()
-        self['Value'] = value
-        return self.end()
+        return EmbeddingElement.EmbeddingElementEnd(builder)
 
-    def flatbuffer_to_dataclass(self, flatbuffer):
-        return EmbeddingElement(flatbuffer.Value())
-
-
-@dataclass
-class EmbeddingResponse:
-    vector: List[EmbeddingElement]
-
-
-class EmbeddingResponseEntity(FlatbufferObject):
-    def __init__(self, builder):
-        super().__init__(EmbeddingResponse, EmbeddingResponseClass, builder)
-
-    def dataclass_to_flatbuffer(self, dataclass):
-        vector_vector = self.build_vector('Vector', dataclass.vector, EmbeddingElementEntity)
-        self.start()
-        self['Vector'] = vector_vector
-        return self.end()
-
-    def flatbuffer_to_dataclass(self, flatbuffer):
-        elements = []
-        for i in range(0, flatbuffer.VectorLength()):
-            element = flatbuffer.Vector(i)
-            element_entity = EmbeddingElementEntity(self.builder)
-            elements.append(element_entity.flatbuffer_to_dataclass(element))
-        return EmbeddingResponse(elements)
+    @staticmethod
+    def to_dataclass(flatbuffer: EmbeddingElement):
+        return EmbeddingElementData(flatbuffer.Value())
 
 
 @dataclass
-class GensimFastTextEmbeddingResponse:
-    responses: List[EmbeddingResponse]
+class EmbeddingResponseData:
+    vector: List[EmbeddingElementData]
 
 
-class GensimFastTextEmbeddingResponseEntity(FlatbufferObject):
-    def __init__(self):
-        super().__init__(GensimFastTextEmbeddingResponse, GensimFastTextEmbeddingResponseClass)
+class EmbeddingResponseMapper:
+    @staticmethod
+    def serialize(data: EmbeddingResponseData, builder: flatbuffers.Builder):
+        length = len(data.vector)
+        vector_offsets = list(map(lambda r: EmbeddingElementMapper.serialize(r, builder), data.vector))
+        EmbeddingResponse.EmbeddingResponseStartVectorVector(builder,
+                                                             length)
+        for offset in reversed(vector_offsets):
+            builder.PrependUOffsetTRelative(offset)
+        vector_offsets_vector = builder.EndVector(length)
+        EmbeddingResponse.EmbeddingResponseStart(builder)
+        EmbeddingResponse.EmbeddingResponseAddVector(builder, vector_offsets_vector)
 
-    def dataclass_to_flatbuffer(self, dataclass):
-        response_vector = self.build_vector('Responses', dataclass.responses, EmbeddingResponseEntity)
-        self.start()
-        self['Responses'] = response_vector
-        return self.end()
+        return EmbeddingResponse.EmbeddingResponseEnd(builder)
 
-    def flatbuffer_to_dataclass(self, flatbuffer):
-        responses = []
-        for i in range(0, flatbuffer.ResponsesLength()):
-            response = flatbuffer.Responses(i)
-            response_entity = EmbeddingResponseEntity(self.builder)
-            responses.append(response_entity.flatbuffer_to_dataclass(response))
-        return GensimFastTextEmbeddingResponse(responses)
+    @staticmethod
+    def to_dataclass(flatbuffer: EmbeddingResponse):
+        vector = list(map(lambda r: EmbeddingElementMapper.to_dataclass(r),
+                          map(lambda i: flatbuffer.Vector(i), range(0, flatbuffer.VectorLength()))))
+        return EmbeddingResponseData(vector)
+
+
+@dataclass
+class GensimFastTextEmbeddingResponseData(TypedMessage):
+    responses: List[EmbeddingResponseData]
+
+    def type(self):
+        return GensimMessageType.GensimFastTextEmbeddingResponse
+
+
+class GensimFastTextEmbeddingResponseMapper:
+    @staticmethod
+    def serialize(data: GensimFastTextEmbeddingResponseData, builder: flatbuffers.Builder):
+        length = len(data.responses)
+        responses_offsets = list(map(lambda r: EmbeddingResponseMapper.serialize(r, builder), data.responses))
+        GensimFastTextEmbeddingResponse.GensimFastTextEmbeddingResponseStartResponsesVector(builder,
+                                                                                            length)
+        for offset in reversed(responses_offsets):
+            builder.PrependUOffsetTRelative(offset)
+        responses_offsets_vector = builder.EndVector(length)
+        GensimFastTextEmbeddingResponse.GensimFastTextEmbeddingResponseStart(builder)
+        GensimFastTextEmbeddingResponse.GensimFastTextEmbeddingResponseAddResponses(builder, responses_offsets_vector)
+
+        return GensimFastTextEmbeddingResponse.GensimFastTextEmbeddingResponseEnd(builder)
+
+    @staticmethod
+    def to_dataclass(flatbuffer: GensimFastTextEmbeddingResponse):
+        requests = list(map(lambda r: EmbeddingResponseMapper.to_dataclass(r),
+                            map(lambda i: flatbuffer.Responses(i), range(0, flatbuffer.ResponsesLength()))))
+        return GensimFastTextEmbeddingResponseData(requests)

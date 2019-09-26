@@ -1,97 +1,113 @@
 from dataclasses import dataclass
 from typing import List
 
-from keios_protocol_common import FlatbufferObject
+import flatbuffers
 
-from .flatbuffers import GensimFastTextSimilarityRequest as GensimFastTextSimilarityRequestClass
-from .flatbuffers import GensimFastTextSimilarityResponse as GensimFastTextSimilarityResponseClass
-from .flatbuffers import SimilarityRequest as SimilarityRequestClass
-from .flatbuffers import SimilarityResponse as SimilarityResponseClass
+from keios_protocol_gensim.typed_message import TypedMessage
+from keios_protocol_gensim.fbs import SimilarityRequest, GensimFastTextSimilarityRequest, SimilarityResponse, \
+    GensimFastTextSimilarityResponse, GensimMessageType
+from keios_protocol_gensim.fbs.SimilarityRequest import SimilarityRequestStart, SimilarityRequestAddText1, \
+    SimilarityRequestAddText2, SimilarityRequestEnd
 
 
 @dataclass
-class SimilarityRequest:
+class SimilarityRequestData:
     text1: str
     text2: str
 
 
-class SimilarityRequestEntity(FlatbufferObject):
-    def __init__(self, builder):
-        super().__init__(SimilarityRequest, SimilarityRequestClass, builder)
+class SimilarityRequestMapper:
+    @staticmethod
+    def serialize(data: SimilarityRequestData, builder: flatbuffers.Builder):
+        text1 = builder.CreateString(data.text1)
+        text2 = builder.CreateString(data.text2)
 
-    def dataclass_to_flatbuffer(self, dataclass):
-        text1 = self.build_string(dataclass.text1)
-        text2 = self.build_string(dataclass.text2)
-        self.start()
-        self['Text1'] = text1
-        self['Text2'] = text2
-        return self.end()
+        SimilarityRequestStart(builder)
+        SimilarityRequestAddText1(builder, text1)
+        SimilarityRequestAddText2(builder, text2)
 
-    def flatbuffer_to_dataclass(self, flatbuffer):
-        return SimilarityRequest(flatbuffer.Text1().decode("utf-8"), flatbuffer.Text2().decode("utf-8"))
+        return SimilarityRequestEnd(builder)
 
-
-@dataclass
-class GensimFastTextSimilarityRequest:
-    requests: List[SimilarityRequest]
-
-
-class GensimFastTextSimilarityRequestEntity(FlatbufferObject):
-    def __init__(self):
-        super().__init__(GensimFastTextSimilarityRequest, GensimFastTextSimilarityRequestClass)
-
-    def dataclass_to_flatbuffer(self, dataclass):
-        request_vector = self.build_vector('Requests', dataclass.requests, SimilarityRequestEntity)
-        self.start()
-        self['Requests'] = request_vector
-        return self.end()
-
-    def flatbuffer_to_dataclass(self, flatbuffer):
-        requests = []
-        for i in range(0, flatbuffer.RequestsLength()):
-            request = flatbuffer.Requests(i)
-            request_entity = SimilarityRequestEntity(self.builder)
-            requests.append(request_entity.flatbuffer_to_dataclass(request))
-        return GensimFastTextSimilarityRequest(requests)
+    @staticmethod
+    def to_dataclass(flatbuffer: SimilarityRequest):
+        return SimilarityRequestData(flatbuffer.Text1().decode("utf-8"), flatbuffer.Text2().decode("utf-8"))
 
 
 @dataclass
-class SimilarityResponse:
+class GensimFastTextSimilarityRequestData(TypedMessage):
+    requests: List[SimilarityRequestData]
+
+    def type(self):
+        return GensimMessageType.GensimMessageType.GensimFastTextSimilarityRequest
+
+
+class GensimFastTextSimilarityRequestMapper:
+
+    @staticmethod
+    def serialize(data: GensimFastTextSimilarityRequestData, builder: flatbuffers.Builder):
+        length = len(data.requests)
+        request_offsets = list(map(lambda r: SimilarityRequestMapper.serialize(r, builder), data.requests))
+        GensimFastTextSimilarityRequest.GensimFastTextSimilarityRequestStartRequestsVector(builder,
+                                                                                           length)
+        for offset in reversed(request_offsets):
+            builder.PrependUOffsetTRelative(offset)
+        request_offsets_vector = builder.EndVector(length)
+        GensimFastTextSimilarityRequest.GensimFastTextSimilarityRequestStart(builder)
+        GensimFastTextSimilarityRequest.GensimFastTextSimilarityRequestAddRequests(builder, request_offsets_vector)
+
+        return GensimFastTextSimilarityRequest.GensimFastTextSimilarityRequestEnd(builder)
+
+    @staticmethod
+    def to_dataclass(flatbuffer: GensimFastTextSimilarityRequest):
+        requests = list(map(lambda r: SimilarityRequestMapper.to_dataclass(r),
+                            map(lambda i: flatbuffer.Requests(i), range(0, flatbuffer.RequestsLength()))))
+        return GensimFastTextSimilarityRequestData(requests)
+
+
+@dataclass
+class SimilarityResponseData:
     value: float
 
 
-class SimilarityResponseEntity(FlatbufferObject):
-    def __init__(self, builder):
-        super().__init__(SimilarityResponse, SimilarityResponseClass, builder)
+class SimilarityResponseMapper:
+    @staticmethod
+    def serialize(data: SimilarityResponseData, builder: flatbuffers.Builder):
+        SimilarityResponse.SimilarityResponseStart(builder)
+        SimilarityResponse.SimilarityResponseAddValue(builder, data.value)
 
-    def dataclass_to_flatbuffer(self, dataclass):
-        self.start()
-        self['Value'] = dataclass.value
-        return self.end()
+        return SimilarityResponse.SimilarityResponseEnd(builder)
 
-    def flatbuffer_to_dataclass(self, flatbuffer):
-        return SimilarityResponse(flatbuffer.Value())
+    @staticmethod
+    def to_dataclass(flatbuffer: SimilarityResponse):
+        return SimilarityResponseData(flatbuffer.Value())
 
 
 @dataclass
-class GensimFastTextSimilarityResponse:
-    responses: List[SimilarityResponse]
+class GensimFastTextSimilarityResponseData(TypedMessage):
+    responses: List[SimilarityResponseData]
+
+    def type(self):
+        return GensimMessageType.GensimMessageType.GensimFastTextSimilarityResponse
 
 
-class GensimFastTextSimilarityResponseEntity(FlatbufferObject):
-    def __init__(self):
-        super().__init__(GensimFastTextSimilarityResponse, GensimFastTextSimilarityResponseClass)
+class GensimFastTextSimilarityResponseMapper:
 
-    def dataclass_to_flatbuffer(self, dataclass):
-        response_vector = self.build_vector('Responses', dataclass.responses, SimilarityResponseEntity)
-        self.start()
-        self['Responses'] = response_vector
-        return self.end()
+    @staticmethod
+    def serialize(data: GensimFastTextSimilarityResponseData, builder: flatbuffers.Builder) -> bytearray:
+        length = len(data.responses)
+        responses_offsets = list(map(lambda r: SimilarityResponseMapper.serialize(r, builder), data.responses))
+        GensimFastTextSimilarityResponse.GensimFastTextSimilarityResponseStartResponsesVector(builder,
+                                                                                              length)
+        for offset in reversed(responses_offsets):
+            builder.PrependUOffsetTRelative(offset)
+        responses_offsets_vector = builder.EndVector(length)
+        GensimFastTextSimilarityResponse.GensimFastTextSimilarityResponseStart(builder)
+        GensimFastTextSimilarityResponse.GensimFastTextSimilarityResponseAddResponses(builder, responses_offsets_vector)
 
-    def flatbuffer_to_dataclass(self, flatbuffer):
-        responses = []
-        for i in range(0, flatbuffer.ResponsesLength()):
-            response = flatbuffer.Responses(i)
-            response_entity = SimilarityResponseEntity(self.builder)
-            responses.append(response_entity.flatbuffer_to_dataclass(response))
-        return GensimFastTextSimilarityResponse(responses)
+        return GensimFastTextSimilarityResponse.GensimFastTextSimilarityResponseEnd(builder)
+
+    @staticmethod
+    def to_dataclass(flatbuffer: GensimFastTextSimilarityResponse) -> GensimFastTextSimilarityResponseData:
+        requests = list(map(lambda r: SimilarityResponseMapper.to_dataclass(r),
+                            map(lambda i: flatbuffer.Responses(i), range(0, flatbuffer.ResponsesLength()))))
+        return GensimFastTextSimilarityResponseData(requests)

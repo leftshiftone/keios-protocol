@@ -8,7 +8,7 @@ authors = ["Leftshift One <contact@leftshift.one>"]
 python = "^3.7"
 flatbuffers = "^1.11"
 keios-protocol-common = "^0.1.1"
-#keios-protocol-common = { version = "^0.1.1", path = "../keios-protocol-common" }
+
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.0"
