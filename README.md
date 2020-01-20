@@ -1,3 +1,5 @@
+# DEPRECATED: [DROPPED FLATBUFFERS IN FAVOUR OF DYNABUFFERS](https://github.com/leftshiftone/keios-dynabuffers)
+
 [![CircleCI branch](https://img.shields.io/circleci/project/github/leftshiftone/keios-protocol/master.svg?style=flat-square)](https://circleci.com/gh/leftshiftone/keios-protocol)
 [![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/leftshiftone/keios-protocol.svg?style=flat-square)](https://github.com/leftshiftone/keios-protocol/tags)
 
